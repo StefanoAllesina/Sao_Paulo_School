@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>A tour of the Generalized Lotka-Volterra Model</title>
+  <meta name="description" content="Lectures for the ICTP-SAIFR/IFT-UNESP School on Community Ecology: from patterns to principles" />
+  <meta name="generator" content="bookdown 0.16 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="A tour of the Generalized Lotka-Volterra Model" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Lectures for the ICTP-SAIFR/IFT-UNESP School on Community Ecology: from patterns to principles" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="A tour of the Generalized Lotka-Volterra Model" />
+  
+  <meta name="twitter:description" content="Lectures for the ICTP-SAIFR/IFT-UNESP School on Community Ecology: from patterns to principles" />
+  
+
+<meta name="author" content="Stefano Allesina" />
+
+
+<meta name="date" content="2019-12-19" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+
+<link rel="next" href="intro.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Lectures on Lotka-Volterra</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#prerequisites"><i class="fa fa-check"></i><b>1.1</b> Prerequisites</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#sources"><i class="fa fa-check"></i><b>1.2</b> Sources</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>2</b> Generalized Lotka-Volterra</a><ul>
+<li class="chapter" data-level="2.1" data-path="intro.html"><a href="intro.html#history"><i class="fa fa-check"></i><b>2.1</b> History</a></li>
+<li class="chapter" data-level="2.2" data-path="intro.html"><a href="intro.html#basic-formulation"><i class="fa fa-check"></i><b>2.2</b> Basic formulation</a></li>
+<li class="chapter" data-level="2.3" data-path="intro.html"><a href="intro.html#a-single-population"><i class="fa fa-check"></i><b>2.3</b> A single population</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="intro.html"><a href="intro.html#metapopulation-dynamics"><i class="fa fa-check"></i><b>2.3.1</b> Metapopulation dynamics</a></li>
+<li class="chapter" data-level="2.3.2" data-path="intro.html"><a href="intro.html#s-i-s-model"><i class="fa fa-check"></i><b>2.3.2</b> S-I-S model</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="intro.html"><a href="intro.html#multi-species-dynamics"><i class="fa fa-check"></i><b>2.4</b> Multi-species dynamics</a><ul>
+<li class="chapter" data-level="2.4.1" data-path="intro.html"><a href="intro.html#existence-of-an-equilibrium"><i class="fa fa-check"></i><b>2.4.1</b> Existence of an equilibrium</a></li>
+<li class="chapter" data-level="2.4.2" data-path="intro.html"><a href="intro.html#stability-of-an-equilibrium"><i class="fa fa-check"></i><b>2.4.2</b> Stability of an equilibrium</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="intro.html"><a href="intro.html#types-of-dynamics"><i class="fa fa-check"></i><b>2.5</b> Types of dynamics</a></li>
+<li class="chapter" data-level="2.6" data-path="intro.html"><a href="intro.html#the-equilibrium-is-the-time-average"><i class="fa fa-check"></i><b>2.6</b> The equilibrium is the time-average</a><ul>
+<li class="chapter" data-level="2.6.1" data-path="intro.html"><a href="intro.html#d-stability-and-lyapunov-function"><i class="fa fa-check"></i><b>2.6.1</b> D-stability and Lyapunov function</a></li>
+</ul></li>
+<li class="chapter" data-level="2.7" data-path="intro.html"><a href="intro.html#stability-of-large-random-communities"><i class="fa fa-check"></i><b>2.7</b> Stability of large random communities</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="multi.html"><a href="multi.html"><i class="fa fa-check"></i><b>3</b> Multispecies GLV</a><ul>
+<li class="chapter" data-level="3.1" data-path="multi.html"><a href="multi.html#feasibility"><i class="fa fa-check"></i><b>3.1</b> Feasibility</a></li>
+<li class="chapter" data-level="3.2" data-path="multi.html"><a href="multi.html#stability"><i class="fa fa-check"></i><b>3.2</b> Stability</a></li>
+<li class="chapter" data-level="3.3" data-path="multi.html"><a href="multi.html#non-invasibility"><i class="fa fa-check"></i><b>3.3</b> Non-invasibility</a></li>
+<li class="chapter" data-level="3.4" data-path="multi.html"><a href="multi.html#assembly"><i class="fa fa-check"></i><b>3.4</b> Assembly</a></li>
+<li class="chapter" data-level="3.5" data-path="multi.html"><a href="multi.html#a-random-zoo"><i class="fa fa-check"></i><b>3.5</b> A random zoo</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="games.html"><a href="games.html"><i class="fa fa-check"></i><b>4</b> Evolutionary Game Theory</a><ul>
+<li class="chapter" data-level="4.1" data-path="games.html"><a href="games.html#game-theory"><i class="fa fa-check"></i><b>4.1</b> Game theory</a></li>
+<li class="chapter" data-level="4.2" data-path="games.html"><a href="games.html#nash-equilibria"><i class="fa fa-check"></i><b>4.2</b> Nash Equilibria</a></li>
+<li class="chapter" data-level="4.3" data-path="games.html"><a href="games.html#evolutionary-game-theory"><i class="fa fa-check"></i><b>4.3</b> Evolutionary game theory</a></li>
+<li class="chapter" data-level="4.4" data-path="games.html"><a href="games.html#replicator-dynamics"><i class="fa fa-check"></i><b>4.4</b> Replicator dynamics</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="games.html"><a href="games.html#rock-paper-scissor"><i class="fa fa-check"></i><b>4.4.1</b> Rock-paper-scissor</a></li>
+<li class="chapter" data-level="4.4.2" data-path="games.html"><a href="games.html#multiple-species"><i class="fa fa-check"></i><b>4.4.2</b> Multiple species</a></li>
+<li class="chapter" data-level="4.4.3" data-path="games.html"><a href="games.html#higher-order-interactions"><i class="fa fa-check"></i><b>4.4.3</b> Higher-order interactions</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>5</b> Simple models for synthetic communities</a><ul>
+<li class="chapter" data-level="5.1" data-path="data.html"><a href="data.html#fitting-absolute-abundances"><i class="fa fa-check"></i><b>5.1</b> Fitting absolute abundances</a></li>
+<li class="chapter" data-level="5.2" data-path="data.html"><a href="data.html#fitting-relative-abundances"><i class="fa fa-check"></i><b>5.2</b> Fitting relative abundances</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A tour of the Generalized Lotka-Volterra Model</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="header">
+<h1 class="title">A tour of the Generalized Lotka-Volterra Model</h1>
+<p class="author"><em>Stefano Allesina</em></p>
+<p class="date"><em>2019-12-19</em></p>
+</div>
+<div id="introduction" class="section level1">
+<h1><span class="header-section-number">Chapter 1</span> Introduction</h1>
+<p>These lectures were prepared for the ICTP-SAIFR/IFT-UNESP “School on Community Ecology: from patterns to principles”, held in São Paulo, Brazil, January 20-25, 2020.</p>
+<p>The four 90-minute lectures provide a semi-rigorous introduction to the Generalized Lotka-Volterra model, along with its applications to community ecology. Throughout the text, I have included code that can be used to simulate the processes that are introduced from a mathematical point of view.</p>
+<p>The emphasis is squarely on models for large communities, composed of <span class="math inline">\(n \gg 1\)</span> species. In particular, I often refer to “random” communities, i.e., dynamical systems with random parameters. This allows me to derive interesting results that are meant to describe the “typical” or “expected” community.</p>
+<p>At the end of the lecture, I refer to my own work in the area, highlighting some of the strongest contributions from my laboratory at the University of Chicago.</p>
+<div id="prerequisites" class="section level2">
+<h2><span class="header-section-number">1.1</span> Prerequisites</h2>
+<p>The lectures are fairly self-contained, but some working knowledge of calculus, dynamical systems, linear algebra, game theory would be beneficial.</p>
+<p>The code is written in <code>R</code>, and meant to run using a fairly recent version of <code>R</code> along with the packages <code>tidyverse</code>, <code>deSolve</code>, … that need to be installed.</p>
+</div>
+<div id="sources" class="section level2">
+<h2><span class="header-section-number">1.2</span> Sources</h2>
+<p>These notes were prepared by summarizing a variety of sources, including <span class="citation">Hadeler, Mackey, and Stevens (<a href="#ref-hadeler2017topics" role="doc-biblioref">2017</a>)</span>, ….</p>
+
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references">
+<div id="ref-hadeler2017topics">
+<p>Hadeler, Karl Peter, Michael C Mackey, and Angela Stevens. 2017. <em>Topics in Mathematical Biology</em>. Springer.</p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+
+<a href="intro.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["A tour of the Generalized Lotka-Volterra Model.pdf", "A tour of the Generalized Lotka-Volterra Model.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

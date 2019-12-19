@@ -1,0 +1,55 @@
+--- 
+title: "A tour of the Generalized Lotka-Volterra Model"
+author: "Stefano Allesina"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+description: 'Lectures for the ICTP-SAIFR/IFT-UNESP *School on Community Ecology:
+  from patterns to principles* '
+documentclass: book
+link-citations: yes
+bibliography: book.bib
+site: bookdown::bookdown_site
+biblio-style: apalike
+---
+
+```{r include=FALSE}
+# automatically create a bib database for R packages
+knitr::write_bib(c(
+  .packages(), 'bookdown', 'knitr', 'rmarkdown'
+), 'packages.bib')
+```
+
+```{r knitr, echo=FALSE}
+knitr::opts_chunk$set(
+  eval      = TRUE,
+  comment   = "#",
+  results   = "hold",
+  message = FALSE,
+  warning = FALSE,
+  # collapse  = TRUE,
+  fig.align = "center")
+```
+
+# Introduction
+
+These lectures were prepared for the ICTP-SAIFR/IFT-UNESP "School on Community Ecology: from patterns to principles", held in São Paulo, Brazil, January 20-25, 2020.
+
+The four 90-minute lectures provide a semi-rigorous introduction to the Generalized Lotka-Volterra model, along with its applications to community ecology. Throughout the text, I have included code that can be used to simulate the processes that are introduced from a mathematical point of view. 
+
+The emphasis is squarely on models for large communities, composed of $n \gg 1$ species. In particular, I often refer to "random" communities, i.e., dynamical systems with random parameters. This allows me to derive interesting results that are meant to describe the "typical" or "expected" community.
+
+At the end of the lecture, I refer to my own work in the area, highlighting some of the strongest contributions from my laboratory at the University of Chicago. 
+
+## Prerequisites
+
+The lectures are fairly self-contained, but some working knowledge of calculus, dynamical systems, linear algebra, game theory would be beneficial.
+
+The code is written in `R`, and meant to run using a fairly recent version of `R` along with the packages `tidyverse`, `deSolve`, ... that need to be installed.
+
+## Sources
+
+These notes were prepared by summarizing and interpolating a variety of sources, including @hadeler2017topics, ....
+

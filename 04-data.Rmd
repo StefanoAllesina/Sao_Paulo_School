@@ -1,0 +1,6 @@
+# Simple models for synthetic communities {#data}
+
+## Fitting absolute abundances
+
+## Fitting relative abundances
+

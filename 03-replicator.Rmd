@@ -1,0 +1,17 @@
+# Evolutionary Game Theory {#games}
+
+## Game theory
+
+## Nash Equilibria
+
+## Evolutionary game theory
+
+## Replicator dynamics
+
+### Rock-paper-scissor
+
+### Multiple species
+
+### Higher-order interactions
+
+

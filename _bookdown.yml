@@ -1,0 +1,6 @@
+book_filename: "A tour of the Generalized Lotka-Volterra Model"
+delete_merged_file: true
+language:
+  ui:
+    chapter_name: "Chapter "
+output_dir: "docs"
