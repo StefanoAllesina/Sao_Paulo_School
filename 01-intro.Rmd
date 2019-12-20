@@ -141,9 +141,13 @@ $$
 
 A given system might have a multitude of equilibria. When the system is resting at an equilibrium point, it will remain there unless it is perturbed away from it. Local stability analysis is a method to probe whether a system that is perturbed infinitesimally away from an equilibrium will eventually return to it, or rather move away from it. 
 
-DERIVATION HERE
+Suppose that the system is resting at an equilibrium $x^\star$, and that it is slightly perturbed away from it. $\Delta x(0) = x(0)-x^\star$ is the state of the system immediately after the perturbation. We Taylor expand around $x^\star$:
 
-The analysis is based on the Jacobian matrix of the system $J$, whose elements are defined as:
+$$
+f(\Delta x(0)) = f(x^\star)+ \left. J \right|_{x^\star} \Delta x(0) + \ldots
+$$
+
+Where $J$ is the Jacobian matrix of the system, whose elements are defined as:
 
 $$
 J_{ij} = \frac{\partial f_i({x})}{\partial x_j} 
@@ -154,10 +158,22 @@ Each element of this matrix is therefore a function, whose value depends on ${x}
 $$
   M = \left. {J} \right|_{ {x}^\star}
 $$
-Note that, although each system has a unique Jacobian matrix, there are as many community matrices as there are equilibria. The community
-matrix details the effect of increasing density of one species on any other species around the equilibrium point.
 
-The most notable property of the community matrix is that its eigenvalues determine the stability of the equilibrium ${x}^\star$: if all the eigenvalues have negative real part, then the system will eventually return to the equilibrium after sufficiently small perturbations; conversely, if any of the eigenvalues have positive real part, the system will move away from the equilibrium whenever perturbed. Therefore, depending on the sign of the "rightmost" eigenvalue of ${M}$, $\lambda_1$, we can determine the stability of ${x}^\star$:
+Note that, although each system has a unique Jacobian matrix, there are as many community matrices as there are equilibria. The community matrix details the effect of increasing density of one species on any other species around the equilibrium point.
+
+We can therefore write the differential equation:
+
+$$
+\frac{d \Delta x(t)}{dt} \approx M \Delta x(t)
+$$
+
+with solution:
+
+$$
+\Delta x(t) = \Delta x(0) e^{Mt} = \Delta x(0) L e^{\Lambda t} R
+$$
+
+Where $L$ and $R$ are matrices containing the left and right eigenvectors of $M$, and $\Lambda$ is a diagonal matrix containing the eigenvalues of $M$. As such, the eigenvalues of $M$ determine the stability of the equilibrium ${x}^\star$: if all the eigenvalues have negative real part, then the system will eventually return to the equilibrium after sufficiently small perturbations; conversely, if any of the eigenvalues have positive real part, the system will move away from the equilibrium whenever perturbed. Therefore, depending on the sign of the "rightmost" eigenvalue of ${M}$, $\lambda_1$, we can determine the stability of ${x}^\star$:
 
 $$
   \text{Re}(\lambda_1) \begin{cases}
@@ -166,8 +182,7 @@ $$
   \end{cases}
 $$
 
-Local asymptotic stability means that the equilibrium is stable with respect to infinitesimal perturbations ("local"), and that returning
-to the equilibrium could take a long time ("asymptotic"). Ecologists have also studied stronger forms of stability (e.g., "global stability", in which all trajectories started at positive densities lead to the equilibrium). 
+Local asymptotic stability means that the equilibrium is stable with respect to infinitesimal perturbations ("local"), and that returning to the equilibrium could take a long time ("asymptotic"). Ecologists have also studied stronger forms of stability (e.g., "global stability", in which all trajectories started at positive densities lead to the equilibrium). 
 
 For the GLV model, the Jacobian is easy to compute:
 
@@ -336,14 +351,44 @@ solve(A_4, -r_4)
 
 ### D-stability and Lyapunov function
 
-Suppose that there is a positive vector $y$ such that $D(y) A + A^t D(y)$ is negative definite (i.e., has only negative eigenvalues; the eigenvalues are real because the matrix is symmetric). Further, suppose that the GLV system with parameters $A$ and $r$ has a feasible equilibrium point $x^\star$. Then the function
+Suppose that there is a positive diagonal matrix $C$ such that $CA + A^t C$ is negative definite (i.e., has only negative eigenvalues; the eigenvalues are real because the matrix is symmetric). Further, suppose that the GLV system with parameters $A$ and $r$ has a feasible equilibrium point $x^\star$. Then the function:
 
 $$
-V(x(t)) = \sum_i y_i (x_i(t) - {x}_i^\star \log x_i(t))
+V(x(t)) = 1^t D(y) \left( x(t) -D(x^\star) \log x(t)\right)
 $$
 is a Lyapunov function for the GLV system. 
 
-To prove this point, we start from $r = -Ax^\star$. Substituting, we can write the GLV system as $dx(t)/dt = D(x)A(x - x^\star)$
+To prove this point, we start from $r = -Ax^\star$. Substituting, we can write the GLV system as $dx(t)/dt = D(x)A(x - x^\star)$; similarly, we can write $d \log x(t)/dt = A(x - x^\star)$. Taking the derivative of $V$ with respect to time:
+
+$$
+\begin{aligned}
+ \frac{d V(x(t))}{dt} &= 1^t C \left(\frac{d x(t)}{dt}  + D(x^*) \frac{d \log x(t)}{dt} \right)\\
+ &= 1^t C \left(A (x - x^\star)  + D(x^*) A (x - x^\star) \right)\\
+ &= 1^t C \left(D(x - x^\star)  A (x - x^\star) \right)\\
+ &= 1^t \left(D(x - x^\star)  C A (x - x^\star) \right)\\
+ &= (x - x^\star)^t  CA (x - x^\star)\\
+ &= \frac{1}{2}(x - x^\star)^t  (CA + A^t C) (x - x^\star)\\
+\end{aligned}
+$$
+
+A matrix $B$ is negative definite if $y^t B y < 0$ for all $y \neq 0$. As such $\frac{d V(x(t))}{dt} \leq 0$, i.e., will decrease in time (starting from any $x(0)$) until the equilibrium $x^\star$ is reached. 
+
+Take a matrix $A$ such that for a positive diagonal matrix $C$, $CA + A^tC$ is negative definite. Then $A$ is said to be **D-stable**. The results above show that **if $A$ is D-stable and a feasible equilibrium $x^\star$ exists, than all trajectories starting at a positive density will converge to the equilibrium**. This property is often used to assess **global stability**.
+
+A simple numerical example: we track species 1 of a two species system defined as:
+
+```{r}
+r <- c(1, 1)
+A <- matrix(c(-1, 3/2, -1/2, -1), 2, 2)
+# the eigenvalues of A + A^t are -1 and -3, hence A is D-stable
+eigen(A + t(A))$values
+# now integrate from random initial condition---this should always 
+# converge to the equilibrium
+solve(A, -r)
+res <- integrate_GLV(r, A, abs(rnorm(2)))
+res <- integrate_GLV(r, A, abs(rnorm(2)))
+```
+
 
 ## Stability of large random communities
 
@@ -516,7 +561,16 @@ plot_eigenvalues(M, prediction)
 
 On the theory of GLV:
 
+- @strogatz2018nonlinear is a simple introductio to dynamical systems and bifurcation theory.
+
+- @hofbauer1998evolutionary is a wonderful introduction to dynamical systems in ecology and population genetics, with a nice introduction to evolutionary game theory.
+
+- @hadeler2017topics contains a more mathematically-oriented treatment of the material covered in the first part of this lecture.
+
+- @baigent2016lotka is a mathematical introduction to Lotka-Volterra dynamics.
 
 On random matrices and stability:
+
+- @allesina2015stability is an opinionated review on applications of random matrices in ecology.
 
 
