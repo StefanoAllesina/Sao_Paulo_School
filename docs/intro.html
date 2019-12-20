@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 2 Generalized Lotka-Volterra | A tour of the Generalized Lotka-Volterra Model</title>
+  <title>Chapter 2 Generalized Lotka-Volterra | A Tour of the Generalized Lotka-Volterra Model</title>
   <meta name="description" content="Lectures for the ICTP-SAIFR/IFT-UNESP School on Community Ecology: from patterns to principles" />
   <meta name="generator" content="bookdown 0.16 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 2 Generalized Lotka-Volterra | A tour of the Generalized Lotka-Volterra Model" />
+  <meta property="og:title" content="Chapter 2 Generalized Lotka-Volterra | A Tour of the Generalized Lotka-Volterra Model" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 2 Generalized Lotka-Volterra | A tour of the Generalized Lotka-Volterra Model" />
+  <meta name="twitter:title" content="Chapter 2 Generalized Lotka-Volterra | A Tour of the Generalized Lotka-Volterra Model" />
   
   <meta name="twitter:description" content="Lectures for the ICTP-SAIFR/IFT-UNESP School on Community Ecology: from patterns to principles" />
   
@@ -138,7 +138,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#sources"><i class="fa fa-check"></i><b>1.2</b> Sources</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>2</b> Generalized Lotka-Volterra</a><ul>
-<li class="chapter" data-level="2.1" data-path="intro.html"><a href="intro.html#history"><i class="fa fa-check"></i><b>2.1</b> History</a></li>
+<li class="chapter" data-level="2.1" data-path="intro.html"><a href="intro.html#history"><i class="fa fa-check"></i><b>2.1</b> History</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="intro.html"><a href="intro.html#lotka-volterra-interactions"><i class="fa fa-check"></i><b>2.1.1</b> Lotka-Volterra interactions</a></li>
+</ul></li>
 <li class="chapter" data-level="2.2" data-path="intro.html"><a href="intro.html#basic-formulation"><i class="fa fa-check"></i><b>2.2</b> Basic formulation</a></li>
 <li class="chapter" data-level="2.3" data-path="intro.html"><a href="intro.html#a-single-population"><i class="fa fa-check"></i><b>2.3</b> A single population</a><ul>
 <li class="chapter" data-level="2.3.1" data-path="intro.html"><a href="intro.html#metapopulation-dynamics"><i class="fa fa-check"></i><b>2.3.1</b> Metapopulation dynamics</a></li>
@@ -149,11 +151,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.4.2" data-path="intro.html"><a href="intro.html#stability-of-an-equilibrium"><i class="fa fa-check"></i><b>2.4.2</b> Stability of an equilibrium</a></li>
 </ul></li>
 <li class="chapter" data-level="2.5" data-path="intro.html"><a href="intro.html#types-of-dynamics"><i class="fa fa-check"></i><b>2.5</b> Types of dynamics</a></li>
-<li class="chapter" data-level="2.6" data-path="intro.html"><a href="intro.html#the-equilibrium-is-the-time-average"><i class="fa fa-check"></i><b>2.6</b> The equilibrium is the time-average</a><ul>
-<li class="chapter" data-level="2.6.1" data-path="intro.html"><a href="intro.html#d-stability-and-lyapunov-function"><i class="fa fa-check"></i><b>2.6.1</b> D-stability and Lyapunov function</a></li>
-</ul></li>
-<li class="chapter" data-level="2.7" data-path="intro.html"><a href="intro.html#stability-of-large-random-communities"><i class="fa fa-check"></i><b>2.7</b> Stability of large random communities</a></li>
-<li class="chapter" data-level="2.8" data-path="intro.html"><a href="intro.html#further-readings"><i class="fa fa-check"></i><b>2.8</b> Further readings</a></li>
+<li class="chapter" data-level="2.6" data-path="intro.html"><a href="intro.html#the-equilibrium-is-the-time-average"><i class="fa fa-check"></i><b>2.6</b> The equilibrium is the time-average</a></li>
+<li class="chapter" data-level="2.7" data-path="intro.html"><a href="intro.html#d-stability-and-lyapunov-function"><i class="fa fa-check"></i><b>2.7</b> D-stability and Lyapunov function</a></li>
+<li class="chapter" data-level="2.8" data-path="intro.html"><a href="intro.html#stability-of-large-random-communities"><i class="fa fa-check"></i><b>2.8</b> Stability of large random communities</a></li>
+<li class="chapter" data-level="2.9" data-path="intro.html"><a href="intro.html#further-readings"><i class="fa fa-check"></i><b>2.9</b> Further readings</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="multi.html"><a href="multi.html"><i class="fa fa-check"></i><b>3</b> Multispecies GLV</a><ul>
 <li class="chapter" data-level="3.1" data-path="multi.html"><a href="multi.html#feasibility"><i class="fa fa-check"></i><b>3.1</b> Feasibility</a></li>
@@ -189,7 +190,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A tour of the Generalized Lotka-Volterra Model</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A Tour of the Generalized Lotka-Volterra Model</a>
           </h1>
         </div>
 
@@ -201,6 +202,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">Chapter 2</span> Generalized Lotka-Volterra</h1>
 <div id="history" class="section level2">
 <h2><span class="header-section-number">2.1</span> History</h2>
+<p><img src="images/Lotka.jpg" width="25%" style="display: block; margin: auto;" /></p>
+<p>Alfred J. Lotka (1880-1949) was born to French-speaking American parents in Lemberg (then part of the Habsburg empire, now Lviv, Ukraine). He studied in France, Germany and England, receiving a BSc in 1901 and a DSc in 1912 from Birmingham university. He moved to the US in 1902, and worked at the US Patent office, as an editor of Scientific American, and as a statistician at the Metropolitan Life Insturance Company in NYC. He wrote more than a hundred papers and five books, spanning a large range of topics. He’s best known for the book <em>Elements of Physical Biology</em>, his contributions to demography, and one of the first examples of bibliometrics.</p>
+<p>Starting in 1910 (reprinted as <span class="citation">Lotka (<a href="#ref-lotka2002contribution" role="doc-biblioref">2002</a>)</span>) he investigated coupled differential equations relating to chemical as well as ecological dynamics. In <span class="citation">Lotka (<a href="#ref-lotka1920analytical" role="doc-biblioref">1920</a>)</span> he studied a system of two ODEs that gave rise to perpetual oscillations: “It was, therefore, with considerable surprise that the writer, on applying his method to certain special cases, found these to lead to undamped, and hence indefinitely continued, oscillations.” He went on to describe “1. A species of organism <span class="math inline">\(S_1\)</span>, a plant species, say, deriving its nourishment from a source presented in such large excess that the mass of the source may be considered constant during the period of time with which we are concerned. 2. A species <span class="math inline">\(S_2\)</span>, for example a herbivorous animal species, feeding on <span class="math inline">\(S_1\)</span>.”</p>
+<p>The equations he derived (and then studied later in more detail) are now termed Lotka-Volterra equations.</p>
+<p><img src="images/Volterra.jpg" width="25%" style="display: block; margin: auto;" /></p>
+<p>Vito Volterra (1860-1940) was born in Ancona (then part of the Papal State) in a poor jewish family. The financial situation precipitated with the death of his father, when Vito was two. Vito and his mother went to live with relatives in Turin and then Florence. Volterra showed amazing mathematical talent at a very early age. Antonio Roiti, professor of physics in Florence, noticed the budding mathematician and hired him as his assistant, so that he could continue his studies. He went on to study at the Scuola Normale in Pisa, receiving a degree in Physics in 1882. At age 23 he was named full professor of Rational Mechanics in Pisa, and then in 1900 of Mathematical Physics in Rome. For thirty years he contributed important studies in mathematics, and instrumental contributions to the academic life in Italy (for example, he was the first director of the National Center for Research). In 1931 he refused to take an oath of loyalty to the Fascist regime (only 12 professors out of 1250 refused), and therefore forced to resign (his take on the fascist enterprise: “Empires die, but Euclid’s theorems keep their youth forever”).</p>
+<p>His interest in mathematical ecology is due to Umberto d’Ancona (his son-in-law), who had studied the trends in fisheries in the Adriatic sea before and immediately after WWI. In 1914-1918 fisheries in the Adriatic had stopped completely because of the conflict. He had noticed that, while herbivorous fish had remained about constant, the piscivorous fish had increased dramatically in numbers. The problem piqued Volterra who immediately published a sophisticated study of the same equations introduced by Lotka. In a short letter to Nature <span class="citation">(Volterra <a href="#ref-volterra1926fluctuations" role="doc-biblioref">1926</a><a href="#ref-volterra1926fluctuations" role="doc-biblioref">a</a>)</span>, he stated the so-called “Volterra’s Principle” (which he termed “Law III”): “a complete closure of the fishery was a form of ‘protection’ under which the voracious fishes were much the better and prospered accordingly, but the ordinary food-fishes, on which these are accustomed to prey, were worse off than before.” This brief paper was a summary of the much larger <span class="citation">Volterra (<a href="#ref-volterra1926variazioni" role="doc-biblioref">1926</a><a href="#ref-volterra1926variazioni" role="doc-biblioref">b</a>)</span>.</p>
+<div id="lotka-volterra-interactions" class="section level3">
+<h3><span class="header-section-number">2.1.1</span> Lotka-Volterra interactions</h3>
+<p>In 1927, Lotka wrote to Nature to raise the issue that the equations studied by Volterra and the figures presented in Volterra’s brief article were identical to those found in <em>Elements of Physical Biology</em> (published in 1925). He concludes that “It would be gratifying if Prof. Volterra’s publication should direct attention to a field and method of inquiry which apparently has hitherto passed almost unnoticed.”</p>
+<p>Volterra graciously conceded “I recognize his priority, and am sorry not to have known his work, and therefore not have been able to mention it.” He however lists a few points in which the two authors pursued different directions, and concludes “Working independently the one from the other, we have found some common results, and this confirms the exactitude and the interest in the position of the problem. I agree with him in his conclusions that these studies and these methods of research deserve to receive greated attention from scholars, and should give rise to important applications.”</p>
+</div>
 </div>
 <div id="basic-formulation" class="section level2">
 <h2><span class="header-section-number">2.2</span> Basic formulation</h2>
@@ -252,7 +265,7 @@ As such, provided with the parameters <span class="math inline">\(r\)</span> and
 <span id="cb1-25"><a href="intro.html#cb1-25"></a><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span></span>
 <span id="cb1-26"><a href="intro.html#cb1-26"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time, <span class="dt">y =</span> x_sol), <span class="dt">colour =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">shape =</span> <span class="dv">2</span>) <span class="op">+</span><span class="st"> </span></span>
 <span id="cb1-27"><a href="intro.html#cb1-27"></a><span class="st">  </span><span class="kw">ylab</span>(<span class="kw">expression</span>(<span class="st">&quot;x(t)&quot;</span>)) <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="kw">expression</span>(<span class="st">&quot;t&quot;</span>))</span></code></pre></div>
-<p><img src="A-tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>If <span class="math inline">\(a &lt; 0\)</span> and <span class="math inline">\(r &gt; 0\)</span>, the population started at any positive value eventually reaches an equilibrium, which we can find by setting <span class="math inline">\(dx(t)/dt = 0\)</span> and considering <span class="math inline">\(x \neq 0\)</span>:</p>
 <p><span class="math display">\[
 (r + a x) = 0 \to x = -\frac{r}{a}
@@ -389,7 +402,7 @@ M = \left. {J} \right|_{ {x}^\star} = D(x^\star)A
 <span id="cb3-7"><a href="intro.html#cb3-7"></a><span class="kw">print</span>(<span class="kw">solve</span>(A_<span class="dv">1</span>, <span class="op">-</span>r_<span class="dv">1</span>)) <span class="co"># not feasible</span></span>
 <span id="cb3-8"><a href="intro.html#cb3-8"></a>x0_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">3</span>)</span>
 <span id="cb3-9"><a href="intro.html#cb3-9"></a>res_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">integrate_GLV</span>(r_<span class="dv">1</span>, A_<span class="dv">1</span>, x0_<span class="dv">1</span>)</span></code></pre></div>
-<p><img src="A-tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre><code># [1] -0.08333333  0.25000000 -0.08333333</code></pre>
 <p>Then, a case in which the equilibrium exists, and is attractive (stable):</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="intro.html#cb5-1"></a><span class="kw">set.seed</span>(<span class="dv">2</span>) <span class="co"># for reproducibility</span></span>
@@ -401,7 +414,7 @@ M = \left. {J} \right|_{ {x}^\star} = D(x^\star)A
 <span id="cb5-7"><a href="intro.html#cb5-7"></a><span class="kw">print</span>(<span class="kw">solve</span>(A_<span class="dv">2</span>, <span class="op">-</span>r_<span class="dv">2</span>)) <span class="co"># feasible</span></span>
 <span id="cb5-8"><a href="intro.html#cb5-8"></a>x0_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">3</span>)</span>
 <span id="cb5-9"><a href="intro.html#cb5-9"></a>res_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">integrate_GLV</span>(r_<span class="dv">2</span>, A_<span class="dv">2</span>, x0_<span class="dv">2</span>)</span></code></pre></div>
-<p><img src="A-tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre><code># [1] 0.1661130 0.3654485 0.4817276</code></pre>
 <p>With three competitors we can find stable limit cycles:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="intro.html#cb7-1"></a><span class="kw">set.seed</span>(<span class="dv">3</span>) <span class="co"># for reproducibility</span></span>
@@ -413,7 +426,7 @@ M = \left. {J} \right|_{ {x}^\star} = D(x^\star)A
 <span id="cb7-7"><a href="intro.html#cb7-7"></a><span class="kw">print</span>(<span class="kw">solve</span>(A_<span class="dv">3</span>, <span class="op">-</span>r_<span class="dv">3</span>)) <span class="co"># feasible</span></span>
 <span id="cb7-8"><a href="intro.html#cb7-8"></a>x0_<span class="dv">3</span> &lt;-<span class="st"> </span><span class="fl">0.1</span> <span class="op">*</span><span class="st"> </span><span class="kw">runif</span>(<span class="dv">3</span>)</span>
 <span id="cb7-9"><a href="intro.html#cb7-9"></a>res_<span class="dv">3</span> &lt;-<span class="st"> </span><span class="kw">integrate_GLV</span>(r_<span class="dv">3</span>, A_<span class="dv">3</span>, x0_<span class="dv">3</span>, <span class="dt">maxtime =</span> <span class="dv">250</span>)</span></code></pre></div>
-<p><img src="A-tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre><code># [1] 0.05714286 0.01428571 0.02857143</code></pre>
 <p>And with four or more species we can have chaos:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="intro.html#cb9-1"></a><span class="kw">set.seed</span>(<span class="dv">4</span>) <span class="co"># for reproducibility</span></span>
@@ -426,7 +439,7 @@ M = \left. {J} \right|_{ {x}^\star} = D(x^\star)A
 <span id="cb9-8"><a href="intro.html#cb9-8"></a><span class="kw">print</span>(<span class="kw">solve</span>(A_<span class="dv">4</span>, <span class="op">-</span>r_<span class="dv">4</span>)) <span class="co"># feasible</span></span>
 <span id="cb9-9"><a href="intro.html#cb9-9"></a>x0_<span class="dv">4</span> &lt;-<span class="st"> </span><span class="fl">0.1</span> <span class="op">*</span><span class="st"> </span><span class="kw">runif</span>(<span class="dv">4</span>)</span>
 <span id="cb9-10"><a href="intro.html#cb9-10"></a>res_<span class="dv">4</span> &lt;-<span class="st"> </span><span class="kw">integrate_GLV</span>(r_<span class="dv">4</span>, A_<span class="dv">4</span>, x0_<span class="dv">4</span>, <span class="dt">maxtime =</span> <span class="dv">500</span>)</span></code></pre></div>
-<p><img src="A-tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre><code># [1] 0.3013030 0.4586546 0.1307655 0.3557416</code></pre>
 </div>
 <div id="the-equilibrium-is-the-time-average" class="section level2">
@@ -479,8 +492,9 @@ multiplying by the matrix inverse and rearranging:</p>
 # 3 sp_3      0.126
 # 4 sp_4      0.354
 # [1] 0.3013030 0.4586546 0.1307655 0.3557416</code></pre>
-<div id="d-stability-and-lyapunov-function" class="section level3">
-<h3><span class="header-section-number">2.6.1</span> D-stability and Lyapunov function</h3>
+</div>
+<div id="d-stability-and-lyapunov-function" class="section level2">
+<h2><span class="header-section-number">2.7</span> D-stability and Lyapunov function</h2>
 <p>Suppose that there is a positive diagonal matrix <span class="math inline">\(C\)</span> such that <span class="math inline">\(CA + A^t C\)</span> is negative definite (i.e., has only negative eigenvalues; the eigenvalues are real because the matrix is symmetric). Further, suppose that the GLV system with parameters <span class="math inline">\(A\)</span> and <span class="math inline">\(r\)</span> has a feasible equilibrium point <span class="math inline">\(x^\star\)</span>. Then the function:</p>
 <p><span class="math display">\[
 V(x(t)) = 1^t D(y) \left( x(t) -D(x^\star) \log x(t)\right)
@@ -508,15 +522,14 @@ is a Lyapunov function for the GLV system.</p>
 <span id="cb15-6"><a href="intro.html#cb15-6"></a><span class="co"># converge to the equilibrium</span></span>
 <span id="cb15-7"><a href="intro.html#cb15-7"></a><span class="kw">solve</span>(A, <span class="op">-</span>r)</span>
 <span id="cb15-8"><a href="intro.html#cb15-8"></a>res &lt;-<span class="st"> </span><span class="kw">integrate_GLV</span>(r, A, <span class="kw">abs</span>(<span class="kw">rnorm</span>(<span class="dv">2</span>)))</span></code></pre></div>
-<p><img src="A-tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="intro.html#cb16-1"></a>res &lt;-<span class="st"> </span><span class="kw">integrate_GLV</span>(r, A, <span class="kw">abs</span>(<span class="kw">rnorm</span>(<span class="dv">2</span>)))</span></code></pre></div>
-<p><img src="A-tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-9-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-11-2.png" width="672" style="display: block; margin: auto;" /></p>
 <pre><code># [1] -1 -3
 # [1] 0.2857143 1.4285714</code></pre>
 </div>
-</div>
 <div id="stability-of-large-random-communities" class="section level2">
-<h2><span class="header-section-number">2.7</span> Stability of large random communities</h2>
+<h2><span class="header-section-number">2.8</span> Stability of large random communities</h2>
 <p>As we have seen above, an equilibrium <span class="math inline">\(x^\star\)</span> is stable if the community matrix for the equilibrium has all eigenvalues with negative real part. In general, to determine the equilibrium and its stability, we would need to specify all the growth rates (<span class="math inline">\(r\)</span>, <span class="math inline">\(n\)</span> values), as well as the matrix of interactions (<span class="math inline">\(A\)</span>, <span class="math inline">\(n^2\)</span> values). This is impractical to do for large systems (though we will try this out later). But can something quite general be said about the limit in which many species are in the community?</p>
 <p><span class="citation">May (<a href="#ref-may1972will" role="doc-biblioref">1972</a>)</span> attempted to answer this question by considering a random community matrix. In a GLV system, the diagonal elements <span class="math inline">\(m_{ii} = a_{ii} x_i^\star\)</span> are influenced by self-regulation (i.e., as in a carrying capacity), while the off-diagonal elements <span class="math inline">\(m_{ij} = a_{ij} x_i^\star\)</span> model the effect of species <span class="math inline">\(j\)</span> on the equilibrium of species <span class="math inline">\(i\)</span>. May considered the following algorithm to build a random community matrix. Take a large community, resting at an unspecified equilibrium; we build the community matrix by setting</p>
 <ul>
@@ -554,7 +567,7 @@ is a Lyapunov function for the GLV system.</p>
 <span id="cb19-18"><a href="intro.html#cb19-18"></a>sigma &lt;-<span class="st"> </span><span class="dv">1</span></span>
 <span id="cb19-19"><a href="intro.html#cb19-19"></a>M &lt;-<span class="st"> </span><span class="kw">build_May_normal</span>(n, C, d, sigma)</span>
 <span id="cb19-20"><a href="intro.html#cb19-20"></a><span class="kw">plot_eigenvalues</span>(M)</span></code></pre></div>
-<p><img src="A-tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>The eigenvalues fall into an almost perfect circle! Turns out, that this is the behavior we should expect, as stated by the so-called “Circular Law”, one of the most beautiful results in random matrix theory.</p>
 <p><strong>Circular law:</strong> Take a non-symmetric, <span class="math inline">\(S \times S\)</span> random matrix in which all coefficients <span class="math inline">\(X_{ij}\)</span> are i.i.d. random variables with <span class="math inline">\(\mathbb E[X_{ij}] = 0\)</span> and <span class="math inline">\(\mathbb E[X_{ij}] = 1\)</span>. Then, as <span class="math inline">\(S \to \infty\)</span>, the e.s.d. of <span class="math inline">\({X} / \sqrt{S}\)</span> converges to the circular law:</p>
 <p><span class="math display">\[
@@ -571,7 +584,7 @@ is a Lyapunov function for the GLV system.</p>
 <p>We can try this on our matrix:</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="intro.html#cb20-1"></a>prediction &lt;-<span class="st"> </span><span class="kw">sqrt</span>(n <span class="op">*</span><span class="st"> </span>C <span class="op">*</span><span class="st"> </span>sigma<span class="op">^</span><span class="dv">2</span>) <span class="op">-</span><span class="st"> </span>d</span>
 <span id="cb20-2"><a href="intro.html#cb20-2"></a><span class="kw">plot_eigenvalues</span>(M, prediction)</span></code></pre></div>
-<p><img src="A-tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Showing that we accurately approximate the location of the rightmost eigenvalue. Note that, in the case of large <span class="math inline">\(n\)</span>, whenever the circle crosses zero, some eigenvalues will be positive, determining the instability of the equilibrium.</p>
 <p>Importantly, the distribution from which the coefficients are sampled does not matter—only that the mean is zero and that the variance is <span class="math inline">\(\sigma^2\)</span>. For example, build the matrix using coefficients from a uniform distribution:</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="intro.html#cb21-1"></a>build_May_uniform &lt;-<span class="st"> </span><span class="cf">function</span>(n, C, d, sigma){</span>
@@ -591,7 +604,7 @@ is a Lyapunov function for the GLV system.</p>
 <span id="cb21-15"><a href="intro.html#cb21-15"></a>M &lt;-<span class="st"> </span><span class="kw">build_May_uniform</span>(n, C, d, sigma)</span>
 <span id="cb21-16"><a href="intro.html#cb21-16"></a>prediction &lt;-<span class="st"> </span><span class="kw">sqrt</span>(n <span class="op">*</span><span class="st"> </span>C <span class="op">*</span><span class="st"> </span>sigma<span class="op">^</span><span class="dv">2</span>) <span class="op">-</span><span class="st"> </span>d</span>
 <span id="cb21-17"><a href="intro.html#cb21-17"></a><span class="kw">plot_eigenvalues</span>(M, prediction)</span></code></pre></div>
-<p><img src="A-tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>This property is called <strong>universality</strong> in random matrix theory.</p>
 <p>In ecological communities, the effect of species <span class="math inline">\(i\)</span> on <span class="math inline">\(j\)</span> and that of <span class="math inline">\(j\)</span> on <span class="math inline">\(i\)</span> are typically not independent (as assumed above): in the case of competition between species, we expect them both to be negative; for consumption, if one is positive, the other is negative, and so forth. A more refined model of a random matrix would therefore sample interactions in pairs from a bivariate distribution. The elliptic law can deal with this case:</p>
 <p><strong>Elliptic law:</strong> Take a non-symmetric, <span class="math inline">\(S \times S\)</span> random matrix in which the pairs of coefficients <span class="math inline">\((X_{ij}, X_{ji})\)</span> are sampled independently from a bivariate distribution defined by a vector of means <span class="math inline">\(m = (0,0)^t\)</span> and a covariance matrix <span class="math inline">\(\Sigma = \begin{pmatrix} 1 &amp; \rho\\ \rho &amp; 1 \end{pmatrix}\)</span>. Then, as <span class="math inline">\(S \to \infty\)</span>, the e.s.d. of <span class="math inline">\({X} / \sqrt{S}\)</span> converges to the elliptic law:</p>
@@ -636,7 +649,7 @@ is a Lyapunov function for the GLV system.</p>
 <span id="cb23-7"><a href="intro.html#cb23-7"></a>M &lt;-<span class="st"> </span><span class="kw">build_Allesina_Tang_normal</span>(n, C, d, sigma, rho)</span>
 <span id="cb23-8"><a href="intro.html#cb23-8"></a>prediction &lt;-<span class="st"> </span><span class="kw">sqrt</span>(n <span class="op">*</span><span class="st"> </span>C <span class="op">*</span><span class="st"> </span>sigma<span class="op">^</span><span class="dv">2</span>) <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>rho) <span class="op">-</span><span class="st"> </span>d</span>
 <span id="cb23-9"><a href="intro.html#cb23-9"></a><span class="kw">plot_eigenvalues</span>(M, prediction)</span></code></pre></div>
-<p><img src="A-tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-17-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Similarly, a negative correlation (e.g., as in predator-prey) would make the system easier to stabilize:</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="intro.html#cb24-1"></a><span class="co"># parameters</span></span>
 <span id="cb24-2"><a href="intro.html#cb24-2"></a>n &lt;-<span class="st"> </span><span class="dv">500</span></span>
@@ -647,10 +660,10 @@ is a Lyapunov function for the GLV system.</p>
 <span id="cb24-7"><a href="intro.html#cb24-7"></a>M &lt;-<span class="st"> </span><span class="kw">build_Allesina_Tang_normal</span>(n, C, d, sigma, rho)</span>
 <span id="cb24-8"><a href="intro.html#cb24-8"></a>prediction &lt;-<span class="st"> </span><span class="kw">sqrt</span>(n <span class="op">*</span><span class="st"> </span>C <span class="op">*</span><span class="st"> </span>sigma<span class="op">^</span><span class="dv">2</span>) <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>rho) <span class="op">-</span><span class="st"> </span>d</span>
 <span id="cb24-9"><a href="intro.html#cb24-9"></a><span class="kw">plot_eigenvalues</span>(M, prediction)</span></code></pre></div>
-<p><img src="A-tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="further-readings" class="section level2">
-<h2><span class="header-section-number">2.8</span> Further readings</h2>
+<h2><span class="header-section-number">2.9</span> Further readings</h2>
 <p>On the theory of GLV:</p>
 <ul>
 <li><p><span class="citation">Strogatz (<a href="#ref-strogatz2018nonlinear" role="doc-biblioref">2018</a>)</span> is a simple introductio to dynamical systems and bifurcation theory.</p></li>
@@ -688,6 +701,12 @@ is a Lyapunov function for the GLV system.</p>
 <div id="ref-hofbauer1998evolutionary">
 <p>Hofbauer, Josef, and Karl Sigmund. 1998. <em>Evolutionary Games and Population Dynamics</em>. Cambridge university press.</p>
 </div>
+<div id="ref-lotka1920analytical">
+<p>Lotka, Alfred J. 1920. “Analytical Note on Certain Rhythmic Relations in Organic Systems.” <em>Proceedings of the National Academy of Sciences</em> 6 (7): 410–15.</p>
+</div>
+<div id="ref-lotka2002contribution">
+<p>Lotka, Alfred J. 2002. “Contribution to the Theory of Periodic Reactions.” <em>The Journal of Physical Chemistry</em> 14 (3): 271–74.</p>
+</div>
 <div id="ref-may1972will">
 <p>May, Robert M. 1972. “Will a Large Complex System Be Stable?” <em>Nature</em> 238 (5364): 413–14.</p>
 </div>
@@ -696,6 +715,12 @@ is a Lyapunov function for the GLV system.</p>
 </div>
 <div id="ref-strogatz2018nonlinear">
 <p>Strogatz, Steven H. 2018. <em>Nonlinear Dynamics and Chaos: With Applications to Physics, Biology, Chemistry, and Engineering</em>. CRC Press.</p>
+</div>
+<div id="ref-volterra1926fluctuations">
+<p>Volterra, Vito. 1926a. “Fluctuations in the Abundance of a Species Considered Mathematically.” <em>Nature</em> 118: 558–60.</p>
+</div>
+<div id="ref-volterra1926variazioni">
+<p>Volterra, Vito. 1926b. “Variazioni E Fluttuazioni Del Numero d’individui in Specie Animali Conviventi.” <em>Memor. Accad. Lincei.</em> 6: 31–113.</p>
 </div>
 </div>
             </section>
@@ -746,7 +771,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": ["A tour of the Generalized Lotka-Volterra Model.pdf", "A tour of the Generalized Lotka-Volterra Model.epub"],
+"download": ["A Tour of the Generalized Lotka-Volterra Model.pdf", "A Tour of the Generalized Lotka-Volterra Model.epub"],
 "toc": {
 "collapse": "subsection"
 }

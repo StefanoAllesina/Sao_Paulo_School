@@ -7,12 +7,41 @@ knitr::opts_chunk$set(
   warning = FALSE,
   # collapse  = TRUE,
   fig.align = "center")
+#library(png) 
+library(jpeg)
+#library(knitr)
 ```
 
 
 # Generalized Lotka-Volterra {#intro}
 
 ## History
+```{r, echo=FALSE,out.width = "25%"}
+# All defaults
+knitr::include_graphics("images/Lotka.jpg")
+```
+
+Alfred J. Lotka (1880-1949) was born to French-speaking American parents in Lemberg (then part of the Habsburg empire, now Lviv, Ukraine). He studied in France, Germany and England, receiving a BSc in 1901 and a DSc in 1912 from Birmingham university. He moved to the US in 1902, and worked at the US Patent office, as an editor of Scientific American, and as a statistician at the Metropolitan Life Insturance Company in NYC. He wrote more than a hundred papers and five books, spanning a large range of topics. He's best known for the book *Elements of Physical Biology*, his contributions to demography, and one of the first examples of bibliometrics. 
+
+Starting in 1910 (reprinted as @lotka2002contribution) he investigated coupled differential equations relating to chemical as well as ecological dynamics. In @lotka1920analytical he studied a system of two ODEs that gave rise to perpetual oscillations: "It was, therefore, with considerable surprise that the writer, on applying his method to certain special cases, found these to lead to undamped, and hence indefinitely continued, oscillations." He went on to describe "1. A species of organism $S_1$, a plant species, say, deriving its nourishment from a source presented in such large excess that the mass of the source may be considered constant during the period of time with which we are concerned. 2. A species $S_2$, for example a herbivorous animal species, feeding on $S_1$." 
+
+The equations he derived (and then studied later in more detail) are now termed Lotka-Volterra equations.
+
+```{r, echo=FALSE,out.width = "25%"}
+# All defaults
+knitr::include_graphics("images/Volterra.jpg")
+```
+
+Vito Volterra (1860-1940) was born in Ancona (then part of the Papal State) in a poor jewish family. The financial situation precipitated with the death of his father, when Vito was two. Vito and his mother went to live with relatives in Turin and then Florence. Volterra showed amazing mathematical talent at a very early age. Antonio Roiti, professor of physics in Florence, noticed the budding mathematician and hired him as his assistant, so that he could continue his studies. He went on to study at the Scuola Normale in Pisa, receiving a degree in Physics in 1882. At age 23 he was named full professor of Rational Mechanics in Pisa, and then in 1900 of Mathematical Physics in Rome. For thirty years he contributed important studies in mathematics, and instrumental contributions to the academic life in Italy (for example, he was the first director of the National Center for Research). In 1931 he refused to take an oath of loyalty to the Fascist regime (only 12 professors out of 1250 refused), and therefore forced to resign (his take on the fascist enterprise: "Empires die, but Euclid's theorems keep their youth forever"). 
+
+His interest in mathematical ecology is due to Umberto d'Ancona (his son-in-law), who had studied the trends in fisheries in the Adriatic sea before and immediately after WWI. In 1914-1918 fisheries in the Adriatic had stopped completely because of the conflict. He had noticed that, while herbivorous fish had remained about constant, the piscivorous fish had increased dramatically in numbers. The problem piqued Volterra who immediately published a sophisticated study of the same equations introduced by Lotka. In a short letter to Nature [@volterra1926fluctuations], he stated the so-called "Volterra's Principle" (which he termed "Law III"): "a complete closure of the fishery was a form of 'protection' under which the voracious fishes were much the better and prospered accordingly, but the ordinary food-fishes, on which these are accustomed to prey, were worse off than before." This brief paper was a summary of the much larger @volterra1926variazioni.
+
+
+### Lotka-Volterra interactions
+
+In 1927, Lotka wrote to Nature to raise the issue that the equations studied by Volterra and the figures presented in Volterra's brief article were identical to those found in *Elements of Physical Biology* (published in 1925). He concludes that "It would be gratifying if Prof. Volterra's publication should direct attention to a field and method of inquiry which apparently has hitherto passed almost unnoticed."
+
+Volterra graciously conceded "I recognize his priority, and am sorry not to have known his work, and therefore not have been able to mention it." He however lists a few points in which the two authors pursued different directions, and concludes "Working independently the one from the other, we have found some common results, and this confirms the exactitude and the interest in the position of the problem. I agree with him in his conclusions that these studies and these methods of research deserve to receive greated attention from scholars, and should give rise to important applications."
 
 ## Basic formulation
 
@@ -349,7 +378,7 @@ res_4 %>% filter(time > 50) %>%
 solve(A_4, -r_4)
 ```
 
-### D-stability and Lyapunov function
+## D-stability and Lyapunov function
 
 Suppose that there is a positive diagonal matrix $C$ such that $CA + A^t C$ is negative definite (i.e., has only negative eigenvalues; the eigenvalues are real because the matrix is symmetric). Further, suppose that the GLV system with parameters $A$ and $r$ has a feasible equilibrium point $x^\star$. Then the function:
 
@@ -388,7 +417,6 @@ solve(A, -r)
 res <- integrate_GLV(r, A, abs(rnorm(2)))
 res <- integrate_GLV(r, A, abs(rnorm(2)))
 ```
-
 
 ## Stability of large random communities
 

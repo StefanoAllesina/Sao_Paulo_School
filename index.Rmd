@@ -1,11 +1,11 @@
 --- 
-title: "A tour of the Generalized Lotka-Volterra Model"
+title: "A Tour of the Generalized Lotka-Volterra Model"
 author: "Stefano Allesina"
 date: "`r Sys.Date()`"
 output:
-  pdf_document: default
   html_document:
     df_print: paged
+  pdf_document: default
 description: 'Lectures for the ICTP-SAIFR/IFT-UNESP *School on Community Ecology:
   from patterns to principles* '
 documentclass: book
