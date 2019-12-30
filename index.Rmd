@@ -1,17 +1,16 @@
 --- 
 title: "A Tour of the Generalized Lotka-Volterra Model"
+site: bookdown::bookdown_site
 author: "Stefano Allesina"
 date: "`r Sys.Date()`"
 output:
   html_document:
     df_print: paged
   pdf_document: default
-description: 'Lectures for the ICTP-SAIFR/IFT-UNESP *School on Community Ecology:
-  from patterns to principles* '
+description: 'Lectures for the ICTP-SAIFR/IFT-UNESP *School on Community Ecology: from patterns to principles* '
 documentclass: book
 link-citations: yes
 bibliography: book.bib
-site: bookdown::bookdown_site
 biblio-style: apalike
 ---
 
@@ -22,7 +21,7 @@ knitr::write_bib(c(
 ), 'packages.bib')
 ```
 
-```{r knitr, echo=FALSE}
+```{r knitr1, echo=FALSE}
 knitr::opts_chunk$set(
   eval      = TRUE,
   comment   = "#",

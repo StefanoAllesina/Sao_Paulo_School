@@ -1,4 +1,4 @@
-```{r knitr, echo=FALSE}
+```{r knitr2, echo=FALSE}
 knitr::opts_chunk$set(
   eval      = TRUE,
   comment   = "#",
@@ -11,7 +11,6 @@ knitr::opts_chunk$set(
 library(jpeg)
 #library(knitr)
 ```
-
 
 # Generalized Lotka-Volterra {#intro}
 

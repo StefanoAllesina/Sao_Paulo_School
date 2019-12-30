@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 5 Simple models for synthetic communities | A Tour of the Generalized Lotka-Volterra Model</title>
+  <title>5 Simple models for synthetic communities | A Tour of the Generalized Lotka-Volterra Model</title>
   <meta name="description" content="Lectures for the ICTP-SAIFR/IFT-UNESP School on Community Ecology: from patterns to principles" />
   <meta name="generator" content="bookdown 0.16 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 5 Simple models for synthetic communities | A Tour of the Generalized Lotka-Volterra Model" />
+  <meta property="og:title" content="5 Simple models for synthetic communities | A Tour of the Generalized Lotka-Volterra Model" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 5 Simple models for synthetic communities | A Tour of the Generalized Lotka-Volterra Model" />
+  <meta name="twitter:title" content="5 Simple models for synthetic communities | A Tour of the Generalized Lotka-Volterra Model" />
   
   <meta name="twitter:description" content="Lectures for the ICTP-SAIFR/IFT-UNESP School on Community Ecology: from patterns to principles" />
   
@@ -210,7 +210,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="data" class="section level1">
-<h1><span class="header-section-number">Chapter 5</span> Simple models for synthetic communities</h1>
+<h1><span class="header-section-number">5</span> Simple models for synthetic communities</h1>
 <p>Ecologists have performed large experiments in which different assemblages of species are co-cultured. These experiments have been conducted with plants (for example, Biodiversity Ecosystem Functioning experiments e.g., <span class="citation">(Hector et al. <a href="#ref-hector1999plant" role="doc-biblioref">1999</a>)</span> <span class="citation">(Tilman et al. <a href="#ref-tilman2001diversity" role="doc-biblioref">2001</a>)</span> <span class="citation">(Cadotte <a href="#ref-cadotte2013experimental" role="doc-biblioref">2013</a>)</span>) and in the laboratory using protozoan, algae or bacteria. Two commonly-encountered problems in this type of experiments have to to with the scaling of the number of experiments with the number of species, and with the probability of coexistence.</p>
 <p><strong>Scale:</strong> How many communities can we form from a pool of <span class="math inline">\(n\)</span> species? We can culture a single species in isolation (<span class="math inline">\(n\)</span> possibilities), two species in pair (<span class="math inline">\(n(n-1) / 2\)</span> possibilities), and so on. The total is therefore:</p>
 <p><span class="math display">\[
@@ -224,17 +224,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>To set the stage for deriving a statistical model that can deal with the problems above, we start by simulating the communities that can be formed from a pool of <span class="math inline">\(n\)</span> species using the GLV model. First, we need a way to index our communities. We take a vector <span class="math inline">\(p\)</span> reporting the presence/absence of a given species at the beginning of the experiment. We then associate a label <span class="math inline">\(k \in \{1, \ldots, 2^n -1\}\)</span> with the experiment. This label uniquely defines the composition of a community. If only taxon 1 is present (<span class="math inline">\(p = [1,0,0,\ldots,0]\)</span>), then <span class="math inline">\(k = 1\)</span>, if only taxon 2 is present (<span class="math inline">\(p =[0,1,0,\ldots,0]\)</span>) then <span class="math inline">\(k = 2\)</span>, if both taxa 1 and 2 are part of the experiment, <span class="math inline">\(k = 3\)</span> (<span class="math inline">\(p = [1,1,0,\ldots,0]\)</span>); in general, <span class="math inline">\(k = \sum_{i = 1}^n p_i 2^{(i-1)}\)</span> where <span class="math inline">\(p_i = 1\)</span> if taxon <span class="math inline">\(i\)</span> is part of the experiment, and <span class="math inline">\(p_i = 0\)</span> otherwise.</p>
 <p>We can then cycle through each of the <span class="math inline">\(2^n - 1\)</span> assemblages that can be formed, and determine whether the species will coexist or not in our experiment. For simplicity, we report as coexisting any set of species for which a) the GLV equilibrium is feasible, and b) it is locally stable. We collect all the communities that are coexisting along with the abundance of all species in the matrix <span class="math inline">\(E\)</span>.</p>
 <p>In <code>R</code>:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="data.html#cb1-1"></a><span class="kw">set.seed</span>(<span class="dv">3</span>)</span>
-<span id="cb1-2"><a href="data.html#cb1-2"></a><span class="co"># take a random matrix of interactions: </span></span>
-<span id="cb1-3"><a href="data.html#cb1-3"></a><span class="co"># -Aij &lt;- U[0,1]; -Aii &lt;- Sqrt(2) + U[0,1]</span></span>
-<span id="cb1-4"><a href="data.html#cb1-4"></a><span class="co"># all interactions are competitive</span></span>
-<span id="cb1-5"><a href="data.html#cb1-5"></a>n &lt;-<span class="st"> </span><span class="dv">5</span></span>
-<span id="cb1-6"><a href="data.html#cb1-6"></a>A &lt;-<span class="st"> </span><span class="op">-</span><span class="kw">matrix</span>(<span class="kw">runif</span>(n <span class="op">*</span><span class="st"> </span>n), n, n)</span>
-<span id="cb1-7"><a href="data.html#cb1-7"></a><span class="kw">diag</span>(A) &lt;-<span class="st"> </span><span class="kw">diag</span>(A) <span class="op">-</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="dv">2</span>)</span>
-<span id="cb1-8"><a href="data.html#cb1-8"></a><span class="kw">print</span>(A)</span>
-<span id="cb1-9"><a href="data.html#cb1-9"></a><span class="co"># choose positive growth rates</span></span>
-<span id="cb1-10"><a href="data.html#cb1-10"></a>r &lt;-<span class="st"> </span><span class="kw">runif</span>(n) <span class="op">+</span><span class="st"> </span><span class="fl">0.5</span></span>
-<span id="cb1-11"><a href="data.html#cb1-11"></a><span class="kw">print</span>(r)</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="data.html#cb33-1"></a><span class="kw">set.seed</span>(<span class="dv">3</span>)</span>
+<span id="cb33-2"><a href="data.html#cb33-2"></a><span class="co"># take a random matrix of interactions: </span></span>
+<span id="cb33-3"><a href="data.html#cb33-3"></a><span class="co"># -Aij &lt;- U[0,1]; -Aii &lt;- Sqrt(2) + U[0,1]</span></span>
+<span id="cb33-4"><a href="data.html#cb33-4"></a><span class="co"># all interactions are competitive</span></span>
+<span id="cb33-5"><a href="data.html#cb33-5"></a>n &lt;-<span class="st"> </span><span class="dv">5</span></span>
+<span id="cb33-6"><a href="data.html#cb33-6"></a>A &lt;-<span class="st"> </span><span class="op">-</span><span class="kw">matrix</span>(<span class="kw">runif</span>(n <span class="op">*</span><span class="st"> </span>n), n, n)</span>
+<span id="cb33-7"><a href="data.html#cb33-7"></a><span class="kw">diag</span>(A) &lt;-<span class="st"> </span><span class="kw">diag</span>(A) <span class="op">-</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="dv">2</span>)</span>
+<span id="cb33-8"><a href="data.html#cb33-8"></a><span class="kw">print</span>(A)</span>
+<span id="cb33-9"><a href="data.html#cb33-9"></a><span class="co"># choose positive growth rates</span></span>
+<span id="cb33-10"><a href="data.html#cb33-10"></a>r &lt;-<span class="st"> </span><span class="kw">runif</span>(n) <span class="op">+</span><span class="st"> </span><span class="fl">0.5</span></span>
+<span id="cb33-11"><a href="data.html#cb33-11"></a><span class="kw">print</span>(r)</span></code></pre></div>
 <pre><code>#            [,1]       [,2]       [,3]       [,4]        [,5]
 # [1,] -1.5822551 -0.6043941 -0.5120159 -0.8297087 -0.22820188
 # [2,] -0.8075164 -1.5388470 -0.5050239 -0.1114492 -0.01532989
@@ -243,34 +243,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 # [5,] -0.6021007 -0.6309793 -0.8679195 -0.2797326 -1.65109857
 # [1] 1.291147 1.099732 1.410148 1.060425 1.255705</code></pre>
 <p>Now go through all possible combinations:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="data.html#cb3-1"></a>E &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, <span class="dv">0</span>, n) <span class="co"># matrix containing all communities</span></span>
-<span id="cb3-2"><a href="data.html#cb3-2"></a>x_template &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, n) <span class="co"># template for row of E</span></span>
-<span id="cb3-3"><a href="data.html#cb3-3"></a><span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>(<span class="dv">2</span><span class="op">^</span>n <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)){</span>
-<span id="cb3-4"><a href="data.html#cb3-4"></a>  p &lt;-<span class="st"> </span><span class="kw">as.integer</span>(<span class="kw">intToBits</span>(k)[<span class="dv">1</span><span class="op">:</span>n])</span>
-<span id="cb3-5"><a href="data.html#cb3-5"></a>  presence &lt;-<span class="st"> </span>p <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span></span>
-<span id="cb3-6"><a href="data.html#cb3-6"></a>  A_k &lt;-<span class="st"> </span>A[presence, presence, drop =<span class="st"> </span><span class="ot">FALSE</span>]</span>
-<span id="cb3-7"><a href="data.html#cb3-7"></a>  r_k &lt;-<span class="st"> </span>r[presence]</span>
-<span id="cb3-8"><a href="data.html#cb3-8"></a>  <span class="co"># check if equilibrium is feasible</span></span>
-<span id="cb3-9"><a href="data.html#cb3-9"></a>  x_k_star &lt;-<span class="st"> </span><span class="kw">solve</span>(A_k, <span class="op">-</span>r_k)</span>
-<span id="cb3-10"><a href="data.html#cb3-10"></a>  <span class="cf">if</span> (<span class="kw">all</span>(x_k_star <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)){</span>
-<span id="cb3-11"><a href="data.html#cb3-11"></a>    <span class="co"># check if equilibrium is locally stable</span></span>
-<span id="cb3-12"><a href="data.html#cb3-12"></a>    <span class="co"># a) build community matrix</span></span>
-<span id="cb3-13"><a href="data.html#cb3-13"></a>    M &lt;-<span class="st"> </span>x_k_star <span class="op">*</span><span class="st"> </span>A_k</span>
-<span id="cb3-14"><a href="data.html#cb3-14"></a>    <span class="co"># b) compute eigenvalues</span></span>
-<span id="cb3-15"><a href="data.html#cb3-15"></a>    eM &lt;-<span class="st"> </span><span class="kw">eigen</span>(M, <span class="dt">only.values =</span> <span class="ot">TRUE</span>)<span class="op">$</span>values</span>
-<span id="cb3-16"><a href="data.html#cb3-16"></a>    <span class="co"># c) check stability</span></span>
-<span id="cb3-17"><a href="data.html#cb3-17"></a>    <span class="cf">if</span> (<span class="kw">all</span>(<span class="kw">Re</span>(eM) <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span>)){</span>
-<span id="cb3-18"><a href="data.html#cb3-18"></a>      <span class="co"># we have a feasible, stable equilibrium</span></span>
-<span id="cb3-19"><a href="data.html#cb3-19"></a>      <span class="co"># add to the set</span></span>
-<span id="cb3-20"><a href="data.html#cb3-20"></a>      tmp &lt;-<span class="st"> </span>x_template</span>
-<span id="cb3-21"><a href="data.html#cb3-21"></a>      tmp[presence] &lt;-<span class="st"> </span>x_k_star</span>
-<span id="cb3-22"><a href="data.html#cb3-22"></a>      E &lt;-<span class="st"> </span><span class="kw">rbind</span>(E, tmp)</span>
-<span id="cb3-23"><a href="data.html#cb3-23"></a>    }</span>
-<span id="cb3-24"><a href="data.html#cb3-24"></a>  }</span>
-<span id="cb3-25"><a href="data.html#cb3-25"></a>}</span>
-<span id="cb3-26"><a href="data.html#cb3-26"></a><span class="kw">rownames</span>(E) &lt;-<span class="st"> </span><span class="ot">NULL</span></span>
-<span id="cb3-27"><a href="data.html#cb3-27"></a><span class="kw">head</span>(E) <span class="co"># show the first few communities</span></span>
-<span id="cb3-28"><a href="data.html#cb3-28"></a><span class="kw">tail</span>(E) <span class="co"># show the last few communities</span></span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="data.html#cb35-1"></a>E &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, <span class="dv">0</span>, n) <span class="co"># matrix containing all communities</span></span>
+<span id="cb35-2"><a href="data.html#cb35-2"></a>x_template &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, n) <span class="co"># template for row of E</span></span>
+<span id="cb35-3"><a href="data.html#cb35-3"></a><span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>(<span class="dv">2</span><span class="op">^</span>n <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)){</span>
+<span id="cb35-4"><a href="data.html#cb35-4"></a>  p &lt;-<span class="st"> </span><span class="kw">as.integer</span>(<span class="kw">intToBits</span>(k)[<span class="dv">1</span><span class="op">:</span>n])</span>
+<span id="cb35-5"><a href="data.html#cb35-5"></a>  presence &lt;-<span class="st"> </span>p <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span></span>
+<span id="cb35-6"><a href="data.html#cb35-6"></a>  A_k &lt;-<span class="st"> </span>A[presence, presence, drop =<span class="st"> </span><span class="ot">FALSE</span>]</span>
+<span id="cb35-7"><a href="data.html#cb35-7"></a>  r_k &lt;-<span class="st"> </span>r[presence]</span>
+<span id="cb35-8"><a href="data.html#cb35-8"></a>  <span class="co"># check if equilibrium is feasible</span></span>
+<span id="cb35-9"><a href="data.html#cb35-9"></a>  x_k_star &lt;-<span class="st"> </span><span class="kw">solve</span>(A_k, <span class="op">-</span>r_k)</span>
+<span id="cb35-10"><a href="data.html#cb35-10"></a>  <span class="cf">if</span> (<span class="kw">all</span>(x_k_star <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)){</span>
+<span id="cb35-11"><a href="data.html#cb35-11"></a>    <span class="co"># check if equilibrium is locally stable</span></span>
+<span id="cb35-12"><a href="data.html#cb35-12"></a>    <span class="co"># a) build community matrix</span></span>
+<span id="cb35-13"><a href="data.html#cb35-13"></a>    M &lt;-<span class="st"> </span>x_k_star <span class="op">*</span><span class="st"> </span>A_k</span>
+<span id="cb35-14"><a href="data.html#cb35-14"></a>    <span class="co"># b) compute eigenvalues</span></span>
+<span id="cb35-15"><a href="data.html#cb35-15"></a>    eM &lt;-<span class="st"> </span><span class="kw">eigen</span>(M, <span class="dt">only.values =</span> <span class="ot">TRUE</span>)<span class="op">$</span>values</span>
+<span id="cb35-16"><a href="data.html#cb35-16"></a>    <span class="co"># c) check stability</span></span>
+<span id="cb35-17"><a href="data.html#cb35-17"></a>    <span class="cf">if</span> (<span class="kw">all</span>(<span class="kw">Re</span>(eM) <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span>)){</span>
+<span id="cb35-18"><a href="data.html#cb35-18"></a>      <span class="co"># we have a feasible, stable equilibrium</span></span>
+<span id="cb35-19"><a href="data.html#cb35-19"></a>      <span class="co"># add to the set</span></span>
+<span id="cb35-20"><a href="data.html#cb35-20"></a>      tmp &lt;-<span class="st"> </span>x_template</span>
+<span id="cb35-21"><a href="data.html#cb35-21"></a>      tmp[presence] &lt;-<span class="st"> </span>x_k_star</span>
+<span id="cb35-22"><a href="data.html#cb35-22"></a>      E &lt;-<span class="st"> </span><span class="kw">rbind</span>(E, tmp)</span>
+<span id="cb35-23"><a href="data.html#cb35-23"></a>    }</span>
+<span id="cb35-24"><a href="data.html#cb35-24"></a>  }</span>
+<span id="cb35-25"><a href="data.html#cb35-25"></a>}</span>
+<span id="cb35-26"><a href="data.html#cb35-26"></a><span class="kw">rownames</span>(E) &lt;-<span class="st"> </span><span class="ot">NULL</span></span>
+<span id="cb35-27"><a href="data.html#cb35-27"></a><span class="kw">head</span>(E) <span class="co"># show the first few communities</span></span>
+<span id="cb35-28"><a href="data.html#cb35-28"></a><span class="kw">tail</span>(E) <span class="co"># show the last few communities</span></span></code></pre></div>
 <pre><code>#           [,1]      [,2]      [,3] [,4] [,5]
 # [1,] 0.8160172 0.0000000 0.0000000    0    0
 # [2,] 0.0000000 0.7146465 0.0000000    0    0
@@ -289,13 +289,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="total-biomass" class="section level2">
 <h2><span class="header-section-number">5.2</span> Total biomass</h2>
 <p>Our simulated communties have much in common with BEF experiments. For example, plotting the species richness on the x-axis and the total biomass on the y-axis, we recover the typical pattern found in real experiments (<span class="citation">(Hector et al. <a href="#ref-hector1999plant" role="doc-biblioref">1999</a>)</span> <span class="citation">(Tilman et al. <a href="#ref-tilman2001diversity" role="doc-biblioref">2001</a>)</span> <span class="citation">Cadotte (<a href="#ref-cadotte2013experimental" role="doc-biblioref">2013</a>)</span>]):</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="data.html#cb5-1"></a><span class="kw">library</span>(tidyverse) <span class="co"># plotting and wrangling</span></span>
-<span id="cb5-2"><a href="data.html#cb5-2"></a>total_biomass &lt;-<span class="st"> </span><span class="kw">rowSums</span>(E)</span>
-<span id="cb5-3"><a href="data.html#cb5-3"></a>species_richness &lt;-<span class="st"> </span><span class="kw">rowSums</span>(E <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)</span>
-<span id="cb5-4"><a href="data.html#cb5-4"></a>BEF &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">species_richness =</span> species_richness, <span class="dt">total_biomass =</span> total_biomass)</span>
-<span id="cb5-5"><a href="data.html#cb5-5"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> BEF) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb5-6"><a href="data.html#cb5-6"></a><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> species_richness, <span class="dt">y =</span> total_biomass) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb5-7"><a href="data.html#cb5-7"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="data.html#cb37-1"></a><span class="kw">library</span>(tidyverse) <span class="co"># plotting and wrangling</span></span>
+<span id="cb37-2"><a href="data.html#cb37-2"></a>total_biomass &lt;-<span class="st"> </span><span class="kw">rowSums</span>(E)</span>
+<span id="cb37-3"><a href="data.html#cb37-3"></a>species_richness &lt;-<span class="st"> </span><span class="kw">rowSums</span>(E <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)</span>
+<span id="cb37-4"><a href="data.html#cb37-4"></a>BEF &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">species_richness =</span> species_richness, <span class="dt">total_biomass =</span> total_biomass)</span>
+<span id="cb37-5"><a href="data.html#cb37-5"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> BEF) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb37-6"><a href="data.html#cb37-6"></a><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> species_richness, <span class="dt">y =</span> total_biomass) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb37-7"><a href="data.html#cb37-7"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>()</span></code></pre></div>
 <p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/glvbefplot-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>showing a modest increase in total biomass with increasing species richness.</p>
 </div>
@@ -311,7 +311,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 where we have <span class="math inline">\(b_{ij} = a_{ij} / r_i\)</span>. The equilibrium for each subset of species <span class="math inline">\(k\)</span> (if it exists) can be found as <span class="math inline">\((B^{(k)})^{-1} 1^{(k)}\)</span>, where <span class="math inline">\((B^{(k)})^{-1}\)</span> is the inverse of the <span class="math inline">\(B^{(k)}\)</span> sub-matrix of <span class="math inline">\(B\)</span> in which only the rows/columns belonging to <span class="math inline">\(k\)</span> are retained, and <span class="math inline">\(1^{(k)}\)</span> is a vector of ones with length equal to the number of species in <span class="math inline">\(k\)</span>.</p>
 <p>We now want to link the matrix <span class="math inline">\(B\)</span> with the results of the experiments, stored in matrix <span class="math inline">\(E\)</span>. Call <span class="math inline">\(x^{(k)}_i\)</span> the recorded density of taxon <span class="math inline">\(i\)</span> in community <span class="math inline">\(k\)</span> (i.e., stored in one of the rows of <span class="math inline">\(E\)</span>). Then, we can build a matrix <span class="math inline">\(P\)</span> where each row represents an equation <span class="math inline">\(\sum_j b_{ij} x_j^{(k)} = 1\)</span> and we have a column for each coefficient in <span class="math inline">\(A\)</span>. For example, take three taxa, and suppose that we can culture each in isolation, and that the all assemblages coexist when co-cultured. We can write 12 equations: monocultures (<span class="math inline">\(k \in \{1, 2, 4\}\)</span>) give rise to a single equation; co-cultures of two taxa to two equations each (<span class="math inline">\(k \in \{3, 5, 6 \}\)</span>); and communities with three taxa to three independent equations (<span class="math inline">\(k = 7\)</span>). Here are the 12 equations we can write:</p>
 <p><span class="math display">\[
-\begin{align}
+\begin{aligned}
 b_{11} x_1^{(1)} &amp;= 1\\
 b_{22} x_2^{(2)} &amp;= 1\\
 b_{11} x_1^{(3)} + b_{12}x_2^{(3)} &amp;= 1\\
@@ -324,7 +324,7 @@ b_{32} x_2^{(6)} + b_{33} x_3^{(6)} &amp;= 1\\
 b_{11} x_1^{(7)} + b_{12} x_2^{(7)} + b_{13} x_3^{(7)} &amp; = 1\\
 b_{21} x_1^{(7)} + b_{22} x_2^{(7)} + b_{23} x_3^{(7)} &amp; = 1\\
 b_{31} x_1^{(7)} + b_{32} x_2^{(7)} + b_{33} x_3^{(7)} &amp; = 1
-\end{align}
+\end{aligned}
 \]</span></p>
 <p>We can summarize the equations in a more compact form as <span class="math inline">\(P v(B)=1\)</span>:</p>
 <p><span class="math display">\[
@@ -434,39 +434,39 @@ b_{13}
 \end{pmatrix}
 \]</span></p>
 <p>For example:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="data.html#cb6-1"></a><span class="co"># rescaled matrix</span></span>
-<span id="cb6-2"><a href="data.html#cb6-2"></a>B &lt;-<span class="st"> </span><span class="dv">1</span> <span class="op">/</span><span class="st"> </span>r <span class="op">*</span><span class="st"> </span>A</span>
-<span id="cb6-3"><a href="data.html#cb6-3"></a><span class="co"># now try to recover B from matrix E</span></span>
-<span id="cb6-4"><a href="data.html#cb6-4"></a>fitted_B &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, n, n)</span>
-<span id="cb6-5"><a href="data.html#cb6-5"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>n){</span>
-<span id="cb6-6"><a href="data.html#cb6-6"></a>  <span class="co"># take the matrix Ei</span></span>
-<span id="cb6-7"><a href="data.html#cb6-7"></a>  Ei &lt;-<span class="st"> </span>E[E[,i] <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>, , drop =<span class="st"> </span><span class="ot">FALSE</span>]</span>
-<span id="cb6-8"><a href="data.html#cb6-8"></a>  <span class="co"># solve for the row</span></span>
-<span id="cb6-9"><a href="data.html#cb6-9"></a>  fitted_B[i,] &lt;-<span class="st"> </span><span class="op">-</span><span class="kw">rowSums</span>(MASS<span class="op">::</span><span class="kw">ginv</span>(Ei))</span>
-<span id="cb6-10"><a href="data.html#cb6-10"></a>}</span>
-<span id="cb6-11"><a href="data.html#cb6-11"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> <span class="kw">tibble</span>(<span class="dt">real =</span> <span class="kw">as.vector</span>(B),</span>
-<span id="cb6-12"><a href="data.html#cb6-12"></a>                     <span class="dt">fitted =</span> <span class="kw">as.vector</span>(fitted_B))) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb6-13"><a href="data.html#cb6-13"></a><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> real, <span class="dt">y =</span> fitted) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span></span>
-<span id="cb6-14"><a href="data.html#cb6-14"></a><span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">slope =</span> <span class="dv">1</span>, <span class="dt">intercept =</span> <span class="dv">0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="data.html#cb38-1"></a><span class="co"># rescaled matrix</span></span>
+<span id="cb38-2"><a href="data.html#cb38-2"></a>B &lt;-<span class="st"> </span><span class="dv">1</span> <span class="op">/</span><span class="st"> </span>r <span class="op">*</span><span class="st"> </span>A</span>
+<span id="cb38-3"><a href="data.html#cb38-3"></a><span class="co"># now try to recover B from matrix E</span></span>
+<span id="cb38-4"><a href="data.html#cb38-4"></a>fitted_B &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, n, n)</span>
+<span id="cb38-5"><a href="data.html#cb38-5"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>n){</span>
+<span id="cb38-6"><a href="data.html#cb38-6"></a>  <span class="co"># take the matrix Ei</span></span>
+<span id="cb38-7"><a href="data.html#cb38-7"></a>  Ei &lt;-<span class="st"> </span>E[E[,i] <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>, , drop =<span class="st"> </span><span class="ot">FALSE</span>]</span>
+<span id="cb38-8"><a href="data.html#cb38-8"></a>  <span class="co"># solve for the row</span></span>
+<span id="cb38-9"><a href="data.html#cb38-9"></a>  fitted_B[i,] &lt;-<span class="st"> </span><span class="op">-</span><span class="kw">rowSums</span>(MASS<span class="op">::</span><span class="kw">ginv</span>(Ei))</span>
+<span id="cb38-10"><a href="data.html#cb38-10"></a>}</span>
+<span id="cb38-11"><a href="data.html#cb38-11"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> <span class="kw">tibble</span>(<span class="dt">real =</span> <span class="kw">as.vector</span>(B),</span>
+<span id="cb38-12"><a href="data.html#cb38-12"></a>                     <span class="dt">fitted =</span> <span class="kw">as.vector</span>(fitted_B))) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb38-13"><a href="data.html#cb38-13"></a><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> real, <span class="dt">y =</span> fitted) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span></span>
+<span id="cb38-14"><a href="data.html#cb38-14"></a><span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">slope =</span> <span class="dv">1</span>, <span class="dt">intercept =</span> <span class="dv">0</span>)</span></code></pre></div>
 <p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/examplefitendpoints-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Notice that in general the system of equations is over-determined. As such, we can fit using a subset of the experiments, and then predict the rest of the experiments out-of-fit. For example, let’s fit again using the information on monocultures and pairs only, and then predict experiment 31, in which all species should coexist:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="data.html#cb7-1"></a>E_partial &lt;-<span class="st"> </span>E[<span class="kw">rowSums</span>(E<span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">&lt;</span><span class="st"> </span><span class="dv">3</span>, ]</span>
-<span id="cb7-2"><a href="data.html#cb7-2"></a>fitted_B &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, n, n)</span>
-<span id="cb7-3"><a href="data.html#cb7-3"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>n){</span>
-<span id="cb7-4"><a href="data.html#cb7-4"></a>  <span class="co"># take the matrix Ei</span></span>
-<span id="cb7-5"><a href="data.html#cb7-5"></a>  Ei &lt;-<span class="st"> </span>E_partial[E_partial[,i] <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>, , drop =<span class="st"> </span><span class="ot">FALSE</span>]</span>
-<span id="cb7-6"><a href="data.html#cb7-6"></a>  <span class="co"># solve for the row</span></span>
-<span id="cb7-7"><a href="data.html#cb7-7"></a>  fitted_B[i,] &lt;-<span class="st"> </span><span class="op">-</span><span class="kw">rowSums</span>(MASS<span class="op">::</span><span class="kw">ginv</span>(Ei))</span>
-<span id="cb7-8"><a href="data.html#cb7-8"></a>}</span>
-<span id="cb7-9"><a href="data.html#cb7-9"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> <span class="kw">tibble</span>(<span class="dt">real =</span> <span class="kw">as.vector</span>(B),</span>
-<span id="cb7-10"><a href="data.html#cb7-10"></a>                     <span class="dt">fitted =</span> <span class="kw">as.vector</span>(fitted_B))) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb7-11"><a href="data.html#cb7-11"></a><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> real, <span class="dt">y =</span> fitted) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span></span>
-<span id="cb7-12"><a href="data.html#cb7-12"></a><span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">slope =</span> <span class="dv">1</span>, <span class="dt">intercept =</span> <span class="dv">0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="data.html#cb39-1"></a>E_partial &lt;-<span class="st"> </span>E[<span class="kw">rowSums</span>(E<span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">&lt;</span><span class="st"> </span><span class="dv">3</span>, ]</span>
+<span id="cb39-2"><a href="data.html#cb39-2"></a>fitted_B &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, n, n)</span>
+<span id="cb39-3"><a href="data.html#cb39-3"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>n){</span>
+<span id="cb39-4"><a href="data.html#cb39-4"></a>  <span class="co"># take the matrix Ei</span></span>
+<span id="cb39-5"><a href="data.html#cb39-5"></a>  Ei &lt;-<span class="st"> </span>E_partial[E_partial[,i] <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>, , drop =<span class="st"> </span><span class="ot">FALSE</span>]</span>
+<span id="cb39-6"><a href="data.html#cb39-6"></a>  <span class="co"># solve for the row</span></span>
+<span id="cb39-7"><a href="data.html#cb39-7"></a>  fitted_B[i,] &lt;-<span class="st"> </span><span class="op">-</span><span class="kw">rowSums</span>(MASS<span class="op">::</span><span class="kw">ginv</span>(Ei))</span>
+<span id="cb39-8"><a href="data.html#cb39-8"></a>}</span>
+<span id="cb39-9"><a href="data.html#cb39-9"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> <span class="kw">tibble</span>(<span class="dt">real =</span> <span class="kw">as.vector</span>(B),</span>
+<span id="cb39-10"><a href="data.html#cb39-10"></a>                     <span class="dt">fitted =</span> <span class="kw">as.vector</span>(fitted_B))) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb39-11"><a href="data.html#cb39-11"></a><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> real, <span class="dt">y =</span> fitted) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span></span>
+<span id="cb39-12"><a href="data.html#cb39-12"></a><span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">slope =</span> <span class="dv">1</span>, <span class="dt">intercept =</span> <span class="dv">0</span>)</span></code></pre></div>
 <p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/examplefitendpoints2-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="data.html#cb8-1"></a><span class="kw">print</span>(<span class="st">&quot;predicted&quot;</span>)</span>
-<span id="cb8-2"><a href="data.html#cb8-2"></a><span class="kw">solve</span>(fitted_B, <span class="op">-</span><span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span>, n))</span>
-<span id="cb8-3"><a href="data.html#cb8-3"></a><span class="kw">print</span>(<span class="st">&quot;observed&quot;</span>)</span>
-<span id="cb8-4"><a href="data.html#cb8-4"></a>E[(<span class="dv">2</span><span class="op">^</span>n <span class="dv">-1</span>), ]</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="data.html#cb40-1"></a><span class="kw">print</span>(<span class="st">&quot;predicted&quot;</span>)</span>
+<span id="cb40-2"><a href="data.html#cb40-2"></a><span class="kw">solve</span>(fitted_B, <span class="op">-</span><span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span>, n))</span>
+<span id="cb40-3"><a href="data.html#cb40-3"></a><span class="kw">print</span>(<span class="st">&quot;observed&quot;</span>)</span>
+<span id="cb40-4"><a href="data.html#cb40-4"></a>E[(<span class="dv">2</span><span class="op">^</span>n <span class="dv">-1</span>), ]</span></code></pre></div>
 <pre><code># [1] &quot;predicted&quot;
 # [1] 0.4000232 0.3200119 0.5151320 0.1902248 0.1893434
 # [1] &quot;observed&quot;
@@ -551,7 +551,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": ["A Tour of the Generalized Lotka-Volterra Model.pdf", "A Tour of the Generalized Lotka-Volterra Model.epub"],
+"download": ["A Tour of the Generalized Lotka-Volterra Model.pdf"],
 "toc": {
 "collapse": "subsection"
 }

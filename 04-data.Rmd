@@ -1,4 +1,4 @@
-```{r knitr, echo=FALSE}
+```{r knitr5, echo=FALSE}
 knitr::opts_chunk$set(
   eval      = TRUE,
   comment   = "#",
@@ -115,7 +115,7 @@ where we have $b_{ij} = a_{ij} / r_i$. The equilibrium for each subset of specie
 We now want to link the matrix $B$ with the results of the experiments, stored in matrix $E$. Call $x^{(k)}_i$ the recorded density of taxon $i$ in community $k$ (i.e., stored in one of the rows of $E$). Then, we can build a matrix $P$ where each row represents an equation $\sum_j b_{ij} x_j^{(k)} = 1$ and we have a column for each coefficient in $A$. For example, take three taxa, and suppose that we can culture each in isolation, and that the all assemblages coexist when co-cultured. We can write 12 equations: monocultures ($k \in \{1, 2, 4\}$) give rise to a single equation; co-cultures of two taxa to two equations each ($k \in \{3, 5, 6 \}$); and communities with three taxa to three independent equations ($k = 7$). Here are the 12 equations we can write:
 
 $$
-\begin{align}
+\begin{aligned}
 b_{11} x_1^{(1)} &= 1\\
 b_{22} x_2^{(2)} &= 1\\
 b_{11} x_1^{(3)} + b_{12}x_2^{(3)} &= 1\\
@@ -128,7 +128,7 @@ b_{32} x_2^{(6)} + b_{33} x_3^{(6)} &= 1\\
 b_{11} x_1^{(7)} + b_{12} x_2^{(7)} + b_{13} x_3^{(7)} & = 1\\
 b_{21} x_1^{(7)} + b_{22} x_2^{(7)} + b_{23} x_3^{(7)} & = 1\\
 b_{31} x_1^{(7)} + b_{32} x_2^{(7)} + b_{33} x_3^{(7)} & = 1
-\end{align}
+\end{aligned}
 $$
 
 We can summarize the equations in a more compact form as $P v(B)=1$:

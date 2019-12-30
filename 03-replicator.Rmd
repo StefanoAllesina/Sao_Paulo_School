@@ -1,4 +1,4 @@
-```{r knitr, echo=FALSE}
+```{r knitr4, echo=FALSE}
 knitr::opts_chunk$set(
   eval      = TRUE,
   comment   = "#",
@@ -56,9 +56,13 @@ A mixed strategy $x$ is dominated by mixed strategy $\tilde{x}$ if $\tilde{x}^t 
 A pair of mixed strategies $\tilde{x}$ and $\tilde{y}$ is called a Nash Equilibrium for a two person matrix game if:
 
 $$
-\tilde{x}^t A \tilde{y} \geq x^t A \tilde{y} \quad \text{for all } x\\
-\tilde{y}^t B \tilde{x} \geq y^t B \tilde{x} \quad \text{for all } y\\
+\begin{aligned}
+\tilde{x}^t A \tilde{y} \geq x^t A \tilde{y} &\quad \text{for all } x\\
+\tilde{y}^t B \tilde{x} \geq y^t B \tilde{x} &\quad \text{for all } y
+\end{aligned}
 $$
+
+
 Nash proved that every two-person game has at least one Nash Equilibrium.
 
 ## Evolutionary stable strategies
@@ -66,7 +70,6 @@ Nash proved that every two-person game has at least one Nash Equilibrium.
 In the context of evolution, one can consider $x$ to be the proportion of individuals (e.g., of different species, or phenotypes) displaying different characteristics. When playing against each other, they win or lose, and their payoffs are invested in reproduction. Because the different "strategies" (populations, phenotypes) play against each other, the payoff matrix is the same for all players, and encoded in matrix $A$. 
 
 In this context, a strategy $x$ is called an evolutionary stable strategy if two conditions are met:
-
 $$
 x^t A x \geq y^t A x \quad \text{for all } y
 $$
@@ -101,13 +104,13 @@ The RE is essentially equivalent to a GLV model in which we track frequencies in
 Adding a constant to each column of $A$ does not alter the dynamics. We have $B = A + e b^t$, where $e$ is a vector of ones. Then:
 
 $$
-\begin{align}
+\begin{aligned}
 D(x)(B x - x^t B x) &= D(x)(A + eb^t) x - x^t (A + eb^t) x\\
 &= D(x)A x + D(x) eb^t x - x^t A x - x^t e b^t x\\
 &= D(x)A x + x^t e b^t x - x^t A x - x^t e b^t  x\\
 &= D(x)A - x^t A x\\
 &= D(x)(A x - x^t A x)
-\end{align}
+\end{aligned}
 $$
 
 Similarly, multiplying each column of $A$ by a (possibly different) positive constant does not alter dynamics (it just rescales time). As such, if $A_2 = A_1 D + eb^t$ the replicator equations formed using $A_1$ and $A_2$ are equivalent.
@@ -214,13 +217,13 @@ meaning that $x^\star$ is an eigenvector of $A$ corresponding to a zero eigenval
 Suppose that an habitat is composed of a large number of patches, each containing a single individual (e.g., a tropical rainforest). Individuals die at a certain rate $d = 1$, and whenever they produce offspring, they disperse it to the empty patches. Whenever two individuals land in the same patch, they compete. The coefficient $H_{ij}$ corresponds to the probability of $i$ winning when competing with $j$, and we have $H_{ij} + H_{ji} = 1$. For each empty patch, we sample two seeds (produced at a rate proportional to $x_i$) and compete them. Dynamics become [@grilli2017higher]:
 
 $$
-\begin{align}
+\begin{aligned}
   \dfrac{d x}{dt} &= x_i \left(\sum_j 2 H_{ij} x_j - 1 \right) \\
   &=x_i \sum_j (2 H_{ij} x_j - x_j) \\
   &= x_i \sum_j (H_{ij} x_j  + (1 - H_{ji}) x_j - x_j) \\
   &= x_i \sum_j (H_{ij} - H_{ji}) x_j \\
   &= x_i  \sum_j A_{ij} x_j
-\end{align}
+\end{aligned}
 $$
 
 I.e., we recover the RE for a zero-sum game. What happens if we draw $H$ (and therefore $A$) at random? @allesina2011competitive and @grilli2017higher applied the results of @fisher1995optimal and @brandl2017distribution to show that, when $n$ species compete, the probability of observing $k$ coexisting is $p(k|n) = \binom{n}{k}
@@ -278,7 +281,7 @@ $$
 Because of Gibbs' inequality, $V(x) \geq 0$ for any $x$, and is equal to zero only if $x = x^\star$.  Note also that at equilibrium $2 \sum_j H_{ij} x_j^\star = 1$. We write:
 
 $$
-\begin{align}
+\begin{aligned}
   \dfrac{d V}{d t} &= \sum_i \dfrac{\partial V}{\partial x_i}
   \dfrac{d x_i}{d t}\\
   &= - \sum_i \frac{x_i^\star}{x_i} \dfrac{d x_i}{d t} \\
@@ -291,7 +294,7 @@ $$
   &= \sum_j \left(-2 + 1 \right) x_j  + 1 \\
   &=- \sum_j x_j + 1\\
   &= 0 
-\end{align}
+\end{aligned}
 $$
 
 We have found a constant of motion, meaning that the system will follow closed orbits. Hence, unless we start the system precisely at $x^\ast$, the abundances will cycle neutrally around the equilibrium.
