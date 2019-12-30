@@ -21,7 +21,7 @@ library(jpeg)
 knitr::include_graphics("images/Lotka.jpg")
 ```
 
-Alfred J. Lotka (1880-1949) was born to French-speaking American parents in Lemberg (then part of the Habsburg empire, now Lviv, Ukraine). He studied in France, Germany and England, receiving a BSc in 1901 and a DSc in 1912 from Birmingham university. He moved to the US in 1902, and worked at the US Patent office, as an editor of Scientific American, and as a statistician at the Metropolitan Life Insturance Company in NYC. He wrote more than a hundred papers and five books, spanning a large range of topics. He's best known for the book *Elements of Physical Biology*, his contributions to demography, and one of the first examples of bibliometrics. 
+Alfred J. Lotka (1880-1949) was born to French-speaking American parents in Lemberg (then part of the Habsburg empire, now Lviv, Ukraine). He studied in France, Germany and England, receiving a BSc in 1901 and a DSc in 1912 from Birmingham university. He moved to the US in 1902, and worked at the US Patent office, as an editor of Scientific American, and as a statistician at the Metropolitan Life Insturance Company in NYC. He wrote more than a hundred papers and five books, spanning a large range of topics. He's best known for the book *Elements of Physical Biology*, his contributions to demography, and one of the first studies dealing with bibliometrics [@lotka1926frequency]. 
 
 Starting in 1910 (reprinted as @lotka2002contribution) he investigated coupled differential equations relating to chemical as well as ecological dynamics. In @lotka1920analytical he studied a system of two ODEs that gave rise to perpetual oscillations: "It was, therefore, with considerable surprise that the writer, on applying his method to certain special cases, found these to lead to undamped, and hence indefinitely continued, oscillations." He went on to describe "1. A species of organism $S_1$, a plant species, say, deriving its nourishment from a source presented in such large excess that the mass of the source may be considered constant during the period of time with which we are concerned. 2. A species $S_2$, for example a herbivorous animal species, feeding on $S_1$." 
 
@@ -32,16 +32,15 @@ The equations he derived (and then studied later in more detail) are now termed 
 knitr::include_graphics("images/Volterra.jpg")
 ```
 
-Vito Volterra (1860-1940) was born in Ancona (then part of the Papal State) in a poor jewish family. The financial situation precipitated with the death of his father, when Vito was two. Vito and his mother went to live with relatives in Turin and then Florence. Volterra showed amazing mathematical talent at a very early age. Antonio Roiti, professor of physics in Florence, noticed the budding mathematician and hired him as his assistant, so that he could continue his studies. He went on to study at the Scuola Normale in Pisa, receiving a degree in Physics in 1882. At age 23 he was named full professor of Rational Mechanics in Pisa, and then in 1900 of Mathematical Physics in Rome. For thirty years he contributed important studies in mathematics, and instrumental contributions to the academic life in Italy (for example, he was the first director of the National Center for Research). In 1931 he refused to take an oath of loyalty to the Fascist regime (only 12 professors out of 1250 refused), and therefore forced to resign (his take on the fascist enterprise: "Empires die, but Euclid's theorems keep their youth forever"). 
+Vito Volterra (1860-1940) was born in Ancona (then part of the Papal State) in a poor jewish family. The financial situation precipitated with the death of his father, when Vito was two. Vito and his mother went to live with relatives in Turin and then Florence. Volterra showed amazing mathematical talent at a very early age. Antonio Roiti, professor of physics in Florence, noticed the budding mathematician and hired him as his assistant, so that he could continue his studies. He went on to enroll at the Scuola Normale in Pisa, receiving a degree in Physics in 1882. At age 23 he was made full professor of Rational Mechanics in Pisa, and then in 1900 of Mathematical Physics in Rome. For thirty years, he contributed important studies in mathematics, and enriched academic life in Italy (for example, he was the first director of the National Center for Research). In 1931 he refused to take an oath of loyalty to the fascist regime (only 12 professors out of 1250 refused), and was therefore forced to resign (his take on the fascist enterprise: "Empires die, but Euclid's theorems keep their youth forever"). 
 
-His interest in mathematical ecology is due to Umberto d'Ancona (his son-in-law), who had studied the trends in fisheries in the Adriatic sea before and immediately after WWI. In 1914-1918 fisheries in the Adriatic had stopped completely because of the conflict. He had noticed that, while herbivorous fish had remained about constant, the piscivorous fish had increased dramatically in numbers. The problem piqued Volterra who immediately published a sophisticated study of the same equations introduced by Lotka. In a short letter to Nature [@volterra1926fluctuations], he stated the so-called "Volterra's Principle" (which he termed "Law III"): "a complete closure of the fishery was a form of 'protection' under which the voracious fishes were much the better and prospered accordingly, but the ordinary food-fishes, on which these are accustomed to prey, were worse off than before." This brief paper was a summary of the much larger @volterra1926variazioni.
-
+His interest in mathematical ecology is due to Umberto d'Ancona (his son-in-law), who had studied the trends in fisheries in the Adriatic sea before and immediately after WWI. In 1914-1918 fisheries in the Adriatic had stopped completely because of the conflict. D'Ancona had noticed that, while herbivorous fish had remained about constant, the piscivorous fish had increased dramatically in numbers. The problem piqued Volterra who immediately published a sophisticated study, proposing the same equations studied by Lotka. In a short letter to Nature [@volterra1926fluctuations], he stated the so-called "Volterra's Effect" (which he termed "Law III"): "a complete closure of the fishery was a form of 'protection' under which the voracious fishes were much the better and prospered accordingly, but the ordinary food-fishes, on which these are accustomed to prey, were worse off than before." This brief paper was a summary of the much larger @volterra1926variazioni.
 
 ### Lotka-Volterra interactions
 
 In 1927, Lotka wrote to Nature to raise the issue that the equations studied by Volterra and the figures presented in Volterra's brief article were identical to those found in *Elements of Physical Biology* (published in 1925). He concludes that "It would be gratifying if Prof. Volterra's publication should direct attention to a field and method of inquiry which apparently has hitherto passed almost unnoticed."
 
-Volterra graciously conceded "I recognize his priority, and am sorry not to have known his work, and therefore not have been able to mention it." He however lists a few points in which the two authors pursued different directions, and concludes "Working independently the one from the other, we have found some common results, and this confirms the exactitude and the interest in the position of the problem. I agree with him in his conclusions that these studies and these methods of research deserve to receive greated attention from scholars, and should give rise to important applications."
+Volterra graciously conceded "I recognize his priority, and am sorry not to have known his work, and therefore not have been able to mention it." He however listed a few points in which the two authors had pursued different directions, and concluded "Working independently the one from the other, we have found some common results, and this confirms the exactitude and the interest in the position of the problem. I agree with him in his conclusions that these studies and these methods of research deserve to receive greated attention from scholars, and should give rise to important applications."
 
 ## Basic formulation
 
@@ -128,7 +127,7 @@ which is equivalent to the logistic equation above with $r = c$ and $a = -(c+e)$
 
 ### S-I-S model
 
-Consider a population of individuals, each of which can be in one of two states: susceptible, or infective/infected. Call $S(t)$ the proportion of susceptible individuals at time $t$, and $I(t)$ the proportion of infected individuals, with $S(t) + I(t) = 1$. When individuals meet an infected individual can transmit the disease with rate $\beta$; infected individuals recover from the disease with rate $\gamma$, and return susceptible. We can write the system of equations:
+Consider a population of individuals, each of which can be in one of two states: susceptible to a disease, or infective/infected. Call $S(t)$ the proportion of susceptible individuals at time $t$, and $I(t)$ the proportion of infected individuals, with $S(t) + I(t) = 1$. When individuals meet, an infected individual can transmit the disease to susceptibles with rate $\beta$; infected individuals recover from the disease with rate $\gamma$, and return susceptible. We can write the system of equations:
 
 $$
 \begin{cases}
@@ -143,34 +142,32 @@ $$
 \dfrac{d I(t)}{dt} = \beta (1-I(t)) I(t) - \gamma I(t) = I(t)(\beta - \gamma -\beta I(t))
 $$
 
-which is again the equation for the logistic growth with $r = \beta - \gamma$ and $a = -\beta$. As such, provided that $\beta -\gamma > 0$, a fraction $(\beta - \gamma) / \beta$ of individuals will be infected. The condition $\beta -\gamma > 0 \to \beta > \gamma \to \beta/ \gamma > 1$ is often written as $\mathcal R_0 = \beta/ \gamma > 1$.
+which is again the equation for the logistic growth with $r = \beta - \gamma$ and $a = -\beta$. As such, provided that $\beta -\gamma > 0$, asymptotically a fraction $(\beta - \gamma) / \beta$ of individuals will be infected. The condition $\beta -\gamma > 0 \to \beta > \gamma \to \beta/ \gamma > 1$ is often written as $\mathcal R_0 = \beta/ \gamma > 1$.
 
 ## Multi-species dynamics
 
 ### Existence of an equilibrium
 
-Returning to the multi-species system, and in analogy with the single species, we can look for stationary points (equilibria). If the matrix $A$ is not singular, then we can look for a solution of $r + Ax$ that has positive components (called a **feasible equilibrium**). If such point exists, it is unique and is the solution of $Ax^\star = -r$, $x^\star = -A^{-1}r$. 
+Returning to the multi-species system, and in analogy with the single species, we can look for stationary points (equilibria). If the matrix $A$ is not singular, then we can look for a solution of $r + Ax$ that has positive components (called a **feasible equilibrium**). **If such point exists, it is unique** and is the solution of $Ax^\star = -r$, $x^\star = -A^{-1}r$. 
 
 Suppose that the GLV has no feasible equilibrium. Then all trajectories (if bounded; some could grow to infinity) reach the boundary of $\mathbb R^n_{0+}$. Practically, this means that **to ensure coexistence of all species, it is necessary to have an equilibrium in the interior $\mathbb R^n_{+}$**. 
 
 ### Stability of an equilibrium
 
-Suppose that a feasible equilibrium $x^\star$ exists. Then we can ask whether it is attractive, i.e. if trajectories started at initial condition $x(0)$ will eventually reach $x^\star$. This problem is in general difficult to solve (but see below); as an alternative we can test for local asymptotic stability, i.e., ask whether the system will return to the equilibrium if perturbed infinitesimally away from it. In general, whenever we describe an ecological community as a system of nonlinear, autonomous ODEs:
+Suppose that a feasible equilibrium $x^\star$ exists. Then we can ask whether it is **attractive**, i.e. if trajectories started at initial condition $x(0)$ will eventually reach $x^\star$. This problem is in general difficult to solve (but see below); as an alternative we can test for **local asymptotic stability**, i.e., ask whether **the system will return to the equilibrium if perturbed infinitesimally away from it**. In general, whenever we describe an ecological community as a system of nonlinear, autonomous ODEs:
 
 $$
 \frac{d x_i (t)}{d t} = f_i (x(t)) \;,
 $$
-
 we define an equilibrium $x^\star$ as a vector of densities such that:
 
 $$
 \left. \frac{d x_i}{d t} \right|_{{x}^\star} = f_i
 ({x}^\star) = 0 \quad \forall i
 $$
-
 A given system might have a multitude of equilibria. When the system is resting at an equilibrium point, it will remain there unless it is perturbed away from it. Local stability analysis is a method to probe whether a system that is perturbed infinitesimally away from an equilibrium will eventually return to it, or rather move away from it. 
 
-Suppose that the system is resting at an equilibrium $x^\star$, and that it is slightly perturbed away from it. $\Delta x(0) = x(0)-x^\star$ is the state of the system immediately after the perturbation. We Taylor expand around $x^\star$:
+Suppose that the system is resting at an equilibrium $x^\star$, and that it is slightly perturbed away from it. $\Delta x(0) = x(0)-x^\star$ is the state of the system immediately after the perturbation. We Taylor-expand around $x^\star$:
 
 $$
 f(\Delta x(0)) = f(x^\star)+ \left. J \right|_{x^\star} \Delta x(0) + \ldots
@@ -188,14 +185,13 @@ $$
   M = \left. {J} \right|_{ {x}^\star}
 $$
 
-Note that, although each system has a unique Jacobian matrix, there are as many community matrices as there are equilibria. The community matrix details the effect of increasing density of one species on any other species around the equilibrium point.
+Note that, although each system has a unique Jacobian matrix, there are as many community matrices as there are equilibria. The community matrix details the effect of increasing the density of one species on any other species around the equilibrium point.
 
 We can therefore write the differential equation:
 
 $$
 \frac{d \Delta x(t)}{dt} \approx M \Delta x(t)
 $$
-
 with solution:
 
 $$
@@ -358,7 +354,7 @@ $$
 -A^{-1} r = x^\star =  \frac{1}{T} \int_0^T x(t) dt 
 $$
 
-showing that the average density is in fact the equilibrium. With a similar argument, one can prove that the trajectory stays in a compact space (i.e., in case of chaotic attractors), then long-time average is still $x^\star$.
+showing that **the average density is** in fact **the equilibrium**. With a similar argument, one can prove that the trajectory stays in a compact space (i.e., in case of chaotic attractors), then long-time average is still $x^\star$.
 
 For example, let's compute the average for the system with the limit cycle above (discarding the transients in the first part of the time series):
 ```{r}
@@ -404,7 +400,7 @@ A matrix $B$ is negative definite if $y^t B y < 0$ for all $y \neq 0$. As such $
 
 Take a matrix $A$ such that for a positive diagonal matrix $C$, $CA + A^tC$ is negative definite. Then $A$ is said to be **D-stable**. The results above show that **if $A$ is D-stable and a feasible equilibrium $x^\star$ exists, than all trajectories starting at a positive density will converge to the equilibrium**. This property is often used to assess **global stability**.
 
-A simple numerical example: we track species 1 of a two species system defined as:
+A simple numerical example with two species:
 
 ```{r}
 r <- c(1, 1)
@@ -422,7 +418,7 @@ res <- integrate_GLV(r, A, abs(rnorm(2)))
 
 As we have seen above, an equilibrium $x^\star$ is stable if the community matrix for the equilibrium has all eigenvalues with negative real part. In general, to determine the equilibrium and its stability, we would need to specify all the growth rates ($r$, $n$ values), as well as the matrix of interactions ($A$, $n^2$ values). This is impractical to do for large systems (though we will try this out later). But can something quite general be said about the limit in which many species are in the community?
 
-@may1972will attempted to answer this question by considering a random community matrix. In a GLV system, the diagonal elements $m_{ii} = a_{ii} x_i^\star$ are influenced by self-regulation (i.e., as in a carrying capacity), while the off-diagonal elements $m_{ij} = a_{ij} x_i^\star$ model the effect of species $j$ on the equilibrium of species $i$. May considered the following algorithm to build a random community matrix. Take a large community, resting at an unspecified equilibrium; we build the community matrix by setting
+@may1972will attempted to answer this question by considering a **random community matrix**. In a GLV system, the diagonal elements $m_{ii} = a_{ii} x_i^\star$ are influenced by self-regulation (i.e., as in a carrying capacity), while the off-diagonal elements $m_{ij} = a_{ij} x_i^\star$ model the effect of species $j$ on the equilibrium of species $i$. May considered the following algorithm to build a random community matrix. Take a large community, resting at an unspecified equilibrium; we build the community matrix by setting
 
 - $m_{ij} = 0$  with probability $(1-C)$; with probability $C$ we draw $m_{ij}$ from a distribution with mean zero and variance $\sigma^2$. $C$ is the proportion of realized connections, termed the "connectance" of the system.
 - the diagonal elements are set to $-d$, modeling self-regulation.
@@ -589,7 +585,7 @@ plot_eigenvalues(M, prediction)
 
 On the theory of GLV:
 
-- @strogatz2018nonlinear is a simple introductio to dynamical systems and bifurcation theory.
+- @strogatz2018nonlinear is a simple introduction to dynamical systems and bifurcation theory.
 
 - @hofbauer1998evolutionary is a wonderful introduction to dynamical systems in ecology and population genetics, with a nice introduction to evolutionary game theory.
 

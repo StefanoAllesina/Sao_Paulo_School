@@ -47,9 +47,9 @@ At the end of the lecture, I refer to my own work in the area, highlighting some
 
 The lectures are fairly self-contained, but some working knowledge of calculus, dynamical systems, linear algebra, game theory would be beneficial.
 
-The code is written in `R`, and meant to run using a fairly recent version of `R` along with the packages `tidyverse`, `deSolve`, ... that need to be installed.
+The code is written in `R`, and meant to run using a fairly recent version of `R` along with the packages `tidyverse`, `deSolve`, `MASS`, `lpSolve`... that need to be installed.
 
 ## Sources
 
-These notes were prepared by summarizing and interpolating a variety of sources, including @hadeler2017topics, ....
+These notes were prepared by summarizing and interpolating a variety of sources, including @hadeler2017topics, @hofbauer1998evolutionary, and @baigent2016lotka.
 
