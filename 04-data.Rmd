@@ -37,7 +37,7 @@ We can then cycle through each of the $2^n - 1$ assemblages that can be formed, 
 
 In `R`:
 
-```{r}
+```{r, randomglvpars}
 set.seed(3)
 # take a random matrix of interactions: 
 # -Aij <- U[0,1]; -Aii <- Sqrt(2) + U[0,1]
@@ -53,7 +53,7 @@ print(r)
 
 Now go through all possible combinations:
 
-```{r}
+```{r, glvbef}
 E <- matrix(0, 0, n) # matrix containing all communities
 x_template <- rep(0, n) # template for row of E
 for (k in 1:(2^n - 1)){
@@ -88,7 +88,7 @@ tail(E) # show the last few communities
 
 Our simulated communties have much in common with BEF experiments. For example, plotting the species richness on the x-axis and the total biomass on the y-axis, we recover the typical pattern found in real experiments ([@hector1999plant] [@tilman2001diversity] @cadotte2013experimental]):
 
-```{r}
+```{r, glvbefplot}
 library(tidyverse) # plotting and wrangling
 total_biomass <- rowSums(E)
 species_richness <- rowSums(E > 0)
@@ -245,7 +245,7 @@ $$
 
 For example:
 
-```{r}
+```{r, examplefitendpoints}
 # rescaled matrix
 B <- 1 / r * A
 # now try to recover B from matrix E
@@ -264,7 +264,7 @@ ggplot(data = tibble(real = as.vector(B),
 
 Notice that in general the system of equations is over-determined. As such, we can fit using a subset of the experiments, and then predict the rest of the experiments out-of-fit. For example, let's fit again using the information on monocultures and pairs only, and then predict experiment 31, in which all species should coexist:
 
-```{r}
+```{r, examplefitendpoints2}
 E_partial <- E[rowSums(E> 0) < 3, ]
 fitted_B <- matrix(0, n, n)
 for (i in 1:n){

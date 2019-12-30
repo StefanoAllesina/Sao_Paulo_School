@@ -130,7 +130,7 @@ $$
 
 We start the population at a random initial condition, and track dynamics:
 
-```{r}
+```{r, refuctions}
 library(deSolve) # integrate ODEs
 library(tidyverse) # plotting and wrangling
 # define the differential equation
@@ -177,13 +177,13 @@ rps <- integrate_RE(A, x0)
 
 What if we start all populations at the same density?
 
-```{r}
+```{r, rps2}
 x0 <- rep(1 / 3, 3)
 rps <- integrate_RE(A, x0)
 ```
 
 And if they are close to the 1/3?
-```{r}
+```{r, rps3}
 x0 <- rep(1/3, 3) + 0.05 * runif(3)
 x0 <- x0 / sum(x0)
 rps <- integrate_RE(A, x0)
@@ -228,7 +228,7 @@ I.e., we recover the RE for a zero-sum game. What happens if we draw $H$ (and th
 
 Importantly, to find the set of coexisting species we do not need to integrate dynamics. One can use linear programming to solve for the set of species that will coexist.
 
-```{r}
+```{r, coexistlp}
 library(lpSolve)
 # Build a random matrix H such that H_ij + H_ji = 1
 random_H <- function(n){
@@ -252,7 +252,7 @@ find_optimal_strategy <- function(H){
 
 Now let's try to count how many species suvive when starting with 10:
 
-```{r}
+```{r, coexistlphist}
 n <- 10
 num_simulations <- 5000
 results <- tibble(simulation = 1:num_simulations, coexisting = NA)
@@ -297,7 +297,7 @@ $$
 We have found a constant of motion, meaning that the system will follow closed orbits. Hence, unless we start the system precisely at $x^\ast$, the abundances will cycle neutrally around the equilibrium.
 
 Let's try with a larger system:
-```{r}
+```{r, reneutral}
 n <- 5
 # search for random H yielding all species coexisting
 i <- 0
@@ -325,7 +325,7 @@ $$
 $$
 where the tensor $A$ (a three-dimensional matrix) encodes the effect of a pair of species ($j$ and $k$) on the density of $i$. Importantly, one can choose the tensor such that the equilibrium is the same as for the two-player replicator equation: take $A_{ijk} = 2 H_{ij} H_{ik} - H_{ji} H_{jk} - H_{ki} H_{kj}$, which can be derived from first principles by writing the stochastic dynamics. What is surprising is that, while the equilibrium is unchanged, the dynamics are now globally stable:
 
-```{r}
+```{r, rehoi}
 # Now payoff is a tensor
 RE_3 <- function(t, x, parameters){
   with(as.list(c(x, parameters)), {
@@ -366,7 +366,7 @@ fivespp <- integrate_RE_3(H, x0, maxtime = 800, steptime = 0.1)
 
 And the rock-paper-scissors:
 
-```{r}
+```{r, rpshoi}
 H <- matrix(c(1/2, 1, 0,
               0, 1/2, 1,
               1, 0, 1/2), 3, 3, byrow = TRUE)

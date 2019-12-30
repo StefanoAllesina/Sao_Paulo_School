@@ -296,7 +296,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb5-5"><a href="data.html#cb5-5"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> BEF) <span class="op">+</span><span class="st"> </span></span>
 <span id="cb5-6"><a href="data.html#cb5-6"></a><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> species_richness, <span class="dt">y =</span> total_biomass) <span class="op">+</span><span class="st"> </span></span>
 <span id="cb5-7"><a href="data.html#cb5-7"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>()</span></code></pre></div>
-<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/glvbefplot-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>showing a modest increase in total biomass with increasing species richness.</p>
 </div>
 <div id="hyperplanes" class="section level2">
@@ -448,7 +448,7 @@ b_{13}
 <span id="cb6-12"><a href="data.html#cb6-12"></a>                     <span class="dt">fitted =</span> <span class="kw">as.vector</span>(fitted_B))) <span class="op">+</span><span class="st"> </span></span>
 <span id="cb6-13"><a href="data.html#cb6-13"></a><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> real, <span class="dt">y =</span> fitted) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span></span>
 <span id="cb6-14"><a href="data.html#cb6-14"></a><span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">slope =</span> <span class="dv">1</span>, <span class="dt">intercept =</span> <span class="dv">0</span>)</span></code></pre></div>
-<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/examplefitendpoints-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Notice that in general the system of equations is over-determined. As such, we can fit using a subset of the experiments, and then predict the rest of the experiments out-of-fit. For example, let’s fit again using the information on monocultures and pairs only, and then predict experiment 31, in which all species should coexist:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="data.html#cb7-1"></a>E_partial &lt;-<span class="st"> </span>E[<span class="kw">rowSums</span>(E<span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">&lt;</span><span class="st"> </span><span class="dv">3</span>, ]</span>
 <span id="cb7-2"><a href="data.html#cb7-2"></a>fitted_B &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, n, n)</span>
@@ -462,7 +462,7 @@ b_{13}
 <span id="cb7-10"><a href="data.html#cb7-10"></a>                     <span class="dt">fitted =</span> <span class="kw">as.vector</span>(fitted_B))) <span class="op">+</span><span class="st"> </span></span>
 <span id="cb7-11"><a href="data.html#cb7-11"></a><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> real, <span class="dt">y =</span> fitted) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span></span>
 <span id="cb7-12"><a href="data.html#cb7-12"></a><span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">slope =</span> <span class="dv">1</span>, <span class="dt">intercept =</span> <span class="dv">0</span>)</span></code></pre></div>
-<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/examplefitendpoints2-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="data.html#cb8-1"></a><span class="kw">print</span>(<span class="st">&quot;predicted&quot;</span>)</span>
 <span id="cb8-2"><a href="data.html#cb8-2"></a><span class="kw">solve</span>(fitted_B, <span class="op">-</span><span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span>, n))</span>
 <span id="cb8-3"><a href="data.html#cb8-3"></a><span class="kw">print</span>(<span class="st">&quot;observed&quot;</span>)</span>

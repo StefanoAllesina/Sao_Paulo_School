@@ -276,7 +276,7 @@ As such, provided with the parameters <span class="math inline">\(r\)</span> and
 <span id="cb1-25"><a href="intro.html#cb1-25"></a><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span></span>
 <span id="cb1-26"><a href="intro.html#cb1-26"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time, <span class="dt">y =</span> x_sol), <span class="dt">colour =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">shape =</span> <span class="dv">2</span>) <span class="op">+</span><span class="st"> </span></span>
 <span id="cb1-27"><a href="intro.html#cb1-27"></a><span class="st">  </span><span class="kw">ylab</span>(<span class="kw">expression</span>(<span class="st">&quot;x(t)&quot;</span>)) <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="kw">expression</span>(<span class="st">&quot;t&quot;</span>))</span></code></pre></div>
-<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/logistic-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>If <span class="math inline">\(a &lt; 0\)</span> and <span class="math inline">\(r &gt; 0\)</span>, the population started at any positive value eventually reaches an equilibrium, which we can find by setting <span class="math inline">\(dx(t)/dt = 0\)</span> and considering <span class="math inline">\(x \neq 0\)</span>:</p>
 <p><span class="math display">\[
 (r + a x) = 0 \to x = -\frac{r}{a}
@@ -413,7 +413,7 @@ M = \left. {J} \right|_{ {x}^\star} = D(x^\star)A
 <span id="cb3-7"><a href="intro.html#cb3-7"></a><span class="kw">print</span>(<span class="kw">solve</span>(A_<span class="dv">1</span>, <span class="op">-</span>r_<span class="dv">1</span>)) <span class="co"># not feasible</span></span>
 <span id="cb3-8"><a href="intro.html#cb3-8"></a>x0_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">3</span>)</span>
 <span id="cb3-9"><a href="intro.html#cb3-9"></a>res_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">integrate_GLV</span>(r_<span class="dv">1</span>, A_<span class="dv">1</span>, x0_<span class="dv">1</span>)</span></code></pre></div>
-<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/glvex1-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre><code># [1] -0.08333333  0.25000000 -0.08333333</code></pre>
 <p>Then, a case in which the equilibrium exists, and is attractive (stable):</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="intro.html#cb5-1"></a><span class="kw">set.seed</span>(<span class="dv">2</span>) <span class="co"># for reproducibility</span></span>
@@ -425,7 +425,7 @@ M = \left. {J} \right|_{ {x}^\star} = D(x^\star)A
 <span id="cb5-7"><a href="intro.html#cb5-7"></a><span class="kw">print</span>(<span class="kw">solve</span>(A_<span class="dv">2</span>, <span class="op">-</span>r_<span class="dv">2</span>)) <span class="co"># feasible</span></span>
 <span id="cb5-8"><a href="intro.html#cb5-8"></a>x0_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">3</span>)</span>
 <span id="cb5-9"><a href="intro.html#cb5-9"></a>res_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">integrate_GLV</span>(r_<span class="dv">2</span>, A_<span class="dv">2</span>, x0_<span class="dv">2</span>)</span></code></pre></div>
-<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/glvex2-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre><code># [1] 0.1661130 0.3654485 0.4817276</code></pre>
 <p>With three competitors we can find stable limit cycles:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="intro.html#cb7-1"></a><span class="kw">set.seed</span>(<span class="dv">3</span>) <span class="co"># for reproducibility</span></span>
@@ -437,7 +437,7 @@ M = \left. {J} \right|_{ {x}^\star} = D(x^\star)A
 <span id="cb7-7"><a href="intro.html#cb7-7"></a><span class="kw">print</span>(<span class="kw">solve</span>(A_<span class="dv">3</span>, <span class="op">-</span>r_<span class="dv">3</span>)) <span class="co"># feasible</span></span>
 <span id="cb7-8"><a href="intro.html#cb7-8"></a>x0_<span class="dv">3</span> &lt;-<span class="st"> </span><span class="fl">0.1</span> <span class="op">*</span><span class="st"> </span><span class="kw">runif</span>(<span class="dv">3</span>)</span>
 <span id="cb7-9"><a href="intro.html#cb7-9"></a>res_<span class="dv">3</span> &lt;-<span class="st"> </span><span class="kw">integrate_GLV</span>(r_<span class="dv">3</span>, A_<span class="dv">3</span>, x0_<span class="dv">3</span>, <span class="dt">maxtime =</span> <span class="dv">250</span>)</span></code></pre></div>
-<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/glvex3-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre><code># [1] 0.05714286 0.01428571 0.02857143</code></pre>
 <p>And with four or more species we can have chaos:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="intro.html#cb9-1"></a><span class="kw">set.seed</span>(<span class="dv">4</span>) <span class="co"># for reproducibility</span></span>
@@ -450,7 +450,7 @@ M = \left. {J} \right|_{ {x}^\star} = D(x^\star)A
 <span id="cb9-8"><a href="intro.html#cb9-8"></a><span class="kw">print</span>(<span class="kw">solve</span>(A_<span class="dv">4</span>, <span class="op">-</span>r_<span class="dv">4</span>)) <span class="co"># feasible</span></span>
 <span id="cb9-9"><a href="intro.html#cb9-9"></a>x0_<span class="dv">4</span> &lt;-<span class="st"> </span><span class="fl">0.1</span> <span class="op">*</span><span class="st"> </span><span class="kw">runif</span>(<span class="dv">4</span>)</span>
 <span id="cb9-10"><a href="intro.html#cb9-10"></a>res_<span class="dv">4</span> &lt;-<span class="st"> </span><span class="kw">integrate_GLV</span>(r_<span class="dv">4</span>, A_<span class="dv">4</span>, x0_<span class="dv">4</span>, <span class="dt">maxtime =</span> <span class="dv">500</span>)</span></code></pre></div>
-<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/glvex4-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre><code># [1] 0.3013030 0.4586546 0.1307655 0.3557416</code></pre>
 </div>
 <div id="the-equilibrium-is-the-time-average" class="section level2">
@@ -533,9 +533,9 @@ is a Lyapunov function for the GLV system.</p>
 <span id="cb15-6"><a href="intro.html#cb15-6"></a><span class="co"># converge to the equilibrium</span></span>
 <span id="cb15-7"><a href="intro.html#cb15-7"></a><span class="kw">solve</span>(A, <span class="op">-</span>r)</span>
 <span id="cb15-8"><a href="intro.html#cb15-8"></a>res &lt;-<span class="st"> </span><span class="kw">integrate_GLV</span>(r, A, <span class="kw">abs</span>(<span class="kw">rnorm</span>(<span class="dv">2</span>)))</span></code></pre></div>
-<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/globalst2-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="intro.html#cb16-1"></a>res &lt;-<span class="st"> </span><span class="kw">integrate_GLV</span>(r, A, <span class="kw">abs</span>(<span class="kw">rnorm</span>(<span class="dv">2</span>)))</span></code></pre></div>
-<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-11-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/globalst2-2.png" width="672" style="display: block; margin: auto;" /></p>
 <pre><code># [1] -1 -3
 # [1] 0.2857143 1.4285714</code></pre>
 </div>
@@ -578,7 +578,7 @@ is a Lyapunov function for the GLV system.</p>
 <span id="cb19-18"><a href="intro.html#cb19-18"></a>sigma &lt;-<span class="st"> </span><span class="dv">1</span></span>
 <span id="cb19-19"><a href="intro.html#cb19-19"></a>M &lt;-<span class="st"> </span><span class="kw">build_May_normal</span>(n, C, d, sigma)</span>
 <span id="cb19-20"><a href="intro.html#cb19-20"></a><span class="kw">plot_eigenvalues</span>(M)</span></code></pre></div>
-<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/exmay-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>The eigenvalues fall into an almost perfect circle! Turns out, that this is the behavior we should expect, as stated by the so-called “Circular Law”, one of the most beautiful results in random matrix theory.</p>
 <p><strong>Circular law:</strong> Take a non-symmetric, <span class="math inline">\(S \times S\)</span> random matrix in which all coefficients <span class="math inline">\(X_{ij}\)</span> are i.i.d. random variables with <span class="math inline">\(\mathbb E[X_{ij}] = 0\)</span> and <span class="math inline">\(\mathbb E[X_{ij}] = 1\)</span>. Then, as <span class="math inline">\(S \to \infty\)</span>, the e.s.d. of <span class="math inline">\({X} / \sqrt{S}\)</span> converges to the circular law:</p>
 <p><span class="math display">\[
@@ -595,7 +595,7 @@ is a Lyapunov function for the GLV system.</p>
 <p>We can try this on our matrix:</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="intro.html#cb20-1"></a>prediction &lt;-<span class="st"> </span><span class="kw">sqrt</span>(n <span class="op">*</span><span class="st"> </span>C <span class="op">*</span><span class="st"> </span>sigma<span class="op">^</span><span class="dv">2</span>) <span class="op">-</span><span class="st"> </span>d</span>
 <span id="cb20-2"><a href="intro.html#cb20-2"></a><span class="kw">plot_eigenvalues</span>(M, prediction)</span></code></pre></div>
-<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/maycrit-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Showing that we accurately approximate the location of the rightmost eigenvalue. Note that, in the case of large <span class="math inline">\(n\)</span>, whenever the circle crosses zero, some eigenvalues will be positive, determining the instability of the equilibrium.</p>
 <p>Importantly, the distribution from which the coefficients are sampled does not matter—only that the mean is zero and that the variance is <span class="math inline">\(\sigma^2\)</span>. For example, build the matrix using coefficients from a uniform distribution:</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="intro.html#cb21-1"></a>build_May_uniform &lt;-<span class="st"> </span><span class="cf">function</span>(n, C, d, sigma){</span>
@@ -615,7 +615,7 @@ is a Lyapunov function for the GLV system.</p>
 <span id="cb21-15"><a href="intro.html#cb21-15"></a>M &lt;-<span class="st"> </span><span class="kw">build_May_uniform</span>(n, C, d, sigma)</span>
 <span id="cb21-16"><a href="intro.html#cb21-16"></a>prediction &lt;-<span class="st"> </span><span class="kw">sqrt</span>(n <span class="op">*</span><span class="st"> </span>C <span class="op">*</span><span class="st"> </span>sigma<span class="op">^</span><span class="dv">2</span>) <span class="op">-</span><span class="st"> </span>d</span>
 <span id="cb21-17"><a href="intro.html#cb21-17"></a><span class="kw">plot_eigenvalues</span>(M, prediction)</span></code></pre></div>
-<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/exmay2-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>This property is called <strong>universality</strong> in random matrix theory.</p>
 <p>In ecological communities, the effect of species <span class="math inline">\(i\)</span> on <span class="math inline">\(j\)</span> and that of <span class="math inline">\(j\)</span> on <span class="math inline">\(i\)</span> are typically not independent (as assumed above): in the case of competition between species, we expect them both to be negative; for consumption, if one is positive, the other is negative, and so forth. A more refined model of a random matrix would therefore sample interactions in pairs from a bivariate distribution. The elliptic law can deal with this case:</p>
 <p><strong>Elliptic law:</strong> Take a non-symmetric, <span class="math inline">\(S \times S\)</span> random matrix in which the pairs of coefficients <span class="math inline">\((X_{ij}, X_{ji})\)</span> are sampled independently from a bivariate distribution defined by a vector of means <span class="math inline">\(m = (0,0)^t\)</span> and a covariance matrix <span class="math inline">\(\Sigma = \begin{pmatrix} 1 &amp; \rho\\ \rho &amp; 1 \end{pmatrix}\)</span>. Then, as <span class="math inline">\(S \to \infty\)</span>, the e.s.d. of <span class="math inline">\({X} / \sqrt{S}\)</span> converges to the elliptic law:</p>
@@ -660,7 +660,7 @@ is a Lyapunov function for the GLV system.</p>
 <span id="cb23-7"><a href="intro.html#cb23-7"></a>M &lt;-<span class="st"> </span><span class="kw">build_Allesina_Tang_normal</span>(n, C, d, sigma, rho)</span>
 <span id="cb23-8"><a href="intro.html#cb23-8"></a>prediction &lt;-<span class="st"> </span><span class="kw">sqrt</span>(n <span class="op">*</span><span class="st"> </span>C <span class="op">*</span><span class="st"> </span>sigma<span class="op">^</span><span class="dv">2</span>) <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>rho) <span class="op">-</span><span class="st"> </span>d</span>
 <span id="cb23-9"><a href="intro.html#cb23-9"></a><span class="kw">plot_eigenvalues</span>(M, prediction)</span></code></pre></div>
-<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-17-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/allesinatangex1-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Similarly, a negative correlation (e.g., as in predator-prey) would make the system easier to stabilize:</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="intro.html#cb24-1"></a><span class="co"># parameters</span></span>
 <span id="cb24-2"><a href="intro.html#cb24-2"></a>n &lt;-<span class="st"> </span><span class="dv">500</span></span>
@@ -671,7 +671,7 @@ is a Lyapunov function for the GLV system.</p>
 <span id="cb24-7"><a href="intro.html#cb24-7"></a>M &lt;-<span class="st"> </span><span class="kw">build_Allesina_Tang_normal</span>(n, C, d, sigma, rho)</span>
 <span id="cb24-8"><a href="intro.html#cb24-8"></a>prediction &lt;-<span class="st"> </span><span class="kw">sqrt</span>(n <span class="op">*</span><span class="st"> </span>C <span class="op">*</span><span class="st"> </span>sigma<span class="op">^</span><span class="dv">2</span>) <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>rho) <span class="op">-</span><span class="st"> </span>d</span>
 <span id="cb24-9"><a href="intro.html#cb24-9"></a><span class="kw">plot_eigenvalues</span>(M, prediction)</span></code></pre></div>
-<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/allesinatangex2-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="further-readings" class="section level2">
 <h2><span class="header-section-number">2.9</span> Further readings</h2>
