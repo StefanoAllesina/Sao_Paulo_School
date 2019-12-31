@@ -124,7 +124,7 @@
   \postauthor{\par}
       \predate{\centering\large\emph}
   \postdate{\par}
-    \date{2019-12-30}
+    \date{2019-12-31}
 
 \usepackage{booktabs}
 \usepackage{graphicx}
@@ -366,7 +366,7 @@ J_{ij} = \frac{\partial f_i}{\partial x_j} = a_{ij} x_i
 and
 
 \[
-J_{ij} = \frac{\partial f_i}{\partial x_i} = r_i + \sum_j a_{ij} x_j + a_{ii} x_i
+J_{ii} = \frac{\partial f_i}{\partial x_i} = r_i + \sum_j a_{ij} x_j + a_{ii} x_i
 \]
 
 At equilibrium \(r_i + \sum_j a_{ij} x_j = 0\), and therefore:
@@ -896,12 +896,12 @@ We briefly introduce the study of mathematical models of games, and their relati
 \hypertarget{two-player-matrix-games}{%
 \section{Two-player matrix games}\label{two-player-matrix-games}}
 
-We start by anayzing games in which two players face each other, each choosing one strategy out of a set. Importantly, we consider static games in which each player makes their decision without having knowledge of the decision of the other player. Player 1 chooses a ``pure'' strategy \(s_1\) from the set of pure strategies \(S_1\), while player 2 chooses \(s_2 \in S_2\). We call \(\pi_k (s_1, s_2)\) the \textbf{payoff} for player \(k\) when player 1 chooses \(s_1\) and player 2 \(s_2\). In a matrix game, we can arrange the payoffs for each player in a matrix. We call \(A\) the matrix of payoffs for player one and \(B\) that for player 2.
+We start by anayzing games in which two players face each other, each choosing one strategy out of a set. Importantly, we consider static games in which each player makes their decision without having knowledge of the decision of the other player. Player 1 chooses a ``pure'' strategy \(s_1\) from the set of pure strategies \(S_1\), while player 2 chooses \(s_2 \in S_2\). We call \(\pi_k (s_1, s_2)\) the \textbf{payoff} for player \(k\) when player 1 chooses \(s_1\) and player 2 \(s_2\). In a matrix game, we can arrange the payoffs for each player in a matrix. We call \(A\) the matrix of payoffs for player one and \(B\) that for player two.
 
 \hypertarget{example-the-prisoners-dilemma}{%
 \subsection{Example: the prisoner's dilemma}\label{example-the-prisoners-dilemma}}
 
-Two prisoners alleggedly committed a crime, but the police do not have enough evidence to convict them. They therefore approach each player separately, proposing a deal: if the prisoner confesses (``defect'' the other prisoner), then their sentence will be reduced. In particular: i) if both confess (both ``defect''), they are sentenced to 4 years in prison; ii) if one confesses (``defect'') and the other keeps quiet (``cooperate'' with the other prisoner), then the one who has confessed is let free, and the other sentenced to 5 years; iii) if both keep quiet (``cooperate''), then they are both sentenced to two years of detention.
+Two prisoners alleggedly committed a crime, but the police do not have enough evidence to convict them. They therefore approach each player separately, proposing a deal: if the prisoner confesses (``defect'' the other prisoner), then their sentence will be reduced. In particular: i) if both confess (both ``defect''), they are sentenced to 4 years in prison; ii) if one confesses (``defect'') and the other keeps quiet (``cooperate'' with the other prisoner), then the one who has confessed is let free, and the other sentenced to 5 years; iii) if both keep quiet (``cooperate''), then they are both sentenced to two years of detention for some accessory crime.
 
 In matrix form, we have (rows for pl 1 strategy C/D; cols for pl 2 strategy):
 
@@ -916,7 +916,9 @@ B = \begin{pmatrix}
 \end{pmatrix}
 \]
 
-What is the best strategy player 1 can play, without knowing whether player 2 will confess or not? If player 2 were to keep quiet, player 1 should confess and be let free; if player 2 confesses, on the other hand, player 1 should also confess and get a reduced sentence. As such, each player would rationally choose to confess, thereby getting sentenced to four years in prison; note that if they could trust the other player, they could cooperate to get a much reduced sentence.
+What is the best strategy player 1 can play---without knowing whether player 2 will confess or not? If player 2 were to keep quiet, player 1 should confess and be let free; if player 2 confesses, on the other hand, player 1 should also confess and get a reduced sentence. As such, each player would rationally choose to confess, thereby getting sentenced to four years in prison; note that if they could trust the other player, they could cooperate to get a much reduced sentence.
+
+The defect/defect is called a \textbf{Nash Equilibrium}: no player can improve their payoff by changing only their own strategy.
 
 \hypertarget{mixed-strategies}{%
 \section{Mixed strategies}\label{mixed-strategies}}
@@ -980,6 +982,8 @@ Where \(f = A x\) is a vector reporting the fitness of each population at time \
 
 The RE is essentially equivalent to a GLV model in which we track frequencies instead of abundances.
 
+Importantly, we can see \(x\) as a ``mixed strategy'' for the symmetric game encoded in \(A\). In this context, \textbf{an equilibrium of the replicator equation is a Nash Equilibrium for the game}; similarly, \textbf{a stable equilibrium for the replicator equation is an Evolutionary Stable Strategy}.
+
 \hypertarget{invariants}{%
 \subsection{Invariants}\label{invariants}}
 
@@ -996,11 +1000,6 @@ D(x)(B x - x^t B x) &= D(x)(A + eb^t) x - x^t (A + eb^t) x\\
 \]
 
 Similarly, multiplying each column of \(A\) by a (possibly different) positive constant does not alter dynamics (it just rescales time). As such, if \(A_2 = A_1 D + eb^t\) the replicator equations formed using \(A_1\) and \(A_2\) are equivalent.
-
-\hypertarget{equivalence-with-glv}{%
-\section{Equivalence with GLV}\label{equivalence-with-glv}}
-
-TODO
 
 \hypertarget{rock-paper-scissor}{%
 \subsection{Rock-paper-scissor}\label{rock-paper-scissor}}
@@ -1041,7 +1040,7 @@ We start the population at a random initial condition, and track dynamics:
   \KeywordTok{show}\NormalTok{(pl)}
   \KeywordTok{return}\NormalTok{(out)}
 \NormalTok{\}}
-\CommentTok{# general function to integrate GLV}
+\CommentTok{# general function to integrate RE}
 \NormalTok{integrate_RE <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(A, x0, }\DataTypeTok{maxtime =} \DecValTok{40}\NormalTok{, }\DataTypeTok{steptime =} \FloatTok{0.05}\NormalTok{)\{}
 \NormalTok{  times <-}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{, maxtime, }\DataTypeTok{by =}\NormalTok{ steptime)}
 \NormalTok{  parameters <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}\DataTypeTok{A =}\NormalTok{ A)}
@@ -1089,10 +1088,138 @@ And if they are close to the 1/3?
 
 \begin{center}\includegraphics{A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-latex/rps3-1} \end{center}
 
+\hypertarget{equivalence-with-glv}{%
+\section{Equivalence with GLV}\label{equivalence-with-glv}}
+
+For a given \(n-\)species GLV system, there is an equivalent \((n+1)-\)dimensional replicator equation with zeros in the last row of the matrix. To show this, let's take our functions for integrating GLV:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Generalized Lotka-Volterra model}
+\NormalTok{GLV <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(t, x, parameters)\{}
+  \KeywordTok{with}\NormalTok{(}\KeywordTok{as.list}\NormalTok{(}\KeywordTok{c}\NormalTok{(x, parameters)), \{}
+\NormalTok{    x[x }\OperatorTok{<}\StringTok{ }\DecValTok{10}\OperatorTok{^-}\DecValTok{8}\NormalTok{] <-}\StringTok{ }\DecValTok{0} \CommentTok{# prevent numerical problems}
+\NormalTok{    dxdt <-}\StringTok{ }\NormalTok{x }\OperatorTok{*}\StringTok{ }\NormalTok{(r }\OperatorTok{+}\StringTok{ }\NormalTok{A }\OperatorTok{%*%}\StringTok{ }\NormalTok{x)}
+    \KeywordTok{list}\NormalTok{(dxdt)}
+\NormalTok{  \})}
+\NormalTok{\}}
+\CommentTok{# general function to integrate GLV}
+\NormalTok{integrate_GLV <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(r, A, x0, }\DataTypeTok{maxtime =} \DecValTok{100}\NormalTok{, }\DataTypeTok{steptime =} \FloatTok{0.5}\NormalTok{)\{}
+\NormalTok{  times <-}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{, maxtime, }\DataTypeTok{by =}\NormalTok{ steptime)}
+\NormalTok{  parameters <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}\DataTypeTok{r =}\NormalTok{ r, }\DataTypeTok{A =}\NormalTok{ A)}
+  \CommentTok{# solve numerically}
+\NormalTok{  out <-}\StringTok{ }\KeywordTok{ode}\NormalTok{(}\DataTypeTok{y =}\NormalTok{ x0, }\DataTypeTok{times =}\NormalTok{ times, }
+           \DataTypeTok{func =}\NormalTok{ GLV, }\DataTypeTok{parms =}\NormalTok{ parameters, }
+           \DataTypeTok{method =} \StringTok{"ode45"}\NormalTok{)}
+  \CommentTok{# plot and make into tidy form}
+\NormalTok{  out <-}\StringTok{ }\KeywordTok{plot_ODE_output}\NormalTok{(out)}
+  \KeywordTok{return}\NormalTok{(out)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+And integrate the simple system:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{r <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{)}
+\NormalTok{A <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\OperatorTok{-}\DecValTok{1}\NormalTok{, }\FloatTok{0.5}\NormalTok{, }\FloatTok{0.1}\NormalTok{,}
+              \FloatTok{-0.7}\NormalTok{, }\DecValTok{-2}\NormalTok{, }\DecValTok{0}\NormalTok{,}
+              \FloatTok{-0.3}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{-5}\NormalTok{), }\DecValTok{3}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DataTypeTok{byrow =} \OtherTok{TRUE}\NormalTok{)}
+\NormalTok{x0 <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\FloatTok{0.1}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{1}\NormalTok{)}
+\NormalTok{glvex <-}\StringTok{ }\KeywordTok{integrate_GLV}\NormalTok{(r, A, x0)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-latex/exampleglvtore1-1} \end{center}
+
+And now build an equivalent RE system. Form a matrix \(B\) with the matrix \(A\) in the first \(n\) rows and columns, and the vector \(r\) as the \((n+1)\)th column:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{B <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{)}
+\NormalTok{B[}\DecValTok{1}\OperatorTok{:}\DecValTok{3}\NormalTok{, }\DecValTok{1}\OperatorTok{:}\DecValTok{3}\NormalTok{] <-}\StringTok{ }\NormalTok{A}
+\NormalTok{B[}\DecValTok{1}\OperatorTok{:}\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{] <-}\StringTok{ }\NormalTok{r}
+\NormalTok{B}
+\NormalTok{y0 <-}\StringTok{ }\KeywordTok{c}\NormalTok{(x0, }\DecValTok{1}\NormalTok{)}
+\NormalTok{y0 <-}\StringTok{ }\NormalTok{y0 }\OperatorTok{/}\StringTok{ }\KeywordTok{sum}\NormalTok{(y0)}
+\NormalTok{reex <-}\StringTok{ }\KeywordTok{integrate_RE}\NormalTok{(B, y0)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-latex/unnamed-chunk-2-1} \end{center}
+
+\begin{verbatim}
+#      [,1] [,2] [,3] [,4]
+# [1,] -1.0  0.5  0.1    1
+# [2,] -0.7 -2.0  0.0    2
+# [3,] -0.3  0.0 -5.0    3
+# [4,]  0.0  0.0  0.0    0
+\end{verbatim}
+
+Now let's look at the equilibrium of the GLV model:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{glvex }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(time }\OperatorTok{==}\StringTok{ }\DecValTok{100}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+# # A tibble: 3 x 3
+#    time species density
+#   <dbl> <chr>     <dbl>
+# 1   100 sp_1      1.32 
+# 2   100 sp_2      0.538
+# 3   100 sp_3      0.521
+\end{verbatim}
+
+And recover it from the RE equation (just divide by the density of the extra ``species''):
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{reex }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(time }\OperatorTok{==}\StringTok{ }\DecValTok{40}\NormalTok{)}
+\NormalTok{reex }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(time }\OperatorTok{==}\StringTok{ }\DecValTok{40}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{density =}\NormalTok{ density }\OperatorTok{/}\StringTok{ }\KeywordTok{tail}\NormalTok{(density, }\DecValTok{1}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+# # A tibble: 4 x 3
+#    time species density
+#   <dbl> <chr>     <dbl>
+# 1    40 sp_1      0.391
+# 2    40 sp_2      0.159
+# 3    40 sp_3      0.154
+# 4    40 sp_4      0.296
+# # A tibble: 4 x 3
+#    time species density
+#   <dbl> <chr>     <dbl>
+# 1    40 sp_1      1.32 
+# 2    40 sp_2      0.538
+# 3    40 sp_3      0.521
+# 4    40 sp_4      1
+\end{verbatim}
+
+Not only the equilibria are the same, but also the dynamics are the same once time has been properly rescaled. Similarly, for each RE system we can always recover a matrix with zero in the last row by applying the transformations detailed above, and therefore recover the corresponding GLV. For example, take the matrix for the RPS above, and make each coefficient in the last row zero by adding the appropriate constant to each column. Then one recovers some sort of a predator-prey system:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{r <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\OperatorTok{-}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{)}
+\NormalTok{A <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\OperatorTok{-}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{,}
+              \DecValTok{-2}\NormalTok{, }\DecValTok{1}\NormalTok{), }\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DataTypeTok{byrow =} \OtherTok{TRUE}\NormalTok{)}
+\NormalTok{x0 <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\FloatTok{0.9}\NormalTok{, }\FloatTok{1.1}\NormalTok{)}
+\NormalTok{glvex <-}\StringTok{ }\KeywordTok{integrate_GLV}\NormalTok{(r, A, x0, }\DataTypeTok{maxtime =} \DecValTok{15}\NormalTok{, }\DataTypeTok{steptime =} \FloatTok{0.01}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-latex/exampleretoglv1-1} \end{center}
+
+in which the species oscillate around one.
+
 \hypertarget{hypertournament-games}{%
 \subsection{Hypertournament games}\label{hypertournament-games}}
 
-The rock-paper-scissor game above is a simple case of a hypertournament game. Take the zero-sum payoff matrix \(A = -A^t\). Then, we have
+The rock-paper-scissor game above is a simple case of a ``hypertournament'' game. Take the zero-sum payoff matrix \(A = -A^t\). Then, we have
 
 \[
 \sum_i \sum_j A_{ij} x_i x_j = 0
@@ -1108,12 +1235,12 @@ At equilibrium, either some elements of \(x\) are zero, or
 \[
 A x^\star = 0
 \]
-meaning that \(x^\star\) is an eigenvector of \(A\) corresponding to a zero eigenvalue.
+meaning that if a feasible equilibrium \(x^\star\) exists, it is an eigenvector of \(A\) corresponding to a zero eigenvalue.
 
 \hypertarget{number-of-coexisting-species}{%
 \subsubsection{Number of coexisting species}\label{number-of-coexisting-species}}
 
-Suppose that an habitat is composed of a large number of patches, each containing a single individual (e.g., a tropical rainforest). Individuals die at a certain rate \(d = 1\), and whenever they produce offspring, they disperse it to the empty patches. Whenever two individuals land in the same patch, they compete. The coefficient \(H_{ij}\) corresponds to the probability of \(i\) winning when competing with \(j\), and we have \(H_{ij} + H_{ji} = 1\). For each empty patch, we sample two seeds (produced at a rate proportional to \(x_i\)) and compete them. Dynamics become \citep{grilli2017higher}:
+We now show how the equations above can arise when modeling ecological dynamics. Suppose that a forest is composed of a fixed number of trees. Each time a tree dies (with rate \(d = 1\) for all species), a gap in the canopy opens, and species will compete to colonize it. Let's assume that two seeds (sampled with probability proportional to the density of the species) land in the empty patch, and that they compete to fill the gap. Call \(H_{ij}\) the probability that \(i\) wins when competing with \(j\); we have \(H_{ij} + H_{ji} = 1\). We can write the dynamics \citep{grilli2017higher} as:
 
 \[
 \begin{aligned}
@@ -1175,7 +1302,7 @@ Now let's try to count how many species suvive when starting with 10:
 \hypertarget{lyapunov-function}{%
 \subsection{Lyapunov function}\label{lyapunov-function}}
 
-In the rock-paper-scissor example above, the species cycled neutrally around the single equilibrium point. To show that this is in fact the behavior of this type of RE, we write a Lyapunov function. By finding a constant of motion we can show that the species will follow closed orbits.
+In the rock-paper-scissor example above, species cycled neutrally around the unique equilibrium point. To show that this is in fact the behavior of this type of RE, we write a Lyapunov function. By finding a constant of motion we can show that the species will follow closed orbits.
 
 Suppose \(x_{i}^\star > 0\) is the equilibrium for the system. We write:
 
@@ -1232,7 +1359,7 @@ Let's try with a larger system:
 \hypertarget{higher-order-interactions}{%
 \subsection{Higher-order interactions}\label{higher-order-interactions}}
 
-We can extend the game above to the case in which three (or more) individuals compete in each patch. \citet{grilli2017higher} showed that in this case, one can write the replicator equation:
+We can extend the game above to the case in which three (or more) seeds compete to fill each patch. \citet{grilli2017higher} showed that in this case, one can write the replicator equation:
 
 \[
 \dfrac{d x_i}{dt} = x_i \sum_{j,k} A_{ijk} x_j x_k

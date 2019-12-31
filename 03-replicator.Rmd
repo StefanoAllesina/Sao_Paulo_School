@@ -19,11 +19,11 @@ We briefly introduce the study of mathematical models of games, and their relati
 
 ## Two-player matrix games
 
-We start by anayzing games in which two players face each other, each choosing one strategy out of a set. Importantly, we consider static games in which each player makes their decision without having knowledge of the decision of the other player. Player 1 chooses a "pure" strategy $s_1$ from the set of pure strategies $S_1$, while player 2 chooses $s_2 \in S_2$. We call $\pi_k (s_1, s_2)$ the **payoff** for player $k$ when player 1 chooses $s_1$ and player 2 $s_2$. In a matrix game, we can arrange the payoffs for each player in a matrix. We call $A$ the matrix of payoffs for player one and $B$ that for player 2. 
+We start by anayzing games in which two players face each other, each choosing one strategy out of a set. Importantly, we consider static games in which each player makes their decision without having knowledge of the decision of the other player. Player 1 chooses a "pure" strategy $s_1$ from the set of pure strategies $S_1$, while player 2 chooses $s_2 \in S_2$. We call $\pi_k (s_1, s_2)$ the **payoff** for player $k$ when player 1 chooses $s_1$ and player 2 $s_2$. In a matrix game, we can arrange the payoffs for each player in a matrix. We call $A$ the matrix of payoffs for player one and $B$ that for player two. 
 
 ### Example: the prisoner's dilemma
 
-Two prisoners alleggedly committed a crime, but the police do not have enough evidence to convict them. They therefore approach each player separately, proposing a deal: if the prisoner confesses ("defect" the other prisoner), then their sentence will be reduced. In particular: i) if both confess (both "defect"), they are sentenced to 4 years in prison; ii) if one confesses ("defect") and the other keeps quiet ("cooperate" with the other prisoner), then the one who has confessed is let free, and the other sentenced to 5 years; iii) if both keep quiet ("cooperate"), then they are both sentenced to two years of detention.
+Two prisoners alleggedly committed a crime, but the police do not have enough evidence to convict them. They therefore approach each player separately, proposing a deal: if the prisoner confesses ("defect" the other prisoner), then their sentence will be reduced. In particular: i) if both confess (both "defect"), they are sentenced to 4 years in prison; ii) if one confesses ("defect") and the other keeps quiet ("cooperate" with the other prisoner), then the one who has confessed is let free, and the other sentenced to 5 years; iii) if both keep quiet ("cooperate"), then they are both sentenced to two years of detention for some accessory crime.
 
 In matrix form, we have (rows for pl 1 strategy C/D; cols for pl 2 strategy):
 
@@ -38,7 +38,9 @@ B = \begin{pmatrix}
 \end{pmatrix}
 $$
 
-What is the best strategy player 1 can play, without knowing whether player 2 will confess or not? If player 2 were to keep quiet, player 1 should confess and be let free; if player 2 confesses, on the other hand, player 1 should also confess and get a reduced sentence. As such, each player would rationally choose to confess, thereby getting sentenced to four years in prison; note that if they could trust the other player, they could cooperate to get a much reduced sentence.
+What is the best strategy player 1 can play---without knowing whether player 2 will confess or not? If player 2 were to keep quiet, player 1 should confess and be let free; if player 2 confesses, on the other hand, player 1 should also confess and get a reduced sentence. As such, each player would rationally choose to confess, thereby getting sentenced to four years in prison; note that if they could trust the other player, they could cooperate to get a much reduced sentence.
+
+The defect/defect is called a **Nash Equilibrium**: no player can improve their payoff by changing only their own strategy. 
 
 ## Mixed strategies
 
@@ -99,6 +101,8 @@ $$
 
 The RE is essentially equivalent to a GLV model in which we track frequencies instead of abundances. 
 
+Importantly, we can see $x$ as a "mixed strategy" for the symmetric game encoded in $A$. In this context, **an equilibrium of the replicator equation is a Nash Equilibrium for the game**; similarly, **a stable equilibrium for the replicator equation is an Evolutionary Stable Strategy**.
+
 ### Invariants
 
 Adding a constant to each column of $A$ does not alter the dynamics. We have $B = A + e b^t$, where $e$ is a vector of ones. Then:
@@ -114,10 +118,6 @@ D(x)(B x - x^t B x) &= D(x)(A + eb^t) x - x^t (A + eb^t) x\\
 $$
 
 Similarly, multiplying each column of $A$ by a (possibly different) positive constant does not alter dynamics (it just rescales time). As such, if $A_2 = A_1 D + eb^t$ the replicator equations formed using $A_1$ and $A_2$ are equivalent.
-
-## Equivalence with GLV
-
-TODO
 
 ### Rock-paper-scissor
 
@@ -156,7 +156,7 @@ plot_ODE_output <- function(out){
   show(pl)
   return(out)
 }
-# general function to integrate GLV
+# general function to integrate RE
 integrate_RE <- function(A, x0, maxtime = 40, steptime = 0.05){
   times <- seq(0, maxtime, by = steptime)
   parameters <- list(A = A)
@@ -192,9 +192,83 @@ x0 <- x0 / sum(x0)
 rps <- integrate_RE(A, x0)
 ```
 
+## Equivalence with GLV
+
+For a given $n-$species GLV system, there is an equivalent $(n+1)-$dimensional replicator equation with zeros in the last row of the matrix. To show this, let's take our functions for integrating GLV:
+
+```{r, glvfunctions2}
+# Generalized Lotka-Volterra model
+GLV <- function(t, x, parameters){
+  with(as.list(c(x, parameters)), {
+    x[x < 10^-8] <- 0 # prevent numerical problems
+    dxdt <- x * (r + A %*% x)
+    list(dxdt)
+  })
+}
+# general function to integrate GLV
+integrate_GLV <- function(r, A, x0, maxtime = 100, steptime = 0.5){
+  times <- seq(0, maxtime, by = steptime)
+  parameters <- list(r = r, A = A)
+  # solve numerically
+  out <- ode(y = x0, times = times, 
+           func = GLV, parms = parameters, 
+           method = "ode45")
+  # plot and make into tidy form
+  out <- plot_ODE_output(out)
+  return(out)
+}
+```
+
+And integrate the simple system:
+
+```{r, exampleglvtore1}
+r <- c(1, 2, 3)
+A <- matrix(c(-1, 0.5, 0.1,
+              -0.7, -2, 0,
+              -0.3, 0, -5), 3, 3, byrow = TRUE)
+x0 <- c(0.1, 3, 1)
+glvex <- integrate_GLV(r, A, x0)
+```
+
+And now build an equivalent RE system. Form a matrix $B$ with the matrix $A$ in the first $n$ rows and columns, and the vector $r$ as the $(n+1)$th column:
+
+```{r}
+B <- matrix(0, 4, 4)
+B[1:3, 1:3] <- A
+B[1:3, 4] <- r
+B
+y0 <- c(x0, 1)
+y0 <- y0 / sum(y0)
+reex <- integrate_RE(B, y0)
+```
+
+Now let's look at the equilibrium of the GLV model:
+```{r}
+glvex %>% filter(time == 100)
+```
+
+And recover it from the RE equation (just divide by the density of the extra "species"):
+
+```{r}
+reex %>% filter(time == 40)
+reex %>% filter(time == 40) %>% mutate(density = density / tail(density, 1))
+```
+
+Not only the equilibria are the same, but also the dynamics are the same once time has been properly rescaled. Similarly, for each RE system we can always recover a matrix with zero in the last row by applying the transformations detailed above, and therefore recover the corresponding GLV. For example, take the matrix for the RPS above, and make each coefficient in the last row zero by adding the appropriate constant to each column. Then one recovers some sort of a predator-prey system:
+
+```{r, exampleretoglv1}
+r <- c(-1, 1)
+A <- matrix(c(-1, 2,
+              -2, 1), 2, 2, byrow = TRUE)
+x0 <- c(0.9, 1.1)
+glvex <- integrate_GLV(r, A, x0, maxtime = 15, steptime = 0.01)
+```
+
+in which the species oscillate around one.
+
 ### Hypertournament games
 
-The rock-paper-scissor game above is a simple case of a hypertournament game. Take the zero-sum payoff matrix $A = -A^t$. Then, we have 
+The rock-paper-scissor game above is a simple case of a "hypertournament" game. Take the zero-sum payoff matrix $A = -A^t$. Then, we have 
 
 $$
 \sum_i \sum_j A_{ij} x_i x_j = 0
@@ -210,11 +284,11 @@ At equilibrium, either some elements of $x$ are zero, or
 $$
 A x^\star = 0
 $$
-meaning that $x^\star$ is an eigenvector of $A$ corresponding to a zero eigenvalue.
+meaning that if a feasible equilibrium $x^\star$ exists, it is an eigenvector of $A$ corresponding to a zero eigenvalue.
 
 #### Number of coexisting species
 
-Suppose that an habitat is composed of a large number of patches, each containing a single individual (e.g., a tropical rainforest). Individuals die at a certain rate $d = 1$, and whenever they produce offspring, they disperse it to the empty patches. Whenever two individuals land in the same patch, they compete. The coefficient $H_{ij}$ corresponds to the probability of $i$ winning when competing with $j$, and we have $H_{ij} + H_{ji} = 1$. For each empty patch, we sample two seeds (produced at a rate proportional to $x_i$) and compete them. Dynamics become [@grilli2017higher]:
+We now show how the equations above can arise when modeling ecological dynamics. Suppose that a forest is composed of a fixed number of trees. Each time a tree dies (with rate $d = 1$ for all species), a gap in the canopy opens, and species will compete to colonize it. Let's assume that two seeds (sampled with probability proportional to the density of the species) land in the empty patch, and that they compete to fill the gap. Call $H_{ij}$ the probability that $i$ wins when competing with $j$; we have $H_{ij} + H_{ji} = 1$. We can write the dynamics [@grilli2017higher] as:
 
 $$
 \begin{aligned}
@@ -270,7 +344,7 @@ ggplot(data = results) + aes(x = coexisting) + geom_bar() + scale_x_continuous(b
 
 ### Lyapunov function
 
-In the rock-paper-scissor example above, the species cycled neutrally around the single equilibrium point. To show that this is in fact the behavior of this type of RE, we write a Lyapunov function. By finding a constant of motion we can show that the species will follow closed orbits.
+In the rock-paper-scissor example above, species cycled neutrally around the unique equilibrium point. To show that this is in fact the behavior of this type of RE, we write a Lyapunov function. By finding a constant of motion we can show that the species will follow closed orbits.
 
 Suppose $x_{i}^\star > 0$ is the equilibrium for the system. We write:
 
@@ -321,7 +395,7 @@ fivespp <- integrate_RE(A, x0, maxtime = 400, steptime = 0.1)
 
 ### Higher-order interactions
 
-We can extend the game above to the case in which three (or more) individuals compete in each patch. @grilli2017higher showed that in this case, one can write the replicator equation:
+We can extend the game above to the case in which three (or more) seeds compete to fill each patch. @grilli2017higher showed that in this case, one can write the replicator equation:
 
 $$
 \dfrac{d x_i}{dt} = x_i \sum_{j,k} A_{ijk} x_j x_k

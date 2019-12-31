@@ -217,7 +217,7 @@ $$
 and 
 
 $$
-J_{ij} = \frac{\partial f_i}{\partial x_i} = r_i + \sum_j a_{ij} x_j + a_{ii} x_i
+J_{ii} = \frac{\partial f_i}{\partial x_i} = r_i + \sum_j a_{ij} x_j + a_{ii} x_i
 $$
 
 At equilibrium $r_i + \sum_j a_{ij} x_j = 0$, and therefore:
