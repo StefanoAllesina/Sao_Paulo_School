@@ -1147,7 +1147,7 @@ And now build an equivalent RE system. Form a matrix \(B\) with the matrix \(A\)
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-latex/unnamed-chunk-2-1} \end{center}
+\begin{center}\includegraphics{A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-latex/redynamicsfromglv-1} \end{center}
 
 \begin{verbatim}
 #      [,1] [,2] [,3] [,4]
@@ -1531,7 +1531,7 @@ Now go through all possible combinations:
 \hypertarget{total-biomass}{%
 \section{Total biomass}\label{total-biomass}}
 
-Our simulated communties have much in common with BEF experiments. For example, plotting the species richness on the x-axis and the total biomass on the y-axis, we recover the typical pattern found in real experiments (\citep{hector1999plant} \citep{tilman2001diversity} \citet{cadotte2013experimental}{]}):
+Our simulated communties have much in common with BEF experiments. For example, plotting the species richness on the x-axis and the total biomass on the y-axis, we recover the typical pattern found in real experiments (\citep{hector1999plant} \citep{tilman2001diversity} \citep{cadotte2013experimental}):
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1562,7 +1562,7 @@ We can rewrite the GLV model as:
 \]
 where we have \(b_{ij} = a_{ij} / r_i\). The equilibrium for each subset of species \(k\) (if it exists) can be found as \((B^{(k)})^{-1} 1^{(k)}\), where \((B^{(k)})^{-1}\) is the inverse of the \(B^{(k)}\) sub-matrix of \(B\) in which only the rows/columns belonging to \(k\) are retained, and \(1^{(k)}\) is a vector of ones with length equal to the number of species in \(k\).
 
-We now want to link the matrix \(B\) with the results of the experiments, stored in matrix \(E\). Call \(x^{(k)}_i\) the recorded density of taxon \(i\) in community \(k\) (i.e., stored in one of the rows of \(E\)). Then, we can build a matrix \(P\) where each row represents an equation \(\sum_j b_{ij} x_j^{(k)} = 1\) and we have a column for each coefficient in \(A\). For example, take three taxa, and suppose that we can culture each in isolation, and that the all assemblages coexist when co-cultured. We can write 12 equations: monocultures (\(k \in \{1, 2, 4\}\)) give rise to a single equation; co-cultures of two taxa to two equations each (\(k \in \{3, 5, 6 \}\)); and communities with three taxa to three independent equations (\(k = 7\)). Here are the 12 equations we can write:
+We now want to link the matrix \(B\) with the results of the experiments, stored in matrix \(E\). Call \(x^{(k)}_i\) the recorded density of taxon \(i\) in community \(k\) (i.e., stored in one of the rows of \(E\)). Then, we can build a matrix \(P\) where each row represents an equation \(\sum_j b_{ij} x_j^{(k)} = 1\) and we have a column for each coefficient in \(B\). For example, take three taxa, and suppose that we can culture each in isolation, and that the all assemblages coexist when co-cultured. We can write 12 equations: monocultures (\(k \in \{1, 2, 4\}\)) give rise to a single equation; co-cultures of two taxa to two equations each (\(k \in \{3, 5, 6 \}\)); and communities with three taxa to three independent equations (\(k = 7\)). Here are the 12 equations we can write:
 
 \[
 \begin{aligned}
@@ -1704,7 +1704,7 @@ For example:
 \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\NormalTok{n)\{}
   \CommentTok{# take the matrix Ei}
 \NormalTok{  Ei <-}\StringTok{ }\NormalTok{E[E[,i] }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{, , drop =}\StringTok{ }\OtherTok{FALSE}\NormalTok{]}
-  \CommentTok{# solve for the row}
+  \CommentTok{# solve for the row (MASS::ginv computes the pseudoinverse)}
 \NormalTok{  fitted_B[i,] <-}\StringTok{ }\OperatorTok{-}\KeywordTok{rowSums}\NormalTok{(MASS}\OperatorTok{::}\KeywordTok{ginv}\NormalTok{(Ei))}
 \NormalTok{\}}
 \KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =} \KeywordTok{tibble}\NormalTok{(}\DataTypeTok{real =} \KeywordTok{as.vector}\NormalTok{(B),}
@@ -1766,14 +1766,214 @@ x_i^{(k)} = \gamma_i - \sum_{j\neq i} \theta_{ij} x_i^{(k)}
 where \(x_i^{(k)}\) is the density of species \(i\) in community \(k\), \(\gamma_i\) models the density of \(i\) when grown in isolation, and the parameters \(\theta_{ij}\) how the density of \(i\) is influenced by the other species in community \(k\). Dividing both sides by \(\gamma_i\) and rearranging:
 
 \[
-\sum_{j\neq i} (\theta_{ij} /\gamma_i) x_i^{(k)} + 1/{\gamma_i} x_i^{(k)}= \sum_j b_{ij} x_j^{(k)} = 1
+\sum_{j\neq i} (\theta_{ij} /\gamma_i) x_i^{(k)} + (1/{\gamma_i}) x_i^{(k)}= \sum_j b_{ij} x_j^{(k)} = 1
 \]
 which is exactly the same system of equations found above. As such, fitting a linear, addittive model for the biomass of each species in each plot is equivalent to finding the equilibrium strcuture of a GLV model that approximates the data.
 
-One thing to consider when modeling real data, contrary to simulated data, is the structure of the errors. For example, empirical data often contain replicates that reach slightly different densities. Typically, what is done in these types of experiments is to sort and measure biomass for a subset of each plot, and then to multiply to extrapolate the biomass for the whole plot. As such, if the error is normally distributed for the sub-plot, then it's going to be lognormally distributed for the whole plot.
+One thing to consider when modeling real data, contrary to simulated data, is the structure of the errors. For example, empirical data often contain replicates that reach slightly different densities. Moreover, what is typically done in these types of experiments is to sort and measure biomass for a section of each plot, and then to multiply to extrapolate the biomass for the whole plot. As such, if the error is normally distributed for the sub-plot, then it's going to be lognormally distributed for the whole plot. Furthermore, we need to link the rows of matrix \(P\) above, because when we make an error in measuring \(x_j^{(k)}\), the value is reported over several values. Following \citet{maynard2019predicting}, we do the following:
+
+\begin{itemize}
+\tightlist
+\item
+  Propose a matrix \(B\)
+\item
+  Compute the predicted abundance for all species in all observed assemblages (call them \(\tilde{x}_j^{(k)}\))
+\item
+  Compute the SSQ: \(\sum_{j, k} (\log x_j^{(k)} - \log \tilde{x}_j^{(k)})^2\)
+\item
+  Search numerically for the matrix \(B\) minimizing the SSQ
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# constant to penalize solutions with negative}
+\CommentTok{# abundances }
+\NormalTok{penalization <-}\StringTok{ }\DecValTok{100000}
+\CommentTok{# main fitting function}
+\CommentTok{# input: }
+\CommentTok{# - matrix E as above (the data)}
+\CommentTok{# - proposed matrix B}
+\CommentTok{# output:}
+\CommentTok{# - predicted matrix \textbackslash{}tilde\{E\}}
+\CommentTok{# - SSQ}
+\NormalTok{compute_SSQ <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(B, E)\{}
+\NormalTok{  tildeE <-}\StringTok{ }\NormalTok{E}
+\NormalTok{  ones <-}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\DecValTok{1}\NormalTok{, }\KeywordTok{ncol}\NormalTok{(B)) }\CommentTok{# vector of 1s}
+  \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{nrow}\NormalTok{(E))\{}
+\NormalTok{    presence <-}\StringTok{ }\NormalTok{E[i, ] }\OperatorTok{>}\StringTok{ }\DecValTok{0}
+    \CommentTok{# use internal calls to speed up calculation}
+\NormalTok{    predicted_x <-}\StringTok{ }\KeywordTok{.Internal}\NormalTok{(}\KeywordTok{La_solve}\NormalTok{(B[presence, presence, }\DataTypeTok{drop =} \OtherTok{FALSE}\NormalTok{], }
+\NormalTok{                                      ones[presence], }
+                                      \DecValTok{10}\OperatorTok{^-}\DecValTok{6}\NormalTok{))}
+\NormalTok{    tildeE[i, presence] <-}\StringTok{ }\NormalTok{predicted_x}
+\NormalTok{  \}}
+  \CommentTok{# now compute SSQ}
+\NormalTok{  observed <-}\StringTok{ }\NormalTok{E[E }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{]}
+  \CommentTok{# penalize negatives}
+\NormalTok{  predicted <-}\StringTok{ }\NormalTok{tildeE[E }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{]}
+\NormalTok{  predicted[predicted }\OperatorTok{<}\StringTok{ }\DecValTok{0}\NormalTok{] <-}\StringTok{ }\NormalTok{penalization}
+  \KeywordTok{return}\NormalTok{(}\KeywordTok{list}\NormalTok{(}\DataTypeTok{B =}\NormalTok{ B, }
+              \DataTypeTok{E =}\NormalTok{ E, }
+              \DataTypeTok{tildeE =}\NormalTok{ tildeE, }
+              \DataTypeTok{SSQ =} \KeywordTok{sum}\NormalTok{((}\KeywordTok{log}\NormalTok{(predicted) }\OperatorTok{-}\StringTok{ }\KeywordTok{log}\NormalTok{(observed))}\OperatorTok{^}\DecValTok{2}\NormalTok{)}
+\NormalTok{              ))}
+\NormalTok{\}}
+\CommentTok{# for numerical minimization}
+\NormalTok{to_minimize <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(b, E)\{}
+\NormalTok{  n <-}\StringTok{ }\KeywordTok{ncol}\NormalTok{(E)}
+  \KeywordTok{return}\NormalTok{(}\KeywordTok{compute_SSQ}\NormalTok{(}
+    \KeywordTok{matrix}\NormalTok{(b, n, n),}
+\NormalTok{    E}
+\NormalTok{  )}\OperatorTok{$}\NormalTok{SSQ)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+To test this method, we are going to use the data from \citet{kuebbing2015above}, who co-cultured four species of plant in 14 out of 15 possible combinations. Let's load the data
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{url <-}\StringTok{ "https://github.com/dsmaynard/endpoints/raw/master/data/Kuebbing_plants/natives.csv"}
+\NormalTok{E <-}\StringTok{ }\KeywordTok{as.matrix}\NormalTok{(}\KeywordTok{read_csv}\NormalTok{(url))}
+\KeywordTok{head}\NormalTok{(E)}
+\KeywordTok{tail}\NormalTok{(E)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+#          as fa la po
+# [1,] 1.4711  0  0  0
+# [2,] 1.7968  0  0  0
+# [3,] 1.8993  0  0  0
+# [4,] 2.0634  0  0  0
+# [5,] 2.2665  0  0  0
+# [6,] 2.3062  0  0  0
+#            as     fa     la     po
+# [135,] 1.1219 1.8011 0.2390 1.4065
+# [136,] 1.4751 1.3486 0.2474 1.5491
+# [137,] 0.6021 1.9389 0.1817 2.7487
+# [138,] 0.8973 1.6002 0.1156 3.2293
+# [139,] 3.0384 1.4442 0.4590 1.5490
+# [140,] 2.9240 2.3903 0.2379 4.3230
+\end{verbatim}
+
+And let's try to find a good numerical solution starting from the identity matrix:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{2}\NormalTok{)}
+\NormalTok{B <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{)}
+\KeywordTok{diag}\NormalTok{(B) <-}\StringTok{ }\DecValTok{1}
+\NormalTok{tmp <-}\StringTok{ }\KeywordTok{optim}\NormalTok{(}\DataTypeTok{par =} \KeywordTok{as.vector}\NormalTok{(B), }
+             \DataTypeTok{fn =}\NormalTok{ to_minimize, }
+             \DataTypeTok{E =}\NormalTok{ E,}
+             \DataTypeTok{method =} \StringTok{"BFGS"}\NormalTok{)}
+\NormalTok{best_B <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(tmp}\OperatorTok{$}\NormalTok{par, }\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{)}
+\NormalTok{solution <-}\StringTok{ }\KeywordTok{compute_SSQ}\NormalTok{(best_B, E)}
+\end{Highlighting}
+\end{Shaded}
+
+Now let's write code to show a nice plot of the predicted vs.~observed values for all communities:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{plot_solution <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(solution)\{}
+  \CommentTok{# add a column with community composition}
+\NormalTok{  spnames <-}\StringTok{ }\KeywordTok{colnames}\NormalTok{(solution}\OperatorTok{$}\NormalTok{E)}
+\NormalTok{  community <-}\StringTok{ }\KeywordTok{apply}\NormalTok{(solution}\OperatorTok{$}\NormalTok{E, }\DecValTok{1}\NormalTok{, }\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{paste}\NormalTok{(spnames[x }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{], }\DataTypeTok{collapse =} \StringTok{"_"}\NormalTok{))}
+  \CommentTok{# work with observed data}
+\NormalTok{  E <-}\StringTok{ }\KeywordTok{as_tibble}\NormalTok{(solution}\OperatorTok{$}\NormalTok{E) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{add_column}\NormalTok{(}\DataTypeTok{community =}\NormalTok{ community) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{experiment =} \KeywordTok{row_number}\NormalTok{())}
+\NormalTok{  toplot <-}\StringTok{ }\NormalTok{E }\OperatorTok{%>%}\StringTok{ }\KeywordTok{gather}\NormalTok{(species, observed_biomass, }\OperatorTok{-}\NormalTok{experiment, }\OperatorTok{-}\NormalTok{community) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{filter}\NormalTok{(observed_biomass }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{)}
+  \CommentTok{# now the predicted data}
+\NormalTok{  tildeE <-}\StringTok{ }\KeywordTok{as_tibble}\NormalTok{(solution}\OperatorTok{$}\NormalTok{tildeE) }\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{add_column}\NormalTok{(}\DataTypeTok{community =}\NormalTok{ community) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{gather}\NormalTok{(species, predicted_biomass, }\OperatorTok{-}\NormalTok{community) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{distinct}\NormalTok{()}
+  \CommentTok{# join the two data sets}
+\NormalTok{  toplot <-}\StringTok{ }\NormalTok{toplot }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{inner_join}\NormalTok{(tildeE, }\DataTypeTok{by =} \KeywordTok{c}\NormalTok{(}\StringTok{"community"}\NormalTok{, }\StringTok{"species"}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{filter}\NormalTok{(observed_biomass }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{)}
+\NormalTok{  pl <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ toplot) }\OperatorTok{+}\StringTok{ }
+\StringTok{    }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ species, }\DataTypeTok{fill =}\NormalTok{ species) }\OperatorTok{+}\StringTok{ }
+\StringTok{    }\KeywordTok{geom_violin}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{y =}\NormalTok{ observed_biomass), }\DataTypeTok{draw_quantiles =} \FloatTok{0.5}\NormalTok{, }\DataTypeTok{scale =} \StringTok{"width"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{    }\KeywordTok{geom_point}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{y =}\NormalTok{ predicted_biomass)) }\OperatorTok{+}\StringTok{ }
+\StringTok{    }\KeywordTok{facet_wrap}\NormalTok{(}\OperatorTok{~}\NormalTok{community, }\DataTypeTok{scales =} \StringTok{"free_y"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{    }\KeywordTok{scale_y_log10}\NormalTok{(}\StringTok{"biomass"}\NormalTok{)}
+  \KeywordTok{return}\NormalTok{(pl)}
+\NormalTok{\}}
+\KeywordTok{plot_solution}\NormalTok{(solution)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-latex/plotendpoints-1} \end{center}
 
 \hypertarget{predicting-real-data-out-of-fit}{%
 \section{Predicting real data out of fit}\label{predicting-real-data-out-of-fit}}
+
+Exactly as done for the GLV simulated data, we can attempt fitting the matrix \(B\) using only part of the experimental data, and then predict the rest out-of-fit. This is a powerful test to make sure that a) we have chosen a good structure for the statistical model, and b) we are not overfitting. For example, let's try to predict all triplets out of fit. First, we fit the model using only the information about monocultures, pairs, and the quadruplet (11 experiments); then, we use the fitted matrix to predict all of the data and plot:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\NormalTok{B <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{)}
+\KeywordTok{diag}\NormalTok{(B) <-}\StringTok{ }\DecValTok{1}
+\NormalTok{Enotriplets <-}\StringTok{ }\NormalTok{E[}\KeywordTok{rowSums}\NormalTok{(E }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) }\OperatorTok{!=}\StringTok{ }\DecValTok{3}\NormalTok{, ]}
+\NormalTok{tmp <-}\StringTok{ }\KeywordTok{optim}\NormalTok{(}\DataTypeTok{par =} \KeywordTok{as.vector}\NormalTok{(B), }
+             \DataTypeTok{fn =}\NormalTok{ to_minimize, }
+             \DataTypeTok{E =}\NormalTok{ Enotriplets,}
+             \DataTypeTok{method =} \StringTok{"BFGS"}\NormalTok{)}
+\NormalTok{best_B_oof <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(tmp}\OperatorTok{$}\NormalTok{par, }\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{)}
+\NormalTok{solution_oof <-}\StringTok{ }\KeywordTok{compute_SSQ}\NormalTok{(best_B_oof, E)}
+\KeywordTok{plot_solution}\NormalTok{(solution_oof)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-latex/kuebnumerics2-1} \end{center}
+
+Repeat excluding all the pairs:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\NormalTok{B <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{)}
+\KeywordTok{diag}\NormalTok{(B) <-}\StringTok{ }\DecValTok{1}
+\NormalTok{Enopairs <-}\StringTok{ }\NormalTok{E[}\KeywordTok{rowSums}\NormalTok{(E }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) }\OperatorTok{!=}\StringTok{ }\DecValTok{2}\NormalTok{, ]}
+\NormalTok{tmp <-}\StringTok{ }\KeywordTok{optim}\NormalTok{(}\DataTypeTok{par =} \KeywordTok{as.vector}\NormalTok{(B), }
+             \DataTypeTok{fn =}\NormalTok{ to_minimize, }
+             \DataTypeTok{E =}\NormalTok{ Enopairs,}
+             \DataTypeTok{method =} \StringTok{"BFGS"}\NormalTok{)}
+\NormalTok{best_B_oof2 <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(tmp}\OperatorTok{$}\NormalTok{par, }\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{)}
+\NormalTok{solution_oof2 <-}\StringTok{ }\KeywordTok{compute_SSQ}\NormalTok{(best_B_oof2, E)}
+\KeywordTok{plot_solution}\NormalTok{(solution_oof2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-latex/kuebnumerics3-1} \end{center}
+
+Of course, we might push this too far. For example, a popular way to attempt parameterizing models is to consider only monocultures and pairs:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\NormalTok{B <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{)}
+\KeywordTok{diag}\NormalTok{(B) <-}\StringTok{ }\DecValTok{1}
+\NormalTok{Eonlymonopairs <-}\StringTok{ }\NormalTok{E[}\KeywordTok{rowSums}\NormalTok{(E }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) }\OperatorTok{<}\StringTok{ }\DecValTok{3}\NormalTok{, ]}
+\NormalTok{tmp <-}\StringTok{ }\KeywordTok{optim}\NormalTok{(}\DataTypeTok{par =} \KeywordTok{as.vector}\NormalTok{(B), }
+             \DataTypeTok{fn =}\NormalTok{ to_minimize, }
+             \DataTypeTok{E =}\NormalTok{ Eonlymonopairs,}
+             \DataTypeTok{method =} \StringTok{"BFGS"}\NormalTok{)}
+\NormalTok{best_B_oof3 <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(tmp}\OperatorTok{$}\NormalTok{par, }\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{)}
+\NormalTok{solution_oof3 <-}\StringTok{ }\KeywordTok{compute_SSQ}\NormalTok{(best_B_oof3, E)}
+\KeywordTok{plot_solution}\NormalTok{(solution_oof3)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-latex/kuebnumerics4-1} \end{center}
+
+You can see that we predict a lack of coexistence for the system with all four species, while experimentally we have observed coexistence in all ten replicates. \citet{maynard2019predicting} have demonstrated that experimental designs mixing high- and low-abundance experiments provide the best fit while minimizing the number of experiments.
 
 \bibliography{book.bib}
 

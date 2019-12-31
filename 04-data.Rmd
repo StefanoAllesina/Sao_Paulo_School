@@ -12,7 +12,6 @@ library(jpeg)
 #library(knitr)
 ```
 
-
 # Simple models for synthetic communities {#data}
 
 Ecologists have performed large experiments in which different assemblages of species are co-cultured. These experiments have been conducted with plants (for example, Biodiversity Ecosystem Functioning experiments e.g., [@hector1999plant] [@tilman2001diversity] [@cadotte2013experimental]) and in the laboratory using protozoan, algae or bacteria. Two commonly-encountered problems in this type of experiments have to to with the scaling of the number of experiments with the number of species, and with the probability of coexistence.
@@ -86,7 +85,7 @@ tail(E) # show the last few communities
 
 ## Total biomass
 
-Our simulated communties have much in common with BEF experiments. For example, plotting the species richness on the x-axis and the total biomass on the y-axis, we recover the typical pattern found in real experiments ([@hector1999plant] [@tilman2001diversity] @cadotte2013experimental]):
+Our simulated communties have much in common with BEF experiments. For example, plotting the species richness on the x-axis and the total biomass on the y-axis, we recover the typical pattern found in real experiments ([@hector1999plant] [@tilman2001diversity] [@cadotte2013experimental]):
 
 ```{r, glvbefplot}
 library(tidyverse) # plotting and wrangling
@@ -112,7 +111,7 @@ $$
 $$
 where we have $b_{ij} = a_{ij} / r_i$. The equilibrium for each subset of species $k$ (if it exists) can be found as $(B^{(k)})^{-1} 1^{(k)}$, where $(B^{(k)})^{-1}$ is the inverse of the $B^{(k)}$ sub-matrix of $B$ in which only the rows/columns belonging to $k$ are retained, and $1^{(k)}$ is a vector of ones with length equal to the number of species in $k$. 
 
-We now want to link the matrix $B$ with the results of the experiments, stored in matrix $E$. Call $x^{(k)}_i$ the recorded density of taxon $i$ in community $k$ (i.e., stored in one of the rows of $E$). Then, we can build a matrix $P$ where each row represents an equation $\sum_j b_{ij} x_j^{(k)} = 1$ and we have a column for each coefficient in $A$. For example, take three taxa, and suppose that we can culture each in isolation, and that the all assemblages coexist when co-cultured. We can write 12 equations: monocultures ($k \in \{1, 2, 4\}$) give rise to a single equation; co-cultures of two taxa to two equations each ($k \in \{3, 5, 6 \}$); and communities with three taxa to three independent equations ($k = 7$). Here are the 12 equations we can write:
+We now want to link the matrix $B$ with the results of the experiments, stored in matrix $E$. Call $x^{(k)}_i$ the recorded density of taxon $i$ in community $k$ (i.e., stored in one of the rows of $E$). Then, we can build a matrix $P$ where each row represents an equation $\sum_j b_{ij} x_j^{(k)} = 1$ and we have a column for each coefficient in $B$. For example, take three taxa, and suppose that we can culture each in isolation, and that the all assemblages coexist when co-cultured. We can write 12 equations: monocultures ($k \in \{1, 2, 4\}$) give rise to a single equation; co-cultures of two taxa to two equations each ($k \in \{3, 5, 6 \}$); and communities with three taxa to three independent equations ($k = 7$). Here are the 12 equations we can write:
 
 $$
 \begin{aligned}
@@ -253,7 +252,7 @@ fitted_B <- matrix(0, n, n)
 for (i in 1:n){
   # take the matrix Ei
   Ei <- E[E[,i] > 0, , drop = FALSE]
-  # solve for the row
+  # solve for the row (MASS::ginv computes the pseudoinverse)
   fitted_B[i,] <- -rowSums(MASS::ginv(Ei))
 }
 ggplot(data = tibble(real = as.vector(B),
@@ -295,16 +294,165 @@ $$
 where $x_i^{(k)}$ is the density of species $i$ in community $k$,  $\gamma_i$ models the density of $i$ when grown in isolation, and the parameters $\theta_{ij}$ how the density of $i$ is influenced by the other species in community $k$. Dividing both sides by $\gamma_i$ and rearranging:
 
 $$
-\sum_{j\neq i} (\theta_{ij} /\gamma_i) x_i^{(k)} + 1/{\gamma_i} x_i^{(k)}= \sum_j b_{ij} x_j^{(k)} = 1
+\sum_{j\neq i} (\theta_{ij} /\gamma_i) x_i^{(k)} + (1/{\gamma_i}) x_i^{(k)}= \sum_j b_{ij} x_j^{(k)} = 1
 $$
 which is exactly the same system of equations found above. As such, fitting a linear, addittive model for the biomass of each species in each plot is equivalent to finding the equilibrium strcuture of a GLV model that approximates the data.
 
-One thing to consider when modeling real data, contrary to simulated data, is the structure of the errors. For example, empirical data often contain replicates that reach slightly different densities. Typically, what is done in these types of experiments is to sort and measure biomass for a subset of each plot, and then to multiply to extrapolate the biomass for the whole plot. As such, if the error is normally distributed for the sub-plot, then it's going to be lognormally distributed for the whole plot.
+One thing to consider when modeling real data, contrary to simulated data, is the structure of the errors. For example, empirical data often contain replicates that reach slightly different densities. Moreover, what is typically done in these types of experiments is to sort and measure biomass for a section of each plot, and then to multiply to extrapolate the biomass for the whole plot. As such, if the error is normally distributed for the sub-plot, then it's going to be lognormally distributed for the whole plot. Furthermore, we need to link the rows of matrix $P$ above, because when we make an error in measuring $x_j^{(k)}$, the value is reported over several values. Following @maynard2019predicting, we do the following:
 
+- Propose a matrix $B$
+- Compute the predicted abundance for all species in all observed assemblages (call them $\tilde{x}_j^{(k)}$)
+- Compute the SSQ: $\sum_{j, k} (\log x_j^{(k)} - \log \tilde{x}_j^{(k)})^2$
+- Search numerically for the matrix $B$ minimizing the SSQ
 
+```{r, endpointsssq}
+# constant to penalize solutions with negative
+# abundances 
+penalization <- 100000
+# main fitting function
+# input: 
+# - matrix E as above (the data)
+# - proposed matrix B
+# output:
+# - predicted matrix \tilde{E}
+# - SSQ
+compute_SSQ <- function(B, E){
+  tildeE <- E
+  ones <- rep(1, ncol(B)) # vector of 1s
+  for (i in 1:nrow(E)){
+    presence <- E[i, ] > 0
+    # use internal calls to speed up calculation
+    predicted_x <- .Internal(La_solve(B[presence, presence, drop = FALSE], 
+                                      ones[presence], 
+                                      10^-6))
+    tildeE[i, presence] <- predicted_x
+  }
+  # now compute SSQ
+  observed <- E[E > 0]
+  # penalize negatives
+  predicted <- tildeE[E > 0]
+  predicted[predicted < 0] <- penalization
+  return(list(B = B, 
+              E = E, 
+              tildeE = tildeE, 
+              SSQ = sum((log(predicted) - log(observed))^2)
+              ))
+}
+# for numerical minimization
+to_minimize <- function(b, E){
+  n <- ncol(E)
+  return(compute_SSQ(
+    matrix(b, n, n),
+    E
+  )$SSQ)
+}
+```
 
+To test this method, we are going to use the data from @kuebbing2015above, who co-cultured four species of plant in 14 out of 15 possible combinations. Let's load the data
 
+```{r, loadkueb}
+url <- "https://github.com/dsmaynard/endpoints/raw/master/data/Kuebbing_plants/natives.csv"
+E <- as.matrix(read_csv(url))
+head(E)
+tail(E)
+```
+
+And let's try to find a good numerical solution starting from the identity matrix:
+
+```{r, kuebnumerics1}
+set.seed(2)
+B <- matrix(0, 4, 4)
+diag(B) <- 1
+tmp <- optim(par = as.vector(B), 
+             fn = to_minimize, 
+             E = E,
+             method = "BFGS")
+best_B <- matrix(tmp$par, 4, 4)
+solution <- compute_SSQ(best_B, E)
+```
+
+Now let's write code to show a nice plot of the predicted vs. observed values for all communities:
+```{r, plotendpoints}
+plot_solution <- function(solution){
+  # add a column with community composition
+  spnames <- colnames(solution$E)
+  community <- apply(solution$E, 1, function(x) paste(spnames[x > 0], collapse = "_"))
+  # work with observed data
+  E <- as_tibble(solution$E) %>% 
+    add_column(community = community) %>% 
+    mutate(experiment = row_number())
+  toplot <- E %>% gather(species, observed_biomass, -experiment, -community) %>% 
+    filter(observed_biomass > 0)
+  # now the predicted data
+  tildeE <- as_tibble(solution$tildeE) %>%
+    add_column(community = community) %>% 
+    gather(species, predicted_biomass, -community) %>% 
+    distinct()
+  # join the two data sets
+  toplot <- toplot %>% 
+    inner_join(tildeE, by = c("community", "species")) %>% 
+    filter(observed_biomass > 0)
+  pl <- ggplot(data = toplot) + 
+    aes(x = species, fill = species) + 
+    geom_violin(aes(y = observed_biomass), draw_quantiles = 0.5, scale = "width") + 
+    geom_point(aes(y = predicted_biomass)) + 
+    facet_wrap(~community, scales = "free_y") + 
+    scale_y_log10("biomass")
+  return(pl)
+}
+plot_solution(solution)
+```
 
 ## Predicting real data out of fit
+Exactly as done for the GLV simulated data, we can attempt fitting the matrix $B$ using only part of the experimental data, and then predict the rest out-of-fit. This is a powerful test to make sure that a) we have chosen a good structure for the statistical model, and b) we are not overfitting. For example, let's try to predict all triplets out of fit. First, we fit the model using only the information about monocultures, pairs, and the quadruplet (11 experiments); then, we use the fitted matrix to predict all of the data and plot:
+
+```{r, kuebnumerics2}
+set.seed(1)
+B <- matrix(0, 4, 4)
+diag(B) <- 1
+Enotriplets <- E[rowSums(E > 0) != 3, ]
+tmp <- optim(par = as.vector(B), 
+             fn = to_minimize, 
+             E = Enotriplets,
+             method = "BFGS")
+best_B_oof <- matrix(tmp$par, 4, 4)
+solution_oof <- compute_SSQ(best_B_oof, E)
+plot_solution(solution_oof)
+```
+
+Repeat excluding all the pairs:
+
+```{r, kuebnumerics3}
+set.seed(1)
+B <- matrix(0, 4, 4)
+diag(B) <- 1
+Enopairs <- E[rowSums(E > 0) != 2, ]
+tmp <- optim(par = as.vector(B), 
+             fn = to_minimize, 
+             E = Enopairs,
+             method = "BFGS")
+best_B_oof2 <- matrix(tmp$par, 4, 4)
+solution_oof2 <- compute_SSQ(best_B_oof2, E)
+plot_solution(solution_oof2)
+```
+
+Of course, we might push this too far. For example, a popular way to attempt parameterizing models is to consider only monocultures and pairs:
+
+```{r, kuebnumerics4}
+set.seed(1)
+B <- matrix(0, 4, 4)
+diag(B) <- 1
+Eonlymonopairs <- E[rowSums(E > 0) < 3, ]
+tmp <- optim(par = as.vector(B), 
+             fn = to_minimize, 
+             E = Eonlymonopairs,
+             method = "BFGS")
+best_B_oof3 <- matrix(tmp$par, 4, 4)
+solution_oof3 <- compute_SSQ(best_B_oof3, E)
+plot_solution(solution_oof3)
+```
+
+You can see that we predict a lack of coexistence for the system with all four species, while experimentally we have observed coexistence in all ten replicates. @maynard2019predicting have demonstrated that experimental designs mixing high- and low-abundance experiments provide the best fit while minimizing the number of experiments.
+
 
 

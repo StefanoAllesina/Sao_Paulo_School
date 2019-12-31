@@ -232,7 +232,7 @@ glvex <- integrate_GLV(r, A, x0)
 
 And now build an equivalent RE system. Form a matrix $B$ with the matrix $A$ in the first $n$ rows and columns, and the vector $r$ as the $(n+1)$th column:
 
-```{r}
+```{r, redynamicsfromglv}
 B <- matrix(0, 4, 4)
 B[1:3, 1:3] <- A
 B[1:3, 4] <- r
@@ -243,13 +243,13 @@ reex <- integrate_RE(B, y0)
 ```
 
 Now let's look at the equilibrium of the GLV model:
-```{r}
+```{r, equilglv}
 glvex %>% filter(time == 100)
 ```
 
 And recover it from the RE equation (just divide by the density of the extra "species"):
 
-```{r}
+```{r, equilglvre}
 reex %>% filter(time == 40)
 reex %>% filter(time == 40) %>% mutate(density = density / tail(density, 1))
 ```
