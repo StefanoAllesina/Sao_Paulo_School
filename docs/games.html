@@ -24,7 +24,7 @@
 <meta name="author" content="Stefano Allesina" />
 
 
-<meta name="date" content="2019-12-31" />
+<meta name="date" content="2020-01-06" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -156,12 +156,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.8" data-path="intro.html"><a href="intro.html#stability-of-large-random-communities"><i class="fa fa-check"></i><b>2.8</b> Stability of large random communities</a></li>
 <li class="chapter" data-level="2.9" data-path="intro.html"><a href="intro.html#further-readings"><i class="fa fa-check"></i><b>2.9</b> Further readings</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="multi.html"><a href="multi.html"><i class="fa fa-check"></i><b>3</b> Multispecies GLV</a><ul>
-<li class="chapter" data-level="3.1" data-path="multi.html"><a href="multi.html#feasibility"><i class="fa fa-check"></i><b>3.1</b> Feasibility</a></li>
-<li class="chapter" data-level="3.2" data-path="multi.html"><a href="multi.html#stability"><i class="fa fa-check"></i><b>3.2</b> Stability</a></li>
-<li class="chapter" data-level="3.3" data-path="multi.html"><a href="multi.html#non-invasibility"><i class="fa fa-check"></i><b>3.3</b> Non-invasibility</a></li>
-<li class="chapter" data-level="3.4" data-path="multi.html"><a href="multi.html#assembly"><i class="fa fa-check"></i><b>3.4</b> Assembly</a></li>
-<li class="chapter" data-level="3.5" data-path="multi.html"><a href="multi.html#a-random-zoo"><i class="fa fa-check"></i><b>3.5</b> A random zoo</a></li>
+<li class="chapter" data-level="3" data-path="multi.html"><a href="multi.html"><i class="fa fa-check"></i><b>3</b> Multispecies GLV: assembly and invasibility</a><ul>
+<li class="chapter" data-level="3.1" data-path="multi.html"><a href="multi.html#assembly"><i class="fa fa-check"></i><b>3.1</b> Assembly</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="games.html"><a href="games.html"><i class="fa fa-check"></i><b>4</b> Evolutionary Game Theory</a><ul>
 <li class="chapter" data-level="4.1" data-path="games.html"><a href="games.html#game-theory"><i class="fa fa-check"></i><b>4.1</b> Game theory</a></li>
@@ -307,99 +303,99 @@ A = \begin{pmatrix}
 \end{pmatrix}
 \]</span></p>
 <p>We start the population at a random initial condition, and track dynamics:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="games.html#cb25-1"></a><span class="kw">library</span>(deSolve) <span class="co"># integrate ODEs</span></span>
-<span id="cb25-2"><a href="games.html#cb25-2"></a><span class="kw">library</span>(tidyverse) <span class="co"># plotting and wrangling</span></span>
-<span id="cb25-3"><a href="games.html#cb25-3"></a><span class="co"># define the differential equation</span></span>
-<span id="cb25-4"><a href="games.html#cb25-4"></a>RE &lt;-<span class="cf">function</span>(t, x, parameters){</span>
-<span id="cb25-5"><a href="games.html#cb25-5"></a>  <span class="kw">with</span>(<span class="kw">as.list</span>(<span class="kw">c</span>(x, parameters)), {</span>
-<span id="cb25-6"><a href="games.html#cb25-6"></a>    x[x <span class="op">&lt;</span><span class="st"> </span><span class="dv">10</span><span class="op">^-</span><span class="dv">8</span>] &lt;-<span class="st"> </span><span class="dv">0</span> <span class="co"># prevent numerical problems</span></span>
-<span id="cb25-7"><a href="games.html#cb25-7"></a>    x &lt;-<span class="st"> </span>x <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(x) <span class="co"># keep on simplex</span></span>
-<span id="cb25-8"><a href="games.html#cb25-8"></a>    dxdt &lt;-<span class="st"> </span>x <span class="op">*</span><span class="st"> </span>(A <span class="op">%*%</span><span class="st"> </span>x <span class="op">-</span><span class="st"> </span><span class="kw">sum</span>(x <span class="op">*</span><span class="st"> </span>A <span class="op">%*%</span><span class="st"> </span>x))</span>
-<span id="cb25-9"><a href="games.html#cb25-9"></a>    <span class="kw">list</span>(dxdt)</span>
-<span id="cb25-10"><a href="games.html#cb25-10"></a>  })</span>
-<span id="cb25-11"><a href="games.html#cb25-11"></a>}</span>
-<span id="cb25-12"><a href="games.html#cb25-12"></a><span class="co"># function to plot output</span></span>
-<span id="cb25-13"><a href="games.html#cb25-13"></a>plot_ODE_output &lt;-<span class="st"> </span><span class="cf">function</span>(out){</span>
-<span id="cb25-14"><a href="games.html#cb25-14"></a>  out &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(out)</span>
-<span id="cb25-15"><a href="games.html#cb25-15"></a>  <span class="kw">colnames</span>(out) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;time&quot;</span>, <span class="kw">paste</span>(<span class="st">&quot;sp&quot;</span>, <span class="dv">1</span><span class="op">:</span>(<span class="kw">ncol</span>(out) <span class="dv">-1</span>), <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>))</span>
-<span id="cb25-16"><a href="games.html#cb25-16"></a>  out &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(out) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(species, density, <span class="op">-</span>time)</span>
-<span id="cb25-17"><a href="games.html#cb25-17"></a>  pl &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> out) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb25-18"><a href="games.html#cb25-18"></a><span class="st">    </span><span class="kw">aes</span>(<span class="dt">x =</span> time, <span class="dt">y =</span> density, <span class="dt">colour =</span> species) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb25-19"><a href="games.html#cb25-19"></a><span class="st">    </span><span class="kw">geom_line</span>()</span>
-<span id="cb25-20"><a href="games.html#cb25-20"></a>  <span class="kw">show</span>(pl)</span>
-<span id="cb25-21"><a href="games.html#cb25-21"></a>  <span class="kw">return</span>(out)</span>
-<span id="cb25-22"><a href="games.html#cb25-22"></a>}</span>
-<span id="cb25-23"><a href="games.html#cb25-23"></a><span class="co"># general function to integrate RE</span></span>
-<span id="cb25-24"><a href="games.html#cb25-24"></a>integrate_RE &lt;-<span class="st"> </span><span class="cf">function</span>(A, x0, <span class="dt">maxtime =</span> <span class="dv">40</span>, <span class="dt">steptime =</span> <span class="fl">0.05</span>){</span>
-<span id="cb25-25"><a href="games.html#cb25-25"></a>  times &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, maxtime, <span class="dt">by =</span> steptime)</span>
-<span id="cb25-26"><a href="games.html#cb25-26"></a>  parameters &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">A =</span> A)</span>
-<span id="cb25-27"><a href="games.html#cb25-27"></a>  <span class="co"># solve numerically</span></span>
-<span id="cb25-28"><a href="games.html#cb25-28"></a>  out &lt;-<span class="st"> </span><span class="kw">ode</span>(<span class="dt">y =</span> x0, <span class="dt">times =</span> times, </span>
-<span id="cb25-29"><a href="games.html#cb25-29"></a>           <span class="dt">func =</span> RE, <span class="dt">parms =</span> parameters, </span>
-<span id="cb25-30"><a href="games.html#cb25-30"></a>           <span class="dt">method =</span> <span class="st">&quot;ode45&quot;</span>)</span>
-<span id="cb25-31"><a href="games.html#cb25-31"></a>  <span class="co"># plot and make into tidy form</span></span>
-<span id="cb25-32"><a href="games.html#cb25-32"></a>  out &lt;-<span class="st"> </span><span class="kw">plot_ODE_output</span>(out)</span>
-<span id="cb25-33"><a href="games.html#cb25-33"></a>  <span class="kw">return</span>(out)</span>
-<span id="cb25-34"><a href="games.html#cb25-34"></a>}</span>
-<span id="cb25-35"><a href="games.html#cb25-35"></a><span class="co"># payoff matrix</span></span>
-<span id="cb25-36"><a href="games.html#cb25-36"></a>A &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">-1</span>, <span class="dv">1</span>,</span>
-<span id="cb25-37"><a href="games.html#cb25-37"></a>              <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">-1</span>,</span>
-<span id="cb25-38"><a href="games.html#cb25-38"></a>              <span class="dv">-1</span>, <span class="dv">1</span>, <span class="dv">0</span>), <span class="dv">3</span>, <span class="dv">3</span>, <span class="dt">byrow =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb25-39"><a href="games.html#cb25-39"></a><span class="co"># initial conditions</span></span>
-<span id="cb25-40"><a href="games.html#cb25-40"></a>x0 &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">3</span>)</span>
-<span id="cb25-41"><a href="games.html#cb25-41"></a>x0 &lt;-<span class="st"> </span>x0 <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(x0)</span>
-<span id="cb25-42"><a href="games.html#cb25-42"></a>rps &lt;-<span class="st"> </span><span class="kw">integrate_RE</span>(A, x0)</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="games.html#cb26-1"></a><span class="kw">library</span>(deSolve) <span class="co"># integrate ODEs</span></span>
+<span id="cb26-2"><a href="games.html#cb26-2"></a><span class="kw">library</span>(tidyverse) <span class="co"># plotting and wrangling</span></span>
+<span id="cb26-3"><a href="games.html#cb26-3"></a><span class="co"># define the differential equation</span></span>
+<span id="cb26-4"><a href="games.html#cb26-4"></a>RE &lt;-<span class="cf">function</span>(t, x, parameters){</span>
+<span id="cb26-5"><a href="games.html#cb26-5"></a>  <span class="kw">with</span>(<span class="kw">as.list</span>(<span class="kw">c</span>(x, parameters)), {</span>
+<span id="cb26-6"><a href="games.html#cb26-6"></a>    x[x <span class="op">&lt;</span><span class="st"> </span><span class="dv">10</span><span class="op">^-</span><span class="dv">8</span>] &lt;-<span class="st"> </span><span class="dv">0</span> <span class="co"># prevent numerical problems</span></span>
+<span id="cb26-7"><a href="games.html#cb26-7"></a>    x &lt;-<span class="st"> </span>x <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(x) <span class="co"># keep on simplex</span></span>
+<span id="cb26-8"><a href="games.html#cb26-8"></a>    dxdt &lt;-<span class="st"> </span>x <span class="op">*</span><span class="st"> </span>(A <span class="op">%*%</span><span class="st"> </span>x <span class="op">-</span><span class="st"> </span><span class="kw">sum</span>(x <span class="op">*</span><span class="st"> </span>A <span class="op">%*%</span><span class="st"> </span>x))</span>
+<span id="cb26-9"><a href="games.html#cb26-9"></a>    <span class="kw">list</span>(dxdt)</span>
+<span id="cb26-10"><a href="games.html#cb26-10"></a>  })</span>
+<span id="cb26-11"><a href="games.html#cb26-11"></a>}</span>
+<span id="cb26-12"><a href="games.html#cb26-12"></a><span class="co"># function to plot output</span></span>
+<span id="cb26-13"><a href="games.html#cb26-13"></a>plot_ODE_output &lt;-<span class="st"> </span><span class="cf">function</span>(out){</span>
+<span id="cb26-14"><a href="games.html#cb26-14"></a>  out &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(out)</span>
+<span id="cb26-15"><a href="games.html#cb26-15"></a>  <span class="kw">colnames</span>(out) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;time&quot;</span>, <span class="kw">paste</span>(<span class="st">&quot;sp&quot;</span>, <span class="dv">1</span><span class="op">:</span>(<span class="kw">ncol</span>(out) <span class="dv">-1</span>), <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>))</span>
+<span id="cb26-16"><a href="games.html#cb26-16"></a>  out &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(out) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(species, density, <span class="op">-</span>time)</span>
+<span id="cb26-17"><a href="games.html#cb26-17"></a>  pl &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> out) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb26-18"><a href="games.html#cb26-18"></a><span class="st">    </span><span class="kw">aes</span>(<span class="dt">x =</span> time, <span class="dt">y =</span> density, <span class="dt">colour =</span> species) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb26-19"><a href="games.html#cb26-19"></a><span class="st">    </span><span class="kw">geom_line</span>()</span>
+<span id="cb26-20"><a href="games.html#cb26-20"></a>  <span class="kw">show</span>(pl)</span>
+<span id="cb26-21"><a href="games.html#cb26-21"></a>  <span class="kw">return</span>(out)</span>
+<span id="cb26-22"><a href="games.html#cb26-22"></a>}</span>
+<span id="cb26-23"><a href="games.html#cb26-23"></a><span class="co"># general function to integrate RE</span></span>
+<span id="cb26-24"><a href="games.html#cb26-24"></a>integrate_RE &lt;-<span class="st"> </span><span class="cf">function</span>(A, x0, <span class="dt">maxtime =</span> <span class="dv">40</span>, <span class="dt">steptime =</span> <span class="fl">0.05</span>){</span>
+<span id="cb26-25"><a href="games.html#cb26-25"></a>  times &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, maxtime, <span class="dt">by =</span> steptime)</span>
+<span id="cb26-26"><a href="games.html#cb26-26"></a>  parameters &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">A =</span> A)</span>
+<span id="cb26-27"><a href="games.html#cb26-27"></a>  <span class="co"># solve numerically</span></span>
+<span id="cb26-28"><a href="games.html#cb26-28"></a>  out &lt;-<span class="st"> </span><span class="kw">ode</span>(<span class="dt">y =</span> x0, <span class="dt">times =</span> times, </span>
+<span id="cb26-29"><a href="games.html#cb26-29"></a>           <span class="dt">func =</span> RE, <span class="dt">parms =</span> parameters, </span>
+<span id="cb26-30"><a href="games.html#cb26-30"></a>           <span class="dt">method =</span> <span class="st">&quot;ode45&quot;</span>)</span>
+<span id="cb26-31"><a href="games.html#cb26-31"></a>  <span class="co"># plot and make into tidy form</span></span>
+<span id="cb26-32"><a href="games.html#cb26-32"></a>  out &lt;-<span class="st"> </span><span class="kw">plot_ODE_output</span>(out)</span>
+<span id="cb26-33"><a href="games.html#cb26-33"></a>  <span class="kw">return</span>(out)</span>
+<span id="cb26-34"><a href="games.html#cb26-34"></a>}</span>
+<span id="cb26-35"><a href="games.html#cb26-35"></a><span class="co"># payoff matrix</span></span>
+<span id="cb26-36"><a href="games.html#cb26-36"></a>A &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">-1</span>, <span class="dv">1</span>,</span>
+<span id="cb26-37"><a href="games.html#cb26-37"></a>              <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">-1</span>,</span>
+<span id="cb26-38"><a href="games.html#cb26-38"></a>              <span class="dv">-1</span>, <span class="dv">1</span>, <span class="dv">0</span>), <span class="dv">3</span>, <span class="dv">3</span>, <span class="dt">byrow =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb26-39"><a href="games.html#cb26-39"></a><span class="co"># initial conditions</span></span>
+<span id="cb26-40"><a href="games.html#cb26-40"></a>x0 &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">3</span>)</span>
+<span id="cb26-41"><a href="games.html#cb26-41"></a>x0 &lt;-<span class="st"> </span>x0 <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(x0)</span>
+<span id="cb26-42"><a href="games.html#cb26-42"></a>rps &lt;-<span class="st"> </span><span class="kw">integrate_RE</span>(A, x0)</span></code></pre></div>
 <p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/refuctions-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>What if we start all populations at the same density?</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="games.html#cb26-1"></a>x0 &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="dv">3</span>, <span class="dv">3</span>)</span>
-<span id="cb26-2"><a href="games.html#cb26-2"></a>rps &lt;-<span class="st"> </span><span class="kw">integrate_RE</span>(A, x0)</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="games.html#cb27-1"></a>x0 &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb27-2"><a href="games.html#cb27-2"></a>rps &lt;-<span class="st"> </span><span class="kw">integrate_RE</span>(A, x0)</span></code></pre></div>
 <p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/rps2-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>And if they are close to the 1/3?</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="games.html#cb27-1"></a>x0 &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">3</span>, <span class="dv">3</span>) <span class="op">+</span><span class="st"> </span><span class="fl">0.05</span> <span class="op">*</span><span class="st"> </span><span class="kw">runif</span>(<span class="dv">3</span>)</span>
-<span id="cb27-2"><a href="games.html#cb27-2"></a>x0 &lt;-<span class="st"> </span>x0 <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(x0)</span>
-<span id="cb27-3"><a href="games.html#cb27-3"></a>rps &lt;-<span class="st"> </span><span class="kw">integrate_RE</span>(A, x0)</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="games.html#cb28-1"></a>x0 &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">3</span>, <span class="dv">3</span>) <span class="op">+</span><span class="st"> </span><span class="fl">0.05</span> <span class="op">*</span><span class="st"> </span><span class="kw">runif</span>(<span class="dv">3</span>)</span>
+<span id="cb28-2"><a href="games.html#cb28-2"></a>x0 &lt;-<span class="st"> </span>x0 <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(x0)</span>
+<span id="cb28-3"><a href="games.html#cb28-3"></a>rps &lt;-<span class="st"> </span><span class="kw">integrate_RE</span>(A, x0)</span></code></pre></div>
 <p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/rps3-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="equivalence-with-glv" class="section level2">
 <h2><span class="header-section-number">4.7</span> Equivalence with GLV</h2>
 <p>For a given <span class="math inline">\(n-\)</span>species GLV system, there is an equivalent <span class="math inline">\((n+1)-\)</span>dimensional replicator equation with zeros in the last row of the matrix. To show this, let’s take our functions for integrating GLV:</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="games.html#cb28-1"></a><span class="co"># Generalized Lotka-Volterra model</span></span>
-<span id="cb28-2"><a href="games.html#cb28-2"></a>GLV &lt;-<span class="st"> </span><span class="cf">function</span>(t, x, parameters){</span>
-<span id="cb28-3"><a href="games.html#cb28-3"></a>  <span class="kw">with</span>(<span class="kw">as.list</span>(<span class="kw">c</span>(x, parameters)), {</span>
-<span id="cb28-4"><a href="games.html#cb28-4"></a>    x[x <span class="op">&lt;</span><span class="st"> </span><span class="dv">10</span><span class="op">^-</span><span class="dv">8</span>] &lt;-<span class="st"> </span><span class="dv">0</span> <span class="co"># prevent numerical problems</span></span>
-<span id="cb28-5"><a href="games.html#cb28-5"></a>    dxdt &lt;-<span class="st"> </span>x <span class="op">*</span><span class="st"> </span>(r <span class="op">+</span><span class="st"> </span>A <span class="op">%*%</span><span class="st"> </span>x)</span>
-<span id="cb28-6"><a href="games.html#cb28-6"></a>    <span class="kw">list</span>(dxdt)</span>
-<span id="cb28-7"><a href="games.html#cb28-7"></a>  })</span>
-<span id="cb28-8"><a href="games.html#cb28-8"></a>}</span>
-<span id="cb28-9"><a href="games.html#cb28-9"></a><span class="co"># general function to integrate GLV</span></span>
-<span id="cb28-10"><a href="games.html#cb28-10"></a>integrate_GLV &lt;-<span class="st"> </span><span class="cf">function</span>(r, A, x0, <span class="dt">maxtime =</span> <span class="dv">100</span>, <span class="dt">steptime =</span> <span class="fl">0.5</span>){</span>
-<span id="cb28-11"><a href="games.html#cb28-11"></a>  times &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, maxtime, <span class="dt">by =</span> steptime)</span>
-<span id="cb28-12"><a href="games.html#cb28-12"></a>  parameters &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">r =</span> r, <span class="dt">A =</span> A)</span>
-<span id="cb28-13"><a href="games.html#cb28-13"></a>  <span class="co"># solve numerically</span></span>
-<span id="cb28-14"><a href="games.html#cb28-14"></a>  out &lt;-<span class="st"> </span><span class="kw">ode</span>(<span class="dt">y =</span> x0, <span class="dt">times =</span> times, </span>
-<span id="cb28-15"><a href="games.html#cb28-15"></a>           <span class="dt">func =</span> GLV, <span class="dt">parms =</span> parameters, </span>
-<span id="cb28-16"><a href="games.html#cb28-16"></a>           <span class="dt">method =</span> <span class="st">&quot;ode45&quot;</span>)</span>
-<span id="cb28-17"><a href="games.html#cb28-17"></a>  <span class="co"># plot and make into tidy form</span></span>
-<span id="cb28-18"><a href="games.html#cb28-18"></a>  out &lt;-<span class="st"> </span><span class="kw">plot_ODE_output</span>(out)</span>
-<span id="cb28-19"><a href="games.html#cb28-19"></a>  <span class="kw">return</span>(out)</span>
-<span id="cb28-20"><a href="games.html#cb28-20"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="games.html#cb29-1"></a><span class="co"># Generalized Lotka-Volterra model</span></span>
+<span id="cb29-2"><a href="games.html#cb29-2"></a>GLV &lt;-<span class="st"> </span><span class="cf">function</span>(t, x, parameters){</span>
+<span id="cb29-3"><a href="games.html#cb29-3"></a>  <span class="kw">with</span>(<span class="kw">as.list</span>(<span class="kw">c</span>(x, parameters)), {</span>
+<span id="cb29-4"><a href="games.html#cb29-4"></a>    x[x <span class="op">&lt;</span><span class="st"> </span><span class="dv">10</span><span class="op">^-</span><span class="dv">8</span>] &lt;-<span class="st"> </span><span class="dv">0</span> <span class="co"># prevent numerical problems</span></span>
+<span id="cb29-5"><a href="games.html#cb29-5"></a>    dxdt &lt;-<span class="st"> </span>x <span class="op">*</span><span class="st"> </span>(r <span class="op">+</span><span class="st"> </span>A <span class="op">%*%</span><span class="st"> </span>x)</span>
+<span id="cb29-6"><a href="games.html#cb29-6"></a>    <span class="kw">list</span>(dxdt)</span>
+<span id="cb29-7"><a href="games.html#cb29-7"></a>  })</span>
+<span id="cb29-8"><a href="games.html#cb29-8"></a>}</span>
+<span id="cb29-9"><a href="games.html#cb29-9"></a><span class="co"># general function to integrate GLV</span></span>
+<span id="cb29-10"><a href="games.html#cb29-10"></a>integrate_GLV &lt;-<span class="st"> </span><span class="cf">function</span>(r, A, x0, <span class="dt">maxtime =</span> <span class="dv">100</span>, <span class="dt">steptime =</span> <span class="fl">0.5</span>){</span>
+<span id="cb29-11"><a href="games.html#cb29-11"></a>  times &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, maxtime, <span class="dt">by =</span> steptime)</span>
+<span id="cb29-12"><a href="games.html#cb29-12"></a>  parameters &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">r =</span> r, <span class="dt">A =</span> A)</span>
+<span id="cb29-13"><a href="games.html#cb29-13"></a>  <span class="co"># solve numerically</span></span>
+<span id="cb29-14"><a href="games.html#cb29-14"></a>  out &lt;-<span class="st"> </span><span class="kw">ode</span>(<span class="dt">y =</span> x0, <span class="dt">times =</span> times, </span>
+<span id="cb29-15"><a href="games.html#cb29-15"></a>           <span class="dt">func =</span> GLV, <span class="dt">parms =</span> parameters, </span>
+<span id="cb29-16"><a href="games.html#cb29-16"></a>           <span class="dt">method =</span> <span class="st">&quot;ode45&quot;</span>)</span>
+<span id="cb29-17"><a href="games.html#cb29-17"></a>  <span class="co"># plot and make into tidy form</span></span>
+<span id="cb29-18"><a href="games.html#cb29-18"></a>  out &lt;-<span class="st"> </span><span class="kw">plot_ODE_output</span>(out)</span>
+<span id="cb29-19"><a href="games.html#cb29-19"></a>  <span class="kw">return</span>(out)</span>
+<span id="cb29-20"><a href="games.html#cb29-20"></a>}</span></code></pre></div>
 <p>And integrate the simple system:</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="games.html#cb29-1"></a>r &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</span>
-<span id="cb29-2"><a href="games.html#cb29-2"></a>A &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>, <span class="fl">0.5</span>, <span class="fl">0.1</span>,</span>
-<span id="cb29-3"><a href="games.html#cb29-3"></a>              <span class="fl">-0.7</span>, <span class="dv">-2</span>, <span class="dv">0</span>,</span>
-<span id="cb29-4"><a href="games.html#cb29-4"></a>              <span class="fl">-0.3</span>, <span class="dv">0</span>, <span class="dv">-5</span>), <span class="dv">3</span>, <span class="dv">3</span>, <span class="dt">byrow =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb29-5"><a href="games.html#cb29-5"></a>x0 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.1</span>, <span class="dv">3</span>, <span class="dv">1</span>)</span>
-<span id="cb29-6"><a href="games.html#cb29-6"></a>glvex &lt;-<span class="st"> </span><span class="kw">integrate_GLV</span>(r, A, x0)</span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="games.html#cb30-1"></a>r &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</span>
+<span id="cb30-2"><a href="games.html#cb30-2"></a>A &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>, <span class="fl">0.5</span>, <span class="fl">0.1</span>,</span>
+<span id="cb30-3"><a href="games.html#cb30-3"></a>              <span class="fl">-0.7</span>, <span class="dv">-2</span>, <span class="dv">0</span>,</span>
+<span id="cb30-4"><a href="games.html#cb30-4"></a>              <span class="fl">-0.3</span>, <span class="dv">0</span>, <span class="dv">-5</span>), <span class="dv">3</span>, <span class="dv">3</span>, <span class="dt">byrow =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb30-5"><a href="games.html#cb30-5"></a>x0 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.1</span>, <span class="dv">3</span>, <span class="dv">1</span>)</span>
+<span id="cb30-6"><a href="games.html#cb30-6"></a>glvex &lt;-<span class="st"> </span><span class="kw">integrate_GLV</span>(r, A, x0)</span></code></pre></div>
 <p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/exampleglvtore1-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>And now build an equivalent RE system. Form a matrix <span class="math inline">\(B\)</span> with the matrix <span class="math inline">\(A\)</span> in the first <span class="math inline">\(n\)</span> rows and columns, and the vector <span class="math inline">\(r\)</span> as the <span class="math inline">\((n+1)\)</span>th column:</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="games.html#cb30-1"></a>B &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, <span class="dv">4</span>, <span class="dv">4</span>)</span>
-<span id="cb30-2"><a href="games.html#cb30-2"></a>B[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>] &lt;-<span class="st"> </span>A</span>
-<span id="cb30-3"><a href="games.html#cb30-3"></a>B[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="dv">4</span>] &lt;-<span class="st"> </span>r</span>
-<span id="cb30-4"><a href="games.html#cb30-4"></a>B</span>
-<span id="cb30-5"><a href="games.html#cb30-5"></a>y0 &lt;-<span class="st"> </span><span class="kw">c</span>(x0, <span class="dv">1</span>)</span>
-<span id="cb30-6"><a href="games.html#cb30-6"></a>y0 &lt;-<span class="st"> </span>y0 <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(y0)</span>
-<span id="cb30-7"><a href="games.html#cb30-7"></a>reex &lt;-<span class="st"> </span><span class="kw">integrate_RE</span>(B, y0)</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="games.html#cb31-1"></a>B &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, <span class="dv">4</span>, <span class="dv">4</span>)</span>
+<span id="cb31-2"><a href="games.html#cb31-2"></a>B[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>] &lt;-<span class="st"> </span>A</span>
+<span id="cb31-3"><a href="games.html#cb31-3"></a>B[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="dv">4</span>] &lt;-<span class="st"> </span>r</span>
+<span id="cb31-4"><a href="games.html#cb31-4"></a>B</span>
+<span id="cb31-5"><a href="games.html#cb31-5"></a>y0 &lt;-<span class="st"> </span><span class="kw">c</span>(x0, <span class="dv">1</span>)</span>
+<span id="cb31-6"><a href="games.html#cb31-6"></a>y0 &lt;-<span class="st"> </span>y0 <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(y0)</span>
+<span id="cb31-7"><a href="games.html#cb31-7"></a>reex &lt;-<span class="st"> </span><span class="kw">integrate_RE</span>(B, y0)</span></code></pre></div>
 <p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/redynamicsfromglv-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre><code>#      [,1] [,2] [,3] [,4]
 # [1,] -1.0  0.5  0.1    1
@@ -407,7 +403,7 @@ A = \begin{pmatrix}
 # [3,] -0.3  0.0 -5.0    3
 # [4,]  0.0  0.0  0.0    0</code></pre>
 <p>Now let’s look at the equilibrium of the GLV model:</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="games.html#cb32-1"></a>glvex <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(time <span class="op">==</span><span class="st"> </span><span class="dv">100</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="games.html#cb33-1"></a>glvex <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(time <span class="op">==</span><span class="st"> </span><span class="dv">100</span>)</span></code></pre></div>
 <pre><code># # A tibble: 3 x 3
 #    time species density
 #   &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;
@@ -415,8 +411,8 @@ A = \begin{pmatrix}
 # 2   100 sp_2      0.538
 # 3   100 sp_3      0.521</code></pre>
 <p>And recover it from the RE equation (just divide by the density of the extra “species”):</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="games.html#cb34-1"></a>reex <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(time <span class="op">==</span><span class="st"> </span><span class="dv">40</span>)</span>
-<span id="cb34-2"><a href="games.html#cb34-2"></a>reex <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(time <span class="op">==</span><span class="st"> </span><span class="dv">40</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">density =</span> density <span class="op">/</span><span class="st"> </span><span class="kw">tail</span>(density, <span class="dv">1</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="games.html#cb35-1"></a>reex <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(time <span class="op">==</span><span class="st"> </span><span class="dv">40</span>)</span>
+<span id="cb35-2"><a href="games.html#cb35-2"></a>reex <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(time <span class="op">==</span><span class="st"> </span><span class="dv">40</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">density =</span> density <span class="op">/</span><span class="st"> </span><span class="kw">tail</span>(density, <span class="dv">1</span>))</span></code></pre></div>
 <pre><code># # A tibble: 4 x 3
 #    time species density
 #   &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;
@@ -432,11 +428,11 @@ A = \begin{pmatrix}
 # 3    40 sp_3      0.521
 # 4    40 sp_4      1</code></pre>
 <p>Not only the equilibria are the same, but also the dynamics are the same once time has been properly rescaled. Similarly, for each RE system we can always recover a matrix with zero in the last row by applying the transformations detailed above, and therefore recover the corresponding GLV. For example, take the matrix for the RPS above, and make each coefficient in the last row zero by adding the appropriate constant to each column. Then one recovers some sort of a predator-prey system:</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="games.html#cb36-1"></a>r &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)</span>
-<span id="cb36-2"><a href="games.html#cb36-2"></a>A &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">2</span>,</span>
-<span id="cb36-3"><a href="games.html#cb36-3"></a>              <span class="dv">-2</span>, <span class="dv">1</span>), <span class="dv">2</span>, <span class="dv">2</span>, <span class="dt">byrow =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb36-4"><a href="games.html#cb36-4"></a>x0 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.9</span>, <span class="fl">1.1</span>)</span>
-<span id="cb36-5"><a href="games.html#cb36-5"></a>glvex &lt;-<span class="st"> </span><span class="kw">integrate_GLV</span>(r, A, x0, <span class="dt">maxtime =</span> <span class="dv">15</span>, <span class="dt">steptime =</span> <span class="fl">0.01</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="games.html#cb37-1"></a>r &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb37-2"><a href="games.html#cb37-2"></a>A &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">2</span>,</span>
+<span id="cb37-3"><a href="games.html#cb37-3"></a>              <span class="dv">-2</span>, <span class="dv">1</span>), <span class="dv">2</span>, <span class="dv">2</span>, <span class="dt">byrow =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb37-4"><a href="games.html#cb37-4"></a>x0 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.9</span>, <span class="fl">1.1</span>)</span>
+<span id="cb37-5"><a href="games.html#cb37-5"></a>glvex &lt;-<span class="st"> </span><span class="kw">integrate_GLV</span>(r, A, x0, <span class="dt">maxtime =</span> <span class="dv">15</span>, <span class="dt">steptime =</span> <span class="fl">0.01</span>)</span></code></pre></div>
 <p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/exampleretoglv1-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>in which the species oscillate around one.</p>
 <div id="hypertournament-games" class="section level3">
@@ -468,36 +464,39 @@ meaning that if a feasible equilibrium <span class="math inline">\(x^\star\)</sp
 \]</span></p>
 <p>I.e., we recover the RE for a zero-sum game. What happens if we draw <span class="math inline">\(H\)</span> (and therefore <span class="math inline">\(A\)</span>) at random? <span class="citation">Allesina and Levine (<a href="#ref-allesina2011competitive" role="doc-biblioref">2011</a>)</span> and <span class="citation">Grilli et al. (<a href="#ref-grilli2017higher" role="doc-biblioref">2017</a>)</span> applied the results of <span class="citation">Fisher and Reeves (<a href="#ref-fisher1995optimal" role="doc-biblioref">1995</a>)</span> and <span class="citation">Brandl (<a href="#ref-brandl2017distribution" role="doc-biblioref">2017</a>)</span> to show that, when <span class="math inline">\(n\)</span> species compete, the probability of observing <span class="math inline">\(k\)</span> coexisting is <span class="math inline">\(p(k|n) = \binom{n}{k} 2^{1-n}\)</span> when <span class="math inline">\(k\)</span> is odd, and <span class="math inline">\(p(k|n) = 0\)</span> when <span class="math inline">\(k\)</span> is even.</p>
 <p>Importantly, to find the set of coexisting species we do not need to integrate dynamics. One can use linear programming to solve for the set of species that will coexist.</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="games.html#cb37-1"></a><span class="kw">library</span>(lpSolve)</span>
-<span id="cb37-2"><a href="games.html#cb37-2"></a><span class="co"># Build a random matrix H such that H_ij + H_ji = 1</span></span>
-<span id="cb37-3"><a href="games.html#cb37-3"></a>random_H &lt;-<span class="st"> </span><span class="cf">function</span>(n){</span>
-<span id="cb37-4"><a href="games.html#cb37-4"></a>  <span class="co"># build random hypertournament H</span></span>
-<span id="cb37-5"><a href="games.html#cb37-5"></a>  H &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">runif</span>(n <span class="op">*</span><span class="st"> </span>n), n, n)</span>
-<span id="cb37-6"><a href="games.html#cb37-6"></a>  <span class="kw">return</span>(H <span class="op">/</span><span class="st"> </span>(H <span class="op">+</span><span class="st"> </span><span class="kw">t</span>(H)))</span>
-<span id="cb37-7"><a href="games.html#cb37-7"></a>}</span>
-<span id="cb37-8"><a href="games.html#cb37-8"></a><span class="co"># Find the optimal strategy for the two-person game encoded in H</span></span>
-<span id="cb37-9"><a href="games.html#cb37-9"></a><span class="co"># using linear programming.</span></span>
-<span id="cb37-10"><a href="games.html#cb37-10"></a><span class="co"># This is also the coexistence equilibrium of the dynamical system.</span></span>
-<span id="cb37-11"><a href="games.html#cb37-11"></a>find_optimal_strategy &lt;-<span class="st"> </span><span class="cf">function</span>(H){</span>
-<span id="cb37-12"><a href="games.html#cb37-12"></a>  n &lt;-<span class="st"> </span><span class="kw">dim</span>(H)[<span class="dv">1</span>]</span>
-<span id="cb37-13"><a href="games.html#cb37-13"></a>  f.obj &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span>, n)</span>
-<span id="cb37-14"><a href="games.html#cb37-14"></a>  f.con &lt;-<span class="st"> </span>H</span>
-<span id="cb37-15"><a href="games.html#cb37-15"></a>  f.rhs &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span>, n)</span>
-<span id="cb37-16"><a href="games.html#cb37-16"></a>  f.dir &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="st">&quot;&lt;=&quot;</span>, n)</span>
-<span id="cb37-17"><a href="games.html#cb37-17"></a>  z &lt;-<span class="st"> </span><span class="kw">lp</span> (<span class="st">&quot;max&quot;</span>, f.obj, f.con, f.dir, f.rhs)</span>
-<span id="cb37-18"><a href="games.html#cb37-18"></a>  <span class="kw">return</span>(z<span class="op">$</span>solution <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(z<span class="op">$</span>solution))</span>
-<span id="cb37-19"><a href="games.html#cb37-19"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="games.html#cb38-1"></a><span class="kw">library</span>(lpSolve)</span>
+<span id="cb38-2"><a href="games.html#cb38-2"></a><span class="co"># Build a random matrix H such that H_ij + H_ji = 1</span></span>
+<span id="cb38-3"><a href="games.html#cb38-3"></a>random_H &lt;-<span class="st"> </span><span class="cf">function</span>(n){</span>
+<span id="cb38-4"><a href="games.html#cb38-4"></a>  <span class="co"># build random hypertournament H</span></span>
+<span id="cb38-5"><a href="games.html#cb38-5"></a>  H &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">runif</span>(n <span class="op">*</span><span class="st"> </span>n), n, n)</span>
+<span id="cb38-6"><a href="games.html#cb38-6"></a>  <span class="kw">return</span>(H <span class="op">/</span><span class="st"> </span>(H <span class="op">+</span><span class="st"> </span><span class="kw">t</span>(H)))</span>
+<span id="cb38-7"><a href="games.html#cb38-7"></a>}</span>
+<span id="cb38-8"><a href="games.html#cb38-8"></a><span class="co"># Find the optimal strategy for the two-person game encoded in H</span></span>
+<span id="cb38-9"><a href="games.html#cb38-9"></a><span class="co"># using linear programming.</span></span>
+<span id="cb38-10"><a href="games.html#cb38-10"></a><span class="co"># This is also the coexistence equilibrium of the dynamical system.</span></span>
+<span id="cb38-11"><a href="games.html#cb38-11"></a>find_optimal_strategy &lt;-<span class="st"> </span><span class="cf">function</span>(H){</span>
+<span id="cb38-12"><a href="games.html#cb38-12"></a>  n &lt;-<span class="st"> </span><span class="kw">dim</span>(H)[<span class="dv">1</span>]</span>
+<span id="cb38-13"><a href="games.html#cb38-13"></a>  f.obj &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span>, n)</span>
+<span id="cb38-14"><a href="games.html#cb38-14"></a>  f.con &lt;-<span class="st"> </span>H</span>
+<span id="cb38-15"><a href="games.html#cb38-15"></a>  f.rhs &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span>, n)</span>
+<span id="cb38-16"><a href="games.html#cb38-16"></a>  f.dir &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="st">&quot;&lt;=&quot;</span>, n)</span>
+<span id="cb38-17"><a href="games.html#cb38-17"></a>  z &lt;-<span class="st"> </span><span class="kw">lp</span> (<span class="st">&quot;max&quot;</span>, f.obj, f.con, f.dir, f.rhs)</span>
+<span id="cb38-18"><a href="games.html#cb38-18"></a>  <span class="kw">return</span>(z<span class="op">$</span>solution <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(z<span class="op">$</span>solution))</span>
+<span id="cb38-19"><a href="games.html#cb38-19"></a>}</span></code></pre></div>
 <p>Now let’s try to count how many species suvive when starting with 10:</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="games.html#cb38-1"></a>n &lt;-<span class="st"> </span><span class="dv">10</span></span>
-<span id="cb38-2"><a href="games.html#cb38-2"></a>num_simulations &lt;-<span class="st"> </span><span class="dv">5000</span></span>
-<span id="cb38-3"><a href="games.html#cb38-3"></a>results &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">simulation =</span> <span class="dv">1</span><span class="op">:</span>num_simulations, <span class="dt">coexisting =</span> <span class="ot">NA</span>)</span>
-<span id="cb38-4"><a href="games.html#cb38-4"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>num_simulations){</span>
-<span id="cb38-5"><a href="games.html#cb38-5"></a>  H &lt;-<span class="st"> </span><span class="kw">random_H</span>(n)</span>
-<span id="cb38-6"><a href="games.html#cb38-6"></a>  coexisting &lt;-<span class="st"> </span><span class="kw">find_optimal_strategy</span>(H)</span>
-<span id="cb38-7"><a href="games.html#cb38-7"></a>  results[i,<span class="st">&quot;coexisting&quot;</span>] &lt;-<span class="st"> </span><span class="kw">sum</span>(coexisting <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)</span>
-<span id="cb38-8"><a href="games.html#cb38-8"></a>}</span>
-<span id="cb38-9"><a href="games.html#cb38-9"></a><span class="co"># and plot</span></span>
-<span id="cb38-10"><a href="games.html#cb38-10"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> results) <span class="op">+</span><span class="st"> </span><span class="kw">aes</span>(<span class="dt">x =</span> coexisting) <span class="op">+</span><span class="st"> </span><span class="kw">geom_bar</span>() <span class="op">+</span><span class="st"> </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="dv">0</span><span class="op">:</span><span class="dv">10</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="games.html#cb39-1"></a>n &lt;-<span class="st"> </span><span class="dv">10</span></span>
+<span id="cb39-2"><a href="games.html#cb39-2"></a>num_simulations &lt;-<span class="st"> </span><span class="dv">5000</span></span>
+<span id="cb39-3"><a href="games.html#cb39-3"></a>results &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">simulation =</span> <span class="dv">1</span><span class="op">:</span>num_simulations, <span class="dt">coexisting =</span> <span class="ot">NA</span>)</span>
+<span id="cb39-4"><a href="games.html#cb39-4"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>num_simulations){</span>
+<span id="cb39-5"><a href="games.html#cb39-5"></a>  H &lt;-<span class="st"> </span><span class="kw">random_H</span>(n)</span>
+<span id="cb39-6"><a href="games.html#cb39-6"></a>  coexisting &lt;-<span class="st"> </span><span class="kw">find_optimal_strategy</span>(H)</span>
+<span id="cb39-7"><a href="games.html#cb39-7"></a>  results[i,<span class="st">&quot;coexisting&quot;</span>] &lt;-<span class="st"> </span><span class="kw">sum</span>(coexisting <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)</span>
+<span id="cb39-8"><a href="games.html#cb39-8"></a>}</span>
+<span id="cb39-9"><a href="games.html#cb39-9"></a><span class="co"># and plot</span></span>
+<span id="cb39-10"><a href="games.html#cb39-10"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> results) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb39-11"><a href="games.html#cb39-11"></a><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> coexisting) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb39-12"><a href="games.html#cb39-12"></a><span class="st">  </span><span class="kw">geom_bar</span>() <span class="op">+</span><span class="st"> </span></span>
+<span id="cb39-13"><a href="games.html#cb39-13"></a><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="dv">0</span><span class="op">:</span><span class="dv">10</span>)</span></code></pre></div>
 <p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/coexistlphist-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 </div>
@@ -527,22 +526,22 @@ V(x) = -\sum_i x_i^\ast \log \frac{x_i}{x_i^\ast} .
 \]</span></p>
 <p>We have found a constant of motion, meaning that the system will follow closed orbits. Hence, unless we start the system precisely at <span class="math inline">\(x^\ast\)</span>, the abundances will cycle neutrally around the equilibrium.</p>
 <p>Let’s try with a larger system:</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="games.html#cb39-1"></a>n &lt;-<span class="st"> </span><span class="dv">5</span></span>
-<span id="cb39-2"><a href="games.html#cb39-2"></a><span class="co"># search for random H yielding all species coexisting</span></span>
-<span id="cb39-3"><a href="games.html#cb39-3"></a>i &lt;-<span class="st"> </span><span class="dv">0</span></span>
-<span id="cb39-4"><a href="games.html#cb39-4"></a><span class="cf">while</span>(<span class="ot">TRUE</span>){</span>
-<span id="cb39-5"><a href="games.html#cb39-5"></a>  i &lt;-<span class="st"> </span>i <span class="op">+</span><span class="st"> </span><span class="dv">1</span></span>
-<span id="cb39-6"><a href="games.html#cb39-6"></a>  <span class="kw">set.seed</span>(i)</span>
-<span id="cb39-7"><a href="games.html#cb39-7"></a>  H &lt;-<span class="st"> </span><span class="kw">random_H</span>(n)</span>
-<span id="cb39-8"><a href="games.html#cb39-8"></a>  x_star &lt;-<span class="st"> </span><span class="kw">find_optimal_strategy</span>(H)</span>
-<span id="cb39-9"><a href="games.html#cb39-9"></a>  <span class="cf">if</span> (<span class="kw">all</span>(x_star) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="cf">break</span></span>
-<span id="cb39-10"><a href="games.html#cb39-10"></a>}</span>
-<span id="cb39-11"><a href="games.html#cb39-11"></a><span class="co"># payoff matrix</span></span>
-<span id="cb39-12"><a href="games.html#cb39-12"></a>A &lt;-<span class="st"> </span>H <span class="op">-</span><span class="st"> </span><span class="kw">t</span>(H)</span>
-<span id="cb39-13"><a href="games.html#cb39-13"></a><span class="co"># initial conditions close to equilibrium</span></span>
-<span id="cb39-14"><a href="games.html#cb39-14"></a>x0 &lt;-<span class="st"> </span>x_star <span class="op">+</span><span class="st"> </span><span class="kw">runif</span>(n) <span class="op">*</span><span class="st"> </span><span class="fl">0.2</span></span>
-<span id="cb39-15"><a href="games.html#cb39-15"></a>x0 &lt;-<span class="st"> </span>x0 <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(x0)</span>
-<span id="cb39-16"><a href="games.html#cb39-16"></a>fivespp &lt;-<span class="st"> </span><span class="kw">integrate_RE</span>(A, x0, <span class="dt">maxtime =</span> <span class="dv">400</span>, <span class="dt">steptime =</span> <span class="fl">0.1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="games.html#cb40-1"></a>n &lt;-<span class="st"> </span><span class="dv">5</span></span>
+<span id="cb40-2"><a href="games.html#cb40-2"></a><span class="co"># search for random H yielding all species coexisting</span></span>
+<span id="cb40-3"><a href="games.html#cb40-3"></a>i &lt;-<span class="st"> </span><span class="dv">0</span></span>
+<span id="cb40-4"><a href="games.html#cb40-4"></a><span class="cf">while</span>(<span class="ot">TRUE</span>){</span>
+<span id="cb40-5"><a href="games.html#cb40-5"></a>  i &lt;-<span class="st"> </span>i <span class="op">+</span><span class="st"> </span><span class="dv">1</span></span>
+<span id="cb40-6"><a href="games.html#cb40-6"></a>  <span class="kw">set.seed</span>(i)</span>
+<span id="cb40-7"><a href="games.html#cb40-7"></a>  H &lt;-<span class="st"> </span><span class="kw">random_H</span>(n)</span>
+<span id="cb40-8"><a href="games.html#cb40-8"></a>  x_star &lt;-<span class="st"> </span><span class="kw">find_optimal_strategy</span>(H)</span>
+<span id="cb40-9"><a href="games.html#cb40-9"></a>  <span class="cf">if</span> (<span class="kw">all</span>(x_star) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="cf">break</span></span>
+<span id="cb40-10"><a href="games.html#cb40-10"></a>}</span>
+<span id="cb40-11"><a href="games.html#cb40-11"></a><span class="co"># payoff matrix</span></span>
+<span id="cb40-12"><a href="games.html#cb40-12"></a>A &lt;-<span class="st"> </span>H <span class="op">-</span><span class="st"> </span><span class="kw">t</span>(H)</span>
+<span id="cb40-13"><a href="games.html#cb40-13"></a><span class="co"># initial conditions close to equilibrium</span></span>
+<span id="cb40-14"><a href="games.html#cb40-14"></a>x0 &lt;-<span class="st"> </span>x_star <span class="op">+</span><span class="st"> </span><span class="kw">runif</span>(n) <span class="op">*</span><span class="st"> </span><span class="fl">0.2</span></span>
+<span id="cb40-15"><a href="games.html#cb40-15"></a>x0 &lt;-<span class="st"> </span>x0 <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(x0)</span>
+<span id="cb40-16"><a href="games.html#cb40-16"></a>fivespp &lt;-<span class="st"> </span><span class="kw">integrate_RE</span>(A, x0, <span class="dt">maxtime =</span> <span class="dv">400</span>, <span class="dt">steptime =</span> <span class="fl">0.1</span>)</span></code></pre></div>
 <p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/reneutral-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="higher-order-interactions" class="section level3">
@@ -552,50 +551,50 @@ V(x) = -\sum_i x_i^\ast \log \frac{x_i}{x_i^\ast} .
 \dfrac{d x_i}{dt} = x_i \sum_{j,k} A_{ijk} x_j x_k
 \]</span>
 where the tensor <span class="math inline">\(A\)</span> (a three-dimensional matrix) encodes the effect of a pair of species (<span class="math inline">\(j\)</span> and <span class="math inline">\(k\)</span>) on the density of <span class="math inline">\(i\)</span>. Importantly, one can choose the tensor such that the equilibrium is the same as for the two-player replicator equation: take <span class="math inline">\(A_{ijk} = 2 H_{ij} H_{ik} - H_{ji} H_{jk} - H_{ki} H_{kj}\)</span>, which can be derived from first principles by writing the stochastic dynamics. What is surprising is that, while the equilibrium is unchanged, the dynamics are now globally stable:</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="games.html#cb40-1"></a><span class="co"># Now payoff is a tensor</span></span>
-<span id="cb40-2"><a href="games.html#cb40-2"></a>RE_<span class="dv">3</span> &lt;-<span class="st"> </span><span class="cf">function</span>(t, x, parameters){</span>
-<span id="cb40-3"><a href="games.html#cb40-3"></a>  <span class="kw">with</span>(<span class="kw">as.list</span>(<span class="kw">c</span>(x, parameters)), {</span>
-<span id="cb40-4"><a href="games.html#cb40-4"></a>    x[x <span class="op">&lt;</span><span class="st"> </span><span class="dv">10</span><span class="op">^-</span><span class="dv">8</span>] &lt;-<span class="st"> </span><span class="dv">0</span> <span class="co"># prevent numerical problems</span></span>
-<span id="cb40-5"><a href="games.html#cb40-5"></a>    x &lt;-<span class="st"> </span>x <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(x) <span class="co"># keep on simplex</span></span>
-<span id="cb40-6"><a href="games.html#cb40-6"></a>    n &lt;-<span class="st"> </span><span class="kw">length</span>(x)</span>
-<span id="cb40-7"><a href="games.html#cb40-7"></a>    dxidt &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, n)</span>
-<span id="cb40-8"><a href="games.html#cb40-8"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>n){</span>
-<span id="cb40-9"><a href="games.html#cb40-9"></a>      dxidt[i] &lt;-<span class="st"> </span>x[i] <span class="op">*</span><span class="st"> </span>x <span class="op">%*%</span><span class="st"> </span>P3[i,,] <span class="op">%*%</span><span class="st"> </span>x</span>
-<span id="cb40-10"><a href="games.html#cb40-10"></a>    }</span>
-<span id="cb40-11"><a href="games.html#cb40-11"></a>    <span class="kw">list</span>(dxidt)</span>
-<span id="cb40-12"><a href="games.html#cb40-12"></a>  })</span>
-<span id="cb40-13"><a href="games.html#cb40-13"></a>}</span>
-<span id="cb40-14"><a href="games.html#cb40-14"></a><span class="co"># general function to integrate RE_3</span></span>
-<span id="cb40-15"><a href="games.html#cb40-15"></a>integrate_RE_<span class="dv">3</span> &lt;-<span class="st"> </span><span class="cf">function</span>(H, x0, <span class="dt">maxtime =</span> <span class="dv">40</span>, <span class="dt">steptime =</span> <span class="fl">0.05</span>){</span>
-<span id="cb40-16"><a href="games.html#cb40-16"></a>  times &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, maxtime, <span class="dt">by =</span> steptime)</span>
-<span id="cb40-17"><a href="games.html#cb40-17"></a>  n &lt;-<span class="st"> </span><span class="kw">nrow</span>(H)</span>
-<span id="cb40-18"><a href="games.html#cb40-18"></a>  P3 &lt;-<span class="st"> </span><span class="kw">array</span>(<span class="dv">0</span>, <span class="kw">c</span>(n, n, n))</span>
-<span id="cb40-19"><a href="games.html#cb40-19"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>n){</span>
-<span id="cb40-20"><a href="games.html#cb40-20"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>n){</span>
-<span id="cb40-21"><a href="games.html#cb40-21"></a>      <span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>n){</span>
-<span id="cb40-22"><a href="games.html#cb40-22"></a>        P3[i,j,k] &lt;-<span class="st"> </span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span>H[i,j] <span class="op">*</span><span class="st"> </span>H[i,k] <span class="op">-</span><span class="st">  </span>H[j,i] <span class="op">*</span><span class="st"> </span>H[j,k] <span class="op">-</span><span class="st"> </span>H[k,i] <span class="op">*</span><span class="st"> </span>H[k,j]</span>
-<span id="cb40-23"><a href="games.html#cb40-23"></a>      }</span>
-<span id="cb40-24"><a href="games.html#cb40-24"></a>    }</span>
-<span id="cb40-25"><a href="games.html#cb40-25"></a>  }</span>
-<span id="cb40-26"><a href="games.html#cb40-26"></a>  parameters &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">P3 =</span> P3)</span>
-<span id="cb40-27"><a href="games.html#cb40-27"></a>  <span class="co"># solve numerically</span></span>
-<span id="cb40-28"><a href="games.html#cb40-28"></a>  out &lt;-<span class="st"> </span><span class="kw">ode</span>(<span class="dt">y =</span> x0, <span class="dt">times =</span> times, </span>
-<span id="cb40-29"><a href="games.html#cb40-29"></a>           <span class="dt">func =</span> RE_<span class="dv">3</span>, <span class="dt">parms =</span> parameters, </span>
-<span id="cb40-30"><a href="games.html#cb40-30"></a>           <span class="dt">method =</span> <span class="st">&quot;ode45&quot;</span>)</span>
-<span id="cb40-31"><a href="games.html#cb40-31"></a>  <span class="co"># plot and make into tidy form</span></span>
-<span id="cb40-32"><a href="games.html#cb40-32"></a>  out &lt;-<span class="st"> </span><span class="kw">plot_ODE_output</span>(out)</span>
-<span id="cb40-33"><a href="games.html#cb40-33"></a>  <span class="kw">return</span>(out)</span>
-<span id="cb40-34"><a href="games.html#cb40-34"></a>}</span>
-<span id="cb40-35"><a href="games.html#cb40-35"></a><span class="co"># integrate the system above</span></span>
-<span id="cb40-36"><a href="games.html#cb40-36"></a>fivespp &lt;-<span class="st"> </span><span class="kw">integrate_RE_3</span>(H, x0, <span class="dt">maxtime =</span> <span class="dv">800</span>, <span class="dt">steptime =</span> <span class="fl">0.1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="games.html#cb41-1"></a><span class="co"># Now payoff is a tensor</span></span>
+<span id="cb41-2"><a href="games.html#cb41-2"></a>RE_<span class="dv">3</span> &lt;-<span class="st"> </span><span class="cf">function</span>(t, x, parameters){</span>
+<span id="cb41-3"><a href="games.html#cb41-3"></a>  <span class="kw">with</span>(<span class="kw">as.list</span>(<span class="kw">c</span>(x, parameters)), {</span>
+<span id="cb41-4"><a href="games.html#cb41-4"></a>    x[x <span class="op">&lt;</span><span class="st"> </span><span class="dv">10</span><span class="op">^-</span><span class="dv">8</span>] &lt;-<span class="st"> </span><span class="dv">0</span> <span class="co"># prevent numerical problems</span></span>
+<span id="cb41-5"><a href="games.html#cb41-5"></a>    x &lt;-<span class="st"> </span>x <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(x) <span class="co"># keep on simplex</span></span>
+<span id="cb41-6"><a href="games.html#cb41-6"></a>    n &lt;-<span class="st"> </span><span class="kw">length</span>(x)</span>
+<span id="cb41-7"><a href="games.html#cb41-7"></a>    dxidt &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, n)</span>
+<span id="cb41-8"><a href="games.html#cb41-8"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>n){</span>
+<span id="cb41-9"><a href="games.html#cb41-9"></a>      dxidt[i] &lt;-<span class="st"> </span>x[i] <span class="op">*</span><span class="st"> </span>x <span class="op">%*%</span><span class="st"> </span>P3[i,,] <span class="op">%*%</span><span class="st"> </span>x</span>
+<span id="cb41-10"><a href="games.html#cb41-10"></a>    }</span>
+<span id="cb41-11"><a href="games.html#cb41-11"></a>    <span class="kw">list</span>(dxidt)</span>
+<span id="cb41-12"><a href="games.html#cb41-12"></a>  })</span>
+<span id="cb41-13"><a href="games.html#cb41-13"></a>}</span>
+<span id="cb41-14"><a href="games.html#cb41-14"></a><span class="co"># general function to integrate RE_3</span></span>
+<span id="cb41-15"><a href="games.html#cb41-15"></a>integrate_RE_<span class="dv">3</span> &lt;-<span class="st"> </span><span class="cf">function</span>(H, x0, <span class="dt">maxtime =</span> <span class="dv">40</span>, <span class="dt">steptime =</span> <span class="fl">0.05</span>){</span>
+<span id="cb41-16"><a href="games.html#cb41-16"></a>  times &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, maxtime, <span class="dt">by =</span> steptime)</span>
+<span id="cb41-17"><a href="games.html#cb41-17"></a>  n &lt;-<span class="st"> </span><span class="kw">nrow</span>(H)</span>
+<span id="cb41-18"><a href="games.html#cb41-18"></a>  P3 &lt;-<span class="st"> </span><span class="kw">array</span>(<span class="dv">0</span>, <span class="kw">c</span>(n, n, n))</span>
+<span id="cb41-19"><a href="games.html#cb41-19"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>n){</span>
+<span id="cb41-20"><a href="games.html#cb41-20"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>n){</span>
+<span id="cb41-21"><a href="games.html#cb41-21"></a>      <span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>n){</span>
+<span id="cb41-22"><a href="games.html#cb41-22"></a>        P3[i,j,k] &lt;-<span class="st"> </span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span>H[i,j] <span class="op">*</span><span class="st"> </span>H[i,k] <span class="op">-</span><span class="st">  </span>H[j,i] <span class="op">*</span><span class="st"> </span>H[j,k] <span class="op">-</span><span class="st"> </span>H[k,i] <span class="op">*</span><span class="st"> </span>H[k,j]</span>
+<span id="cb41-23"><a href="games.html#cb41-23"></a>      }</span>
+<span id="cb41-24"><a href="games.html#cb41-24"></a>    }</span>
+<span id="cb41-25"><a href="games.html#cb41-25"></a>  }</span>
+<span id="cb41-26"><a href="games.html#cb41-26"></a>  parameters &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">P3 =</span> P3)</span>
+<span id="cb41-27"><a href="games.html#cb41-27"></a>  <span class="co"># solve numerically</span></span>
+<span id="cb41-28"><a href="games.html#cb41-28"></a>  out &lt;-<span class="st"> </span><span class="kw">ode</span>(<span class="dt">y =</span> x0, <span class="dt">times =</span> times, </span>
+<span id="cb41-29"><a href="games.html#cb41-29"></a>           <span class="dt">func =</span> RE_<span class="dv">3</span>, <span class="dt">parms =</span> parameters, </span>
+<span id="cb41-30"><a href="games.html#cb41-30"></a>           <span class="dt">method =</span> <span class="st">&quot;ode45&quot;</span>)</span>
+<span id="cb41-31"><a href="games.html#cb41-31"></a>  <span class="co"># plot and make into tidy form</span></span>
+<span id="cb41-32"><a href="games.html#cb41-32"></a>  out &lt;-<span class="st"> </span><span class="kw">plot_ODE_output</span>(out)</span>
+<span id="cb41-33"><a href="games.html#cb41-33"></a>  <span class="kw">return</span>(out)</span>
+<span id="cb41-34"><a href="games.html#cb41-34"></a>}</span>
+<span id="cb41-35"><a href="games.html#cb41-35"></a><span class="co"># integrate the system above</span></span>
+<span id="cb41-36"><a href="games.html#cb41-36"></a>fivespp &lt;-<span class="st"> </span><span class="kw">integrate_RE_3</span>(H, x0, <span class="dt">maxtime =</span> <span class="dv">800</span>, <span class="dt">steptime =</span> <span class="fl">0.1</span>)</span></code></pre></div>
 <p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/rehoi-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>And the rock-paper-scissors:</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="games.html#cb41-1"></a>H &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">0</span>,</span>
-<span id="cb41-2"><a href="games.html#cb41-2"></a>              <span class="dv">0</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">2</span>, <span class="dv">1</span>,</span>
-<span id="cb41-3"><a href="games.html#cb41-3"></a>              <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">2</span>), <span class="dv">3</span>, <span class="dv">3</span>, <span class="dt">byrow =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb41-4"><a href="games.html#cb41-4"></a>x0 &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">3</span>)</span>
-<span id="cb41-5"><a href="games.html#cb41-5"></a>x0 &lt;-<span class="st"> </span>x0 <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(x0)</span>
-<span id="cb41-6"><a href="games.html#cb41-6"></a>rps &lt;-<span class="st"> </span><span class="kw">integrate_RE_3</span>(H, x0, <span class="dt">maxtime =</span> <span class="dv">50</span>, <span class="dt">steptime =</span> <span class="fl">0.1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="games.html#cb42-1"></a>H &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">0</span>,</span>
+<span id="cb42-2"><a href="games.html#cb42-2"></a>              <span class="dv">0</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">2</span>, <span class="dv">1</span>,</span>
+<span id="cb42-3"><a href="games.html#cb42-3"></a>              <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">2</span>), <span class="dv">3</span>, <span class="dv">3</span>, <span class="dt">byrow =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb42-4"><a href="games.html#cb42-4"></a>x0 &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">3</span>)</span>
+<span id="cb42-5"><a href="games.html#cb42-5"></a>x0 &lt;-<span class="st"> </span>x0 <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(x0)</span>
+<span id="cb42-6"><a href="games.html#cb42-6"></a>rps &lt;-<span class="st"> </span><span class="kw">integrate_RE_3</span>(H, x0, <span class="dt">maxtime =</span> <span class="dv">50</span>, <span class="dt">steptime =</span> <span class="fl">0.1</span>)</span></code></pre></div>
 <p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/rpshoi-1.png" width="672" style="display: block; margin: auto;" /></p>
 
 </div>

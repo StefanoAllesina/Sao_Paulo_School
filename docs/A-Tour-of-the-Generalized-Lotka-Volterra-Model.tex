@@ -124,7 +124,7 @@
   \postauthor{\par}
       \predate{\centering\large\emph}
   \postdate{\par}
-    \date{2019-12-31}
+    \date{2020-01-06}
 
 \usepackage{booktabs}
 \usepackage{graphicx}
@@ -145,14 +145,14 @@ The four 90-minute lectures provide a semi-rigorous introduction to the Generali
 
 The emphasis is squarely on models for large communities, composed of \(n \gg 1\) species. In particular, I often refer to ``random'' communities, i.e., dynamical systems with random parameters. This allows me to derive interesting results that are meant to describe the ``typical'' or ``expected'' community.
 
-At the end of the lecture, I refer to my own work in the area, highlighting some of the strongest contributions from my laboratory at the University of Chicago.
+At the end of each lecture, I refer to my own work in the area, highlighting some of the strongest contributions from my laboratory at the University of Chicago.
 
 \hypertarget{prerequisites}{%
 \section{Prerequisites}\label{prerequisites}}
 
 The lectures are fairly self-contained, but some working knowledge of calculus, dynamical systems, linear algebra, game theory would be beneficial.
 
-The code is written in \texttt{R}, and meant to run using a fairly recent version of \texttt{R} along with the packages \texttt{tidyverse}, \texttt{deSolve}, \texttt{MASS}, \texttt{lpSolve}\ldots{} that need to be installed.
+The code is written in \texttt{R}, and meant to run using a fairly recent version of \texttt{R} along with the packages \texttt{tidyverse}, \texttt{deSolve}, \texttt{MASS}, \texttt{lpSolve} that need to be installed.
 
 \hypertarget{sources}{%
 \section{Sources}\label{sources}}
@@ -177,7 +177,7 @@ The equations he derived (and then studied later in more detail) are now termed 
 
 Vito Volterra (1860-1940) was born in Ancona (then part of the Papal State) in a poor jewish family. The financial situation precipitated with the death of his father, when Vito was two. Vito and his mother went to live with relatives in Turin and then Florence. Volterra showed amazing mathematical talent at a very early age. Antonio Roiti, professor of physics in Florence, noticed the budding mathematician and hired him as his assistant, so that he could continue his studies. He went on to enroll at the Scuola Normale in Pisa, receiving a degree in Physics in 1882. At age 23 he was made full professor of Rational Mechanics in Pisa, and then in 1900 of Mathematical Physics in Rome. For thirty years, he contributed important studies in mathematics, and enriched academic life in Italy (for example, he was the first director of the National Center for Research). In 1931 he refused to take an oath of loyalty to the fascist regime (only 12 professors out of 1250 refused), and was therefore forced to resign (his take on the fascist enterprise: ``Empires die, but Euclid's theorems keep their youth forever'').
 
-His interest in mathematical ecology is due to Umberto d'Ancona (his son-in-law), who had studied the trends in fisheries in the Adriatic sea before and immediately after WWI. In 1914-1918 fisheries in the Adriatic had stopped completely because of the conflict. D'Ancona had noticed that, while herbivorous fish had remained about constant, the piscivorous fish had increased dramatically in numbers. The problem piqued Volterra who immediately published a sophisticated study, proposing the same equations studied by Lotka. In a short letter to Nature \citep{volterra1926fluctuations}, he stated the so-called ``Volterra's Effect'' (which he termed ``Law III''): ``a complete closure of the fishery was a form of `protection' under which the voracious fishes were much the better and prospered accordingly, but the ordinary food-fishes, on which these are accustomed to prey, were worse off than before.'' This brief paper was a summary of the much larger \citet{volterra1926variazioni}.
+His interest in mathematical ecology is due to Umberto D'Ancona (his son-in-law), who had studied the trends in fisheries in the Adriatic sea before and immediately after WWI. In 1914-1918 fisheries in the Adriatic had stopped completely because of the conflict. D'Ancona had noticed that, while herbivorous fish had remained about constant, the piscivorous fish had increased dramatically in numbers. The problem piqued Volterra who immediately published a sophisticated study, proposing the same equations studied by Lotka. In a short letter to Nature \citep{volterra1926fluctuations}, he stated the so-called ``Volterra's Effect'' (which he termed ``Law III''): ``a complete closure of the fishery was a form of `protection' under which the voracious fishes were much the better and prospered accordingly, but the ordinary food-fishes, on which these are accustomed to prey, were worse off than before.'' This brief paper was a summary of the much extensive \citet{volterra1926variazioni}.
 
 \hypertarget{lotka-volterra-interactions}{%
 \subsection{Lotka-Volterra interactions}\label{lotka-volterra-interactions}}
@@ -261,7 +261,7 @@ If \(a < 0\) and \(r > 0\), the population started at any positive value eventua
 \hypertarget{metapopulation-dynamics}{%
 \subsection{Metapopulation dynamics}\label{metapopulation-dynamics}}
 
-Consider a fragmented landscape in which habitable patches are connected by dispersal (for simplicity, suppose that all patches are reachable from any other). Call \(p(t)\) the proportion of patches occupied by the species of interest at time \(t\), and assume that a) an empty patch (the proportion of empty patches is \(1 - p(t)\)) is colonized by the species with rate \(c p(t)\), where \(c\) is the ``colonization rate'', and b) that occupied patches become empty at rate \(e p(t)\) (``extinction rate''). We want to model the proportion of patches occupied by the population at time \(t\):
+Consider a fragmented landscape in which habitable patches are connected by dispersal (for simplicity, suppose that all patches are reachable from any other). Call \(p(t)\) the proportion of patches occupied by the species of interest at time \(t\), and assume that a) an empty patch (the proportion of empty patches is \(1 - p(t)\)) is colonized by the species with rate \(c p(t)\), where \(c\) is the ``colonization rate'', and b) that occupied patches become empty at rate \(e p(t)\) (``extinction rate''). We want to model the proportion of patches occupied by the population at time \(t\) \citep{levins1969some}:
 
 \[
 \dfrac{d p(t)}{dt} = c p(t)(1 - p(t)) - e p(t) = p(t) (c - (c + e) p(t))
@@ -343,10 +343,10 @@ We can therefore write the differential equation:
 with solution:
 
 \[
-\Delta x(t) = \Delta x(0) e^{Mt} = \Delta x(0) L e^{\Lambda t} R
+\Delta x(t) = \Delta x(0) e^{Mt} = \Delta x(0) Q e^{\Lambda t} Q^{-1}
 \]
 
-Where \(L\) and \(R\) are matrices containing the left and right eigenvectors of \(M\), and \(\Lambda\) is a diagonal matrix containing the eigenvalues of \(M\). As such, the eigenvalues of \(M\) determine the stability of the equilibrium \({x}^\star\): if all the eigenvalues have negative real part, then the system will eventually return to the equilibrium after sufficiently small perturbations; conversely, if any of the eigenvalues have positive real part, the system will move away from the equilibrium whenever perturbed. Therefore, depending on the sign of the ``rightmost'' eigenvalue of \({M}\), \(\lambda_1\), we can determine the stability of \({x}^\star\):
+Where \(Q\) is the matrix containing the (unit) eigenvectors of \(M\), and \(\Lambda\) is a diagonal matrix containing the eigenvalues of \(M\). As such, the eigenvalues of \(M\) determine the stability of the equilibrium \({x}^\star\): if all the eigenvalues have negative real part, then the system will eventually return to the equilibrium after sufficiently small perturbations; conversely, if any of the eigenvalues have positive real part, the system will move away from the equilibrium whenever perturbed. Therefore, depending on the sign of the ``rightmost'' eigenvalue of \({M}\), \(\lambda_1\), we can determine the stability of \({x}^\star\):
 
 \[
   \text{Re}(\lambda_1) \begin{cases}
@@ -868,22 +868,57 @@ On random matrices and stability:
 \end{itemize}
 
 \hypertarget{multi}{%
-\chapter{Multispecies GLV}\label{multi}}
+\chapter{Multispecies GLV: assembly and invasibility}\label{multi}}
 
-\hypertarget{feasibility}{%
-\section{Feasibility}\label{feasibility}}
-
-\hypertarget{stability}{%
-\section{Stability}\label{stability}}
-
-\hypertarget{non-invasibility}{%
-\section{Non-invasibility}\label{non-invasibility}}
+We have seen in the previous lecture that a large ecological community will almost invariably be unstable, possibly leading to extinctions. It is therefore natural to ask what happens when either a feasible equilibrium does not exist, or it is unstable. In particular, we want to know how many species can persist.
 
 \hypertarget{assembly}{%
 \section{Assembly}\label{assembly}}
 
-\hypertarget{a-random-zoo}{%
-\section{A random zoo}\label{a-random-zoo}}
+We call assembly the process by which a community is constituted by adding species sequentially. Imagine starting with a bare environment, and introduce the first species. If the species can grow in the new environment, it will establish, and if not, it will go extinct. Mathematically, we assume that new species are introduced at very low abundance, so that they do not experience self-limitation due to crowding. For example, consider
+
+\[
+\dfrac{1}{x_i(t)}\dfrac{dx_i(t)}{dt} = r_i + \sum_j A_{ij} x_j(t)
+\]
+If the species is grown by itself, and we discard the quadratic effect, we have that initially:
+
+\[
+\dfrac{1}{x_i(t)}\dfrac{dx_i(t)}{dt} \approx r_i
+\]
+
+That is, the species will establish if it has a positive growth rate in the environment. Suppose that this is the case: the species 1 will then grow to its equilibrium abundance \(x_i^\star\). Now add a second species. Its initial per-capita growth rate is going to be:
+
+\[
+\dfrac{1}{x_j(t)}\dfrac{dx_j(t)}{dt} = r_j + \sum_k A_{jj} x_k(t) \approx r_j + A_{ji}x_i^\star
+\]
+
+The species \(j\) can therefore growth when rare if \(r_j + A_{ji}x_i^\star > 0\), i.e., \(r_j > -A_{ji}x_i^\star\). If the species \(j\) can grow when rare, it could a) grow initially, but then go extinct; b) displace species \(i\), sending it to extinction; c) coexist with species \(i\).
+\#\# Number of coexisting species: a random zoo
+
+We can generalize the notions above to multiple species, by making a strong assumption on the matrix \(A\). If the matrix \(A\) is diagonally stable, we have seen before that all trajectories started at a positive point will converge to a unique equilibrium \(x^\star\). At equilibrium, some of the species will have positive abundance, while other abundance zero.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(tidyverse)}
+\CommentTok{# code to solve for the equilibrium without integration}
+\KeywordTok{source}\NormalTok{(}\StringTok{"https://raw.githubusercontent.com/StefanoAllesina/randomzoo/master/R/lemke-howson.R"}\NormalTok{)}
+
+\CommentTok{# draw a random symmetric matrix, and make it stable}
+\CommentTok{# (and therefore diagonally stable)}
+\CommentTok{# with off-diagonals with mean zero}
+\NormalTok{build_random_symmetric_stable_matrix <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(n)\{}
+\NormalTok{  A <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{, n, n)}
+\NormalTok{  A[}\KeywordTok{upper.tri}\NormalTok{(A)] <-}\StringTok{ }\KeywordTok{rnorm}\NormalTok{(n }\OperatorTok{*}\StringTok{ }\NormalTok{(n }\OperatorTok{-}\StringTok{ }\DecValTok{1}\NormalTok{) }\OperatorTok{/}\StringTok{ }\DecValTok{2}\NormalTok{)}
+  \CommentTok{# make symmetric}
+\NormalTok{  A <-}\StringTok{ }\NormalTok{A }\OperatorTok{+}\StringTok{ }\KeywordTok{t}\NormalTok{(A)}
+  \CommentTok{# now find the largest eigenvalue}
+\NormalTok{  l1A <-}\StringTok{ }\KeywordTok{max}\NormalTok{(}\KeywordTok{eigen}\NormalTok{(A, }\DataTypeTok{only.values =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{symmetric =} \OtherTok{TRUE}\NormalTok{)}\OperatorTok{$}\NormalTok{values)}
+  \CommentTok{# set the diagonal to make it stable}
+  \KeywordTok{diag}\NormalTok{(A) <-}\StringTok{ }\FloatTok{-1.01} \OperatorTok{*}\StringTok{ }\NormalTok{l1A}
+  \KeywordTok{return}\NormalTok{(A)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
 
 \hypertarget{games}{%
 \chapter{Evolutionary Game Theory}\label{games}}
@@ -1293,7 +1328,10 @@ Now let's try to count how many species suvive when starting with 10:
 \NormalTok{  results[i,}\StringTok{"coexisting"}\NormalTok{] <-}\StringTok{ }\KeywordTok{sum}\NormalTok{(coexisting }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{)}
 \NormalTok{\}}
 \CommentTok{# and plot}
-\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ results) }\OperatorTok{+}\StringTok{ }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ coexisting) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_bar}\NormalTok{() }\OperatorTok{+}\StringTok{ }\KeywordTok{scale_x_continuous}\NormalTok{(}\DataTypeTok{breaks =} \DecValTok{0}\OperatorTok{:}\DecValTok{10}\NormalTok{)}
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ results) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ coexisting) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_bar}\NormalTok{() }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{scale_x_continuous}\NormalTok{(}\DataTypeTok{breaks =} \DecValTok{0}\OperatorTok{:}\DecValTok{10}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 

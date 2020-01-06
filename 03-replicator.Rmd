@@ -339,7 +339,10 @@ for (i in 1:num_simulations){
   results[i,"coexisting"] <- sum(coexisting > 0)
 }
 # and plot
-ggplot(data = results) + aes(x = coexisting) + geom_bar() + scale_x_continuous(breaks = 0:10)
+ggplot(data = results) + 
+  aes(x = coexisting) + 
+  geom_bar() + 
+  scale_x_continuous(breaks = 0:10)
 ```
 
 ### Lyapunov function

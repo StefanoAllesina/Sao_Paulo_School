@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>3 Multispecies GLV | A Tour of the Generalized Lotka-Volterra Model</title>
+  <title>3 Multispecies GLV: assembly and invasibility | A Tour of the Generalized Lotka-Volterra Model</title>
   <meta name="description" content="Lectures for the ICTP-SAIFR/IFT-UNESP School on Community Ecology: from patterns to principles" />
   <meta name="generator" content="bookdown 0.16 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="3 Multispecies GLV | A Tour of the Generalized Lotka-Volterra Model" />
+  <meta property="og:title" content="3 Multispecies GLV: assembly and invasibility | A Tour of the Generalized Lotka-Volterra Model" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="3 Multispecies GLV | A Tour of the Generalized Lotka-Volterra Model" />
+  <meta name="twitter:title" content="3 Multispecies GLV: assembly and invasibility | A Tour of the Generalized Lotka-Volterra Model" />
   
   <meta name="twitter:description" content="Lectures for the ICTP-SAIFR/IFT-UNESP School on Community Ecology: from patterns to principles" />
   
@@ -24,7 +24,7 @@
 <meta name="author" content="Stefano Allesina" />
 
 
-<meta name="date" content="2019-12-31" />
+<meta name="date" content="2020-01-06" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -156,12 +156,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.8" data-path="intro.html"><a href="intro.html#stability-of-large-random-communities"><i class="fa fa-check"></i><b>2.8</b> Stability of large random communities</a></li>
 <li class="chapter" data-level="2.9" data-path="intro.html"><a href="intro.html#further-readings"><i class="fa fa-check"></i><b>2.9</b> Further readings</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="multi.html"><a href="multi.html"><i class="fa fa-check"></i><b>3</b> Multispecies GLV</a><ul>
-<li class="chapter" data-level="3.1" data-path="multi.html"><a href="multi.html#feasibility"><i class="fa fa-check"></i><b>3.1</b> Feasibility</a></li>
-<li class="chapter" data-level="3.2" data-path="multi.html"><a href="multi.html#stability"><i class="fa fa-check"></i><b>3.2</b> Stability</a></li>
-<li class="chapter" data-level="3.3" data-path="multi.html"><a href="multi.html#non-invasibility"><i class="fa fa-check"></i><b>3.3</b> Non-invasibility</a></li>
-<li class="chapter" data-level="3.4" data-path="multi.html"><a href="multi.html#assembly"><i class="fa fa-check"></i><b>3.4</b> Assembly</a></li>
-<li class="chapter" data-level="3.5" data-path="multi.html"><a href="multi.html#a-random-zoo"><i class="fa fa-check"></i><b>3.5</b> A random zoo</a></li>
+<li class="chapter" data-level="3" data-path="multi.html"><a href="multi.html"><i class="fa fa-check"></i><b>3</b> Multispecies GLV: assembly and invasibility</a><ul>
+<li class="chapter" data-level="3.1" data-path="multi.html"><a href="multi.html#assembly"><i class="fa fa-check"></i><b>3.1</b> Assembly</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="games.html"><a href="games.html"><i class="fa fa-check"></i><b>4</b> Evolutionary Game Theory</a><ul>
 <li class="chapter" data-level="4.1" data-path="games.html"><a href="games.html#game-theory"><i class="fa fa-check"></i><b>4.1</b> Game theory</a></li>
@@ -210,21 +206,43 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="multi" class="section level1">
-<h1><span class="header-section-number">3</span> Multispecies GLV</h1>
-<div id="feasibility" class="section level2">
-<h2><span class="header-section-number">3.1</span> Feasibility</h2>
-</div>
-<div id="stability" class="section level2">
-<h2><span class="header-section-number">3.2</span> Stability</h2>
-</div>
-<div id="non-invasibility" class="section level2">
-<h2><span class="header-section-number">3.3</span> Non-invasibility</h2>
-</div>
+<h1><span class="header-section-number">3</span> Multispecies GLV: assembly and invasibility</h1>
+<p>We have seen in the previous lecture that a large ecological community will almost invariably be unstable, possibly leading to extinctions. It is therefore natural to ask what happens when either a feasible equilibrium does not exist, or it is unstable. In particular, we want to know how many species can persist.</p>
 <div id="assembly" class="section level2">
-<h2><span class="header-section-number">3.4</span> Assembly</h2>
-</div>
-<div id="a-random-zoo" class="section level2">
-<h2><span class="header-section-number">3.5</span> A random zoo</h2>
+<h2><span class="header-section-number">3.1</span> Assembly</h2>
+<p>We call assembly the process by which a community is constituted by adding species sequentially. Imagine starting with a bare environment, and introduce the first species. If the species can grow in the new environment, it will establish, and if not, it will go extinct. Mathematically, we assume that new species are introduced at very low abundance, so that they do not experience self-limitation due to crowding. For example, consider</p>
+<p><span class="math display">\[
+\dfrac{1}{x_i(t)}\dfrac{dx_i(t)}{dt} = r_i + \sum_j A_{ij} x_j(t)
+\]</span>
+If the species is grown by itself, and we discard the quadratic effect, we have that initially:</p>
+<p><span class="math display">\[
+\dfrac{1}{x_i(t)}\dfrac{dx_i(t)}{dt} \approx r_i
+\]</span></p>
+<p>That is, the species will establish if it has a positive growth rate in the environment. Suppose that this is the case: the species 1 will then grow to its equilibrium abundance <span class="math inline">\(x_i^\star\)</span>. Now add a second species. Its initial per-capita growth rate is going to be:</p>
+<p><span class="math display">\[
+\dfrac{1}{x_j(t)}\dfrac{dx_j(t)}{dt} = r_j + \sum_k A_{jj} x_k(t) \approx r_j + A_{ji}x_i^\star
+\]</span></p>
+<p>The species <span class="math inline">\(j\)</span> can therefore growth when rare if <span class="math inline">\(r_j + A_{ji}x_i^\star &gt; 0\)</span>, i.e., <span class="math inline">\(r_j &gt; -A_{ji}x_i^\star\)</span>. If the species <span class="math inline">\(j\)</span> can grow when rare, it could a) grow initially, but then go extinct; b) displace species <span class="math inline">\(i\)</span>, sending it to extinction; c) coexist with species <span class="math inline">\(i\)</span>.
+## Number of coexisting species: a random zoo</p>
+<p>We can generalize the notions above to multiple species, by making a strong assumption on the matrix <span class="math inline">\(A\)</span>. If the matrix <span class="math inline">\(A\)</span> is diagonally stable, we have seen before that all trajectories started at a positive point will converge to a unique equilibrium <span class="math inline">\(x^\star\)</span>. At equilibrium, some of the species will have positive abundance, while other abundance zero.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="multi.html#cb25-1"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb25-2"><a href="multi.html#cb25-2"></a><span class="co"># code to solve for the equilibrium without integration</span></span>
+<span id="cb25-3"><a href="multi.html#cb25-3"></a><span class="kw">source</span>(<span class="st">&quot;https://raw.githubusercontent.com/StefanoAllesina/randomzoo/master/R/lemke-howson.R&quot;</span>)</span>
+<span id="cb25-4"><a href="multi.html#cb25-4"></a></span>
+<span id="cb25-5"><a href="multi.html#cb25-5"></a><span class="co"># draw a random symmetric matrix, and make it stable</span></span>
+<span id="cb25-6"><a href="multi.html#cb25-6"></a><span class="co"># (and therefore diagonally stable)</span></span>
+<span id="cb25-7"><a href="multi.html#cb25-7"></a><span class="co"># with off-diagonals with mean zero</span></span>
+<span id="cb25-8"><a href="multi.html#cb25-8"></a>build_random_symmetric_stable_matrix &lt;-<span class="st"> </span><span class="cf">function</span>(n){</span>
+<span id="cb25-9"><a href="multi.html#cb25-9"></a>  A &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, n, n)</span>
+<span id="cb25-10"><a href="multi.html#cb25-10"></a>  A[<span class="kw">upper.tri</span>(A)] &lt;-<span class="st"> </span><span class="kw">rnorm</span>(n <span class="op">*</span><span class="st"> </span>(n <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">/</span><span class="st"> </span><span class="dv">2</span>)</span>
+<span id="cb25-11"><a href="multi.html#cb25-11"></a>  <span class="co"># make symmetric</span></span>
+<span id="cb25-12"><a href="multi.html#cb25-12"></a>  A &lt;-<span class="st"> </span>A <span class="op">+</span><span class="st"> </span><span class="kw">t</span>(A)</span>
+<span id="cb25-13"><a href="multi.html#cb25-13"></a>  <span class="co"># now find the largest eigenvalue</span></span>
+<span id="cb25-14"><a href="multi.html#cb25-14"></a>  l1A &lt;-<span class="st"> </span><span class="kw">max</span>(<span class="kw">eigen</span>(A, <span class="dt">only.values =</span> <span class="ot">TRUE</span>, <span class="dt">symmetric =</span> <span class="ot">TRUE</span>)<span class="op">$</span>values)</span>
+<span id="cb25-15"><a href="multi.html#cb25-15"></a>  <span class="co"># set the diagonal to make it stable</span></span>
+<span id="cb25-16"><a href="multi.html#cb25-16"></a>  <span class="kw">diag</span>(A) &lt;-<span class="st"> </span><span class="fl">-1.01</span> <span class="op">*</span><span class="st"> </span>l1A</span>
+<span id="cb25-17"><a href="multi.html#cb25-17"></a>  <span class="kw">return</span>(A)</span>
+<span id="cb25-18"><a href="multi.html#cb25-18"></a>}</span></code></pre></div>
 
 </div>
 </div>

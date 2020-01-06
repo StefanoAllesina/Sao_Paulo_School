@@ -24,7 +24,7 @@
 <meta name="author" content="Stefano Allesina" />
 
 
-<meta name="date" content="2019-12-31" />
+<meta name="date" content="2020-01-06" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -156,12 +156,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.8" data-path="intro.html"><a href="intro.html#stability-of-large-random-communities"><i class="fa fa-check"></i><b>2.8</b> Stability of large random communities</a></li>
 <li class="chapter" data-level="2.9" data-path="intro.html"><a href="intro.html#further-readings"><i class="fa fa-check"></i><b>2.9</b> Further readings</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="multi.html"><a href="multi.html"><i class="fa fa-check"></i><b>3</b> Multispecies GLV</a><ul>
-<li class="chapter" data-level="3.1" data-path="multi.html"><a href="multi.html#feasibility"><i class="fa fa-check"></i><b>3.1</b> Feasibility</a></li>
-<li class="chapter" data-level="3.2" data-path="multi.html"><a href="multi.html#stability"><i class="fa fa-check"></i><b>3.2</b> Stability</a></li>
-<li class="chapter" data-level="3.3" data-path="multi.html"><a href="multi.html#non-invasibility"><i class="fa fa-check"></i><b>3.3</b> Non-invasibility</a></li>
-<li class="chapter" data-level="3.4" data-path="multi.html"><a href="multi.html#assembly"><i class="fa fa-check"></i><b>3.4</b> Assembly</a></li>
-<li class="chapter" data-level="3.5" data-path="multi.html"><a href="multi.html#a-random-zoo"><i class="fa fa-check"></i><b>3.5</b> A random zoo</a></li>
+<li class="chapter" data-level="3" data-path="multi.html"><a href="multi.html"><i class="fa fa-check"></i><b>3</b> Multispecies GLV: assembly and invasibility</a><ul>
+<li class="chapter" data-level="3.1" data-path="multi.html"><a href="multi.html#assembly"><i class="fa fa-check"></i><b>3.1</b> Assembly</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="games.html"><a href="games.html"><i class="fa fa-check"></i><b>4</b> Evolutionary Game Theory</a><ul>
 <li class="chapter" data-level="4.1" data-path="games.html"><a href="games.html#game-theory"><i class="fa fa-check"></i><b>4.1</b> Game theory</a></li>
@@ -219,7 +215,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The equations he derived (and then studied later in more detail) are now termed Lotka-Volterra equations.</p>
 <p><img src="images/Volterra.jpg" width="25%" style="display: block; margin: auto;" /></p>
 <p>Vito Volterra (1860-1940) was born in Ancona (then part of the Papal State) in a poor jewish family. The financial situation precipitated with the death of his father, when Vito was two. Vito and his mother went to live with relatives in Turin and then Florence. Volterra showed amazing mathematical talent at a very early age. Antonio Roiti, professor of physics in Florence, noticed the budding mathematician and hired him as his assistant, so that he could continue his studies. He went on to enroll at the Scuola Normale in Pisa, receiving a degree in Physics in 1882. At age 23 he was made full professor of Rational Mechanics in Pisa, and then in 1900 of Mathematical Physics in Rome. For thirty years, he contributed important studies in mathematics, and enriched academic life in Italy (for example, he was the first director of the National Center for Research). In 1931 he refused to take an oath of loyalty to the fascist regime (only 12 professors out of 1250 refused), and was therefore forced to resign (his take on the fascist enterprise: “Empires die, but Euclid’s theorems keep their youth forever”).</p>
-<p>His interest in mathematical ecology is due to Umberto d’Ancona (his son-in-law), who had studied the trends in fisheries in the Adriatic sea before and immediately after WWI. In 1914-1918 fisheries in the Adriatic had stopped completely because of the conflict. D’Ancona had noticed that, while herbivorous fish had remained about constant, the piscivorous fish had increased dramatically in numbers. The problem piqued Volterra who immediately published a sophisticated study, proposing the same equations studied by Lotka. In a short letter to Nature <span class="citation">(Volterra <a href="#ref-volterra1926fluctuations" role="doc-biblioref">1926</a><a href="#ref-volterra1926fluctuations" role="doc-biblioref">a</a>)</span>, he stated the so-called “Volterra’s Effect” (which he termed “Law III”): “a complete closure of the fishery was a form of ‘protection’ under which the voracious fishes were much the better and prospered accordingly, but the ordinary food-fishes, on which these are accustomed to prey, were worse off than before.” This brief paper was a summary of the much larger <span class="citation">Volterra (<a href="#ref-volterra1926variazioni" role="doc-biblioref">1926</a><a href="#ref-volterra1926variazioni" role="doc-biblioref">b</a>)</span>.</p>
+<p>His interest in mathematical ecology is due to Umberto D’Ancona (his son-in-law), who had studied the trends in fisheries in the Adriatic sea before and immediately after WWI. In 1914-1918 fisheries in the Adriatic had stopped completely because of the conflict. D’Ancona had noticed that, while herbivorous fish had remained about constant, the piscivorous fish had increased dramatically in numbers. The problem piqued Volterra who immediately published a sophisticated study, proposing the same equations studied by Lotka. In a short letter to Nature <span class="citation">(Volterra <a href="#ref-volterra1926fluctuations" role="doc-biblioref">1926</a><a href="#ref-volterra1926fluctuations" role="doc-biblioref">a</a>)</span>, he stated the so-called “Volterra’s Effect” (which he termed “Law III”): “a complete closure of the fishery was a form of ‘protection’ under which the voracious fishes were much the better and prospered accordingly, but the ordinary food-fishes, on which these are accustomed to prey, were worse off than before.” This brief paper was a summary of the much extensive <span class="citation">Volterra (<a href="#ref-volterra1926variazioni" role="doc-biblioref">1926</a><a href="#ref-volterra1926variazioni" role="doc-biblioref">b</a>)</span>.</p>
 <div id="lotka-volterra-interactions" class="section level3">
 <h3><span class="header-section-number">2.1.1</span> Lotka-Volterra interactions</h3>
 <p>In 1927, Lotka wrote to Nature to raise the issue that the equations studied by Volterra and the figures presented in Volterra’s brief article were identical to those found in <em>Elements of Physical Biology</em> (published in 1925). He concludes that “It would be gratifying if Prof. Volterra’s publication should direct attention to a field and method of inquiry which apparently has hitherto passed almost unnoticed.”</p>
@@ -283,7 +279,7 @@ As such, provided with the parameters <span class="math inline">\(r\)</span> and
 \]</span></p>
 <div id="metapopulation-dynamics" class="section level3">
 <h3><span class="header-section-number">2.3.1</span> Metapopulation dynamics</h3>
-<p>Consider a fragmented landscape in which habitable patches are connected by dispersal (for simplicity, suppose that all patches are reachable from any other). Call <span class="math inline">\(p(t)\)</span> the proportion of patches occupied by the species of interest at time <span class="math inline">\(t\)</span>, and assume that a) an empty patch (the proportion of empty patches is <span class="math inline">\(1 - p(t)\)</span>) is colonized by the species with rate <span class="math inline">\(c p(t)\)</span>, where <span class="math inline">\(c\)</span> is the “colonization rate”, and b) that occupied patches become empty at rate <span class="math inline">\(e p(t)\)</span> (“extinction rate”). We want to model the proportion of patches occupied by the population at time <span class="math inline">\(t\)</span>:</p>
+<p>Consider a fragmented landscape in which habitable patches are connected by dispersal (for simplicity, suppose that all patches are reachable from any other). Call <span class="math inline">\(p(t)\)</span> the proportion of patches occupied by the species of interest at time <span class="math inline">\(t\)</span>, and assume that a) an empty patch (the proportion of empty patches is <span class="math inline">\(1 - p(t)\)</span>) is colonized by the species with rate <span class="math inline">\(c p(t)\)</span>, where <span class="math inline">\(c\)</span> is the “colonization rate”, and b) that occupied patches become empty at rate <span class="math inline">\(e p(t)\)</span> (“extinction rate”). We want to model the proportion of patches occupied by the population at time <span class="math inline">\(t\)</span> <span class="citation">(Levins <a href="#ref-levins1969some" role="doc-biblioref">1969</a>)</span>:</p>
 <p><span class="math display">\[
 \dfrac{d p(t)}{dt} = c p(t)(1 - p(t)) - e p(t) = p(t) (c - (c + e) p(t))
 \]</span></p>
@@ -343,9 +339,9 @@ J_{ij} = \frac{\partial f_i({x})}{\partial x_j}
 \]</span>
 with solution:</p>
 <p><span class="math display">\[
-\Delta x(t) = \Delta x(0) e^{Mt} = \Delta x(0) L e^{\Lambda t} R
+\Delta x(t) = \Delta x(0) e^{Mt} = \Delta x(0) Q e^{\Lambda t} Q^{-1}
 \]</span></p>
-<p>Where <span class="math inline">\(L\)</span> and <span class="math inline">\(R\)</span> are matrices containing the left and right eigenvectors of <span class="math inline">\(M\)</span>, and <span class="math inline">\(\Lambda\)</span> is a diagonal matrix containing the eigenvalues of <span class="math inline">\(M\)</span>. As such, the eigenvalues of <span class="math inline">\(M\)</span> determine the stability of the equilibrium <span class="math inline">\({x}^\star\)</span>: if all the eigenvalues have negative real part, then the system will eventually return to the equilibrium after sufficiently small perturbations; conversely, if any of the eigenvalues have positive real part, the system will move away from the equilibrium whenever perturbed. Therefore, depending on the sign of the “rightmost” eigenvalue of <span class="math inline">\({M}\)</span>, <span class="math inline">\(\lambda_1\)</span>, we can determine the stability of <span class="math inline">\({x}^\star\)</span>:</p>
+<p>Where <span class="math inline">\(Q\)</span> is the matrix containing the (unit) eigenvectors of <span class="math inline">\(M\)</span>, and <span class="math inline">\(\Lambda\)</span> is a diagonal matrix containing the eigenvalues of <span class="math inline">\(M\)</span>. As such, the eigenvalues of <span class="math inline">\(M\)</span> determine the stability of the equilibrium <span class="math inline">\({x}^\star\)</span>: if all the eigenvalues have negative real part, then the system will eventually return to the equilibrium after sufficiently small perturbations; conversely, if any of the eigenvalues have positive real part, the system will move away from the equilibrium whenever perturbed. Therefore, depending on the sign of the “rightmost” eigenvalue of <span class="math inline">\({M}\)</span>, <span class="math inline">\(\lambda_1\)</span>, we can determine the stability of <span class="math inline">\({x}^\star\)</span>:</p>
 <p><span class="math display">\[
   \text{Re}(\lambda_1) \begin{cases}
     &lt; 0 \to {x}^\star \quad \text{is stable}\\
@@ -711,6 +707,9 @@ is a Lyapunov function for the GLV system.</p>
 </div>
 <div id="ref-hofbauer1998evolutionary">
 <p>Hofbauer, Josef, and Karl Sigmund. 1998. <em>Evolutionary Games and Population Dynamics</em>. Cambridge university press.</p>
+</div>
+<div id="ref-levins1969some">
+<p>Levins, Richard. 1969. “Some Demographic and Genetic Consequences of Environmental Heterogeneity for Biological Control.” <em>American Entomologist</em> 15 (3): 237–40.</p>
 </div>
 <div id="ref-lotka1920analytical">
 <p>Lotka, Alfred J. 1920. “Analytical Note on Certain Rhythmic Relations in Organic Systems.” <em>Proceedings of the National Academy of Sciences</em> 6 (7): 410–15.</p>
