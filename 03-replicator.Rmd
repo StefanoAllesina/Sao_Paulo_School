@@ -192,7 +192,7 @@ x0 <- x0 / sum(x0)
 rps <- integrate_RE(A, x0)
 ```
 
-## Equivalence with GLV
+### Equivalence with GLV
 
 For a given $n-$species GLV system, there is an equivalent $(n+1)-$dimensional replicator equation with zeros in the last row of the matrix. To show this, let's take our functions for integrating GLV:
 

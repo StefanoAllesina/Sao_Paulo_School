@@ -376,7 +376,7 @@ M = \left. {J} \right|_{ {x}^\star} = D(x^\star)A
 \]
 
 \hypertarget{types-of-dynamics}{%
-\section{Types of dynamics}\label{types-of-dynamics}}
+\subsection{Types of dynamics}\label{types-of-dynamics}}
 
 For a single population, there are only three types of dynamics that can be displayed by a GLV model: either the population grows to infinity, shrinks to zero, or asymptotically reaches a steady state.
 
@@ -510,7 +510,7 @@ And with four or more species we can have chaos:
 \end{verbatim}
 
 \hypertarget{the-equilibrium-is-the-time-average}{%
-\section{The equilibrium is the time-average}\label{the-equilibrium-is-the-time-average}}
+\subsection{The equilibrium is the time-average}\label{the-equilibrium-is-the-time-average}}
 
 Suppose that \(x(t)\) has a periodic orbit of period \(T\). Further, assume that the GLV has an interior equilibrium \(x^\star\). We want to calculate the average density for each species:
 
@@ -588,7 +588,7 @@ Repeat for the chaotic system:
 \end{verbatim}
 
 \hypertarget{d-stability-and-lyapunov-function}{%
-\section{D-stability and Lyapunov function}\label{d-stability-and-lyapunov-function}}
+\subsection{D-stability and Lyapunov function}\label{d-stability-and-lyapunov-function}}
 
 Suppose that there is a positive diagonal matrix \(C\) such that \(CA + A^t C\) is negative definite (i.e., has only negative eigenvalues; the eigenvalues are real because the matrix is symmetric). Further, suppose that the GLV system with parameters \(A\) and \(r\) has a feasible equilibrium point \(x^\star\). Then the function:
 
@@ -875,50 +875,471 @@ We have seen in the previous lecture that a large ecological community will almo
 \hypertarget{assembly}{%
 \section{Assembly}\label{assembly}}
 
-We call assembly the process by which a community is constituted by adding species sequentially. Imagine starting with a bare environment, and introduce the first species. If the species can grow in the new environment, it will establish, and if not, it will go extinct. Mathematically, we assume that new species are introduced at very low abundance, so that they do not experience self-limitation due to crowding. For example, consider
+We call assembly the process by which a community is constituted by adding species sequentially. Imagine starting with a bare environment, and introducing the first species. If the species can grow in the new environment, it will establish, and if not, it will go extinct. Mathematically, we assume that new species are introduced at very low abundance, so that they do not experience self-limitation due to crowding, and that invasion are spaced in time so that the dynamics can play out before the next invasion happens. For example, consider the first species entering the system, and write the equation for the per-capita growth rate:
 
 \[
-\dfrac{1}{x_i(t)}\dfrac{dx_i(t)}{dt} = r_i + \sum_j A_{ij} x_j(t)
+\dfrac{1}{x_i(t)}\dfrac{dx_i(t)}{dt} = r_i + A_{ii} x_i(t)
 \]
-If the species is grown by itself, and we discard the quadratic effect, we have that initially:
+If \(x_i(0) \ll 1\), we can set \(A_{ii} x_i(0) \approx 0\), obtaining
 
 \[
 \dfrac{1}{x_i(t)}\dfrac{dx_i(t)}{dt} \approx r_i
 \]
 
-That is, the species will establish if it has a positive growth rate in the environment. Suppose that this is the case: the species 1 will then grow to its equilibrium abundance \(x_i^\star\). Now add a second species. Its initial per-capita growth rate is going to be:
+That is, the species will establish if it has a positive growth rate in the new environment. Suppose that this is the case: then species \(i\) will grow to its equilibrium abundance \(x_i^\star = -r_i / A_{ii}\). Now add a second species. Its initial per-capita growth rate is going to be:
 
 \[
-\dfrac{1}{x_j(t)}\dfrac{dx_j(t)}{dt} = r_j + \sum_k A_{jj} x_k(t) \approx r_j + A_{ji}x_i^\star
+\dfrac{1}{x_j(t)}\dfrac{dx_j(t)}{dt} = r_j + \sum_k A_{jk} x_k(t) \approx r_j + A_{ji}x_i^\star
 \]
 
-The species \(j\) can therefore growth when rare if \(r_j + A_{ji}x_i^\star > 0\), i.e., \(r_j > -A_{ji}x_i^\star\). If the species \(j\) can grow when rare, it could a) grow initially, but then go extinct; b) displace species \(i\), sending it to extinction; c) coexist with species \(i\).
-\#\# Number of coexisting species: a random zoo
+Species \(j\) can therefore growth when rare if \(r_j + A_{ji}x_i^\star > 0\), i.e., \(r_j > -A_{ji}x_i^\star\). We call this type of inequality and ``invasion criterion''.
 
-We can generalize the notions above to multiple species, by making a strong assumption on the matrix \(A\). If the matrix \(A\) is diagonally stable, we have seen before that all trajectories started at a positive point will converge to a unique equilibrium \(x^\star\). At equilibrium, some of the species will have positive abundance, while other abundance zero.
+If the species \(j\) can grow when rare, in general, it could a) grow initially, but then go extinct; b) displace species \(i\), sending it to extinction; c) coexist with species \(i\).
+
+\hypertarget{assembly-and-d-stability}{%
+\section{Assembly and D-stability}\label{assembly-and-d-stability}}
+
+We have seen in the previous lecture that whenever there exists a matrix \(C\) such that \(CA + A^t C\) is negative definite XXX
+
+TODO: Definition of saturated equilibrium (globally attractive, non invasible by other species)
+
+\hypertarget{how-many-species-will-coexist}{%
+\section{How many species will coexist?}\label{how-many-species-will-coexist}}
+
+Here we investigate the simplest case in which \(A\) is symmetric and stable (and therefore \(D-\)stable) matrix with random coefficients, and \(r\) is a vector of growth rates with random coefficients. For simplicity, we take the off-diagonal elements of \(A\) and the growth rates from a normal distribution (the same would be found for any distribution symmetric about zero). This case was studied by \citet{servan2018coexistence}.
+
+First, we are going to consider a trivial case, then simulate a more complex one, and finally outline the proof in \citet{servan2018coexistence}.
+
+\hypertarget{a-trivial-case}{%
+\subsection{A trivial case}\label{a-trivial-case}}
+
+Suppose that the growth rates are drawn from a normal distribution, and that the matrix \(A\) is diagonal and stable (i.e., species do not interact with each other; each species is self regulating). As such, a species will persist if and only if \(r_i > 0\). If we draw the growth rates from any distribution centered at zero, then the probability of having a positive growth rate is \(1/2\). Therefore, the number of coexisting species will follow the binomial distribution.
+
+\hypertarget{simulating-final-composition}{%
+\subsection{Simulating final composition}\label{simulating-final-composition}}
+
+Now, let's simulate cases in which species do interact with each other. First, we load the functions we've written before:
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{library}\NormalTok{(tidyverse)}
-\CommentTok{# code to solve for the equilibrium without integration}
-\KeywordTok{source}\NormalTok{(}\StringTok{"https://raw.githubusercontent.com/StefanoAllesina/randomzoo/master/R/lemke-howson.R"}\NormalTok{)}
+\KeywordTok{library}\NormalTok{(deSolve)}
+\CommentTok{# Generalized Lotka-Volterra model}
+\NormalTok{GLV <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(t, x, parameters)\{}
+  \KeywordTok{with}\NormalTok{(}\KeywordTok{as.list}\NormalTok{(}\KeywordTok{c}\NormalTok{(x, parameters)), \{}
+\NormalTok{    x[x }\OperatorTok{<}\StringTok{ }\DecValTok{10}\OperatorTok{^-}\DecValTok{8}\NormalTok{] <-}\StringTok{ }\DecValTok{0} \CommentTok{# prevent numerical problems}
+\NormalTok{    dxdt <-}\StringTok{ }\NormalTok{x }\OperatorTok{*}\StringTok{ }\NormalTok{(r }\OperatorTok{+}\StringTok{ }\NormalTok{A }\OperatorTok{%*%}\StringTok{ }\NormalTok{x)}
+    \KeywordTok{list}\NormalTok{(dxdt)}
+\NormalTok{  \})}
+\NormalTok{\}}
+\CommentTok{# function to plot output}
+\NormalTok{plot_ODE_output <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(out)\{}
+\NormalTok{  out <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(out)}
+  \KeywordTok{colnames}\NormalTok{(out) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"time"}\NormalTok{, }\KeywordTok{paste}\NormalTok{(}\StringTok{"sp"}\NormalTok{, }\DecValTok{1}\OperatorTok{:}\NormalTok{(}\KeywordTok{ncol}\NormalTok{(out) }\DecValTok{-1}\NormalTok{), }\DataTypeTok{sep =} \StringTok{"_"}\NormalTok{))}
+\NormalTok{  out <-}\StringTok{ }\KeywordTok{as_tibble}\NormalTok{(out) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{gather}\NormalTok{(species, density, }\OperatorTok{-}\NormalTok{time)}
+\NormalTok{  pl <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ out) }\OperatorTok{+}\StringTok{ }
+\StringTok{    }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ time, }\DataTypeTok{y =}\NormalTok{ density, }\DataTypeTok{colour =}\NormalTok{ species) }\OperatorTok{+}\StringTok{ }
+\StringTok{    }\KeywordTok{geom_line}\NormalTok{()}
+  \KeywordTok{show}\NormalTok{(pl)}
+  \KeywordTok{return}\NormalTok{(out)}
+\NormalTok{\}}
+\CommentTok{# general function to integrate GLV}
+\NormalTok{integrate_GLV <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(r, A, x0, }\DataTypeTok{maxtime =} \DecValTok{100}\NormalTok{, }\DataTypeTok{steptime =} \FloatTok{0.5}\NormalTok{)\{}
+\NormalTok{  times <-}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{, maxtime, }\DataTypeTok{by =}\NormalTok{ steptime)}
+\NormalTok{  parameters <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}\DataTypeTok{r =}\NormalTok{ r, }\DataTypeTok{A =}\NormalTok{ A)}
+  \CommentTok{# solve numerically}
+\NormalTok{  out <-}\StringTok{ }\KeywordTok{ode}\NormalTok{(}\DataTypeTok{y =}\NormalTok{ x0, }\DataTypeTok{times =}\NormalTok{ times, }
+           \DataTypeTok{func =}\NormalTok{ GLV, }\DataTypeTok{parms =}\NormalTok{ parameters, }
+           \DataTypeTok{method =} \StringTok{"ode45"}\NormalTok{)}
+  \CommentTok{# plot and make into tidy form}
+\NormalTok{  out <-}\StringTok{ }\KeywordTok{plot_ODE_output}\NormalTok{(out)}
+  \KeywordTok{return}\NormalTok{(out)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
 
-\CommentTok{# draw a random symmetric matrix, and make it stable}
-\CommentTok{# (and therefore diagonally stable)}
-\CommentTok{# with off-diagonals with mean zero}
-\NormalTok{build_random_symmetric_stable_matrix <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(n)\{}
+And then write functions to give us a (barely) stable, symmetric matrix \(A\), and random growth rates:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# function to build symmetric, D-stable matrix}
+\NormalTok{build_Dstable <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(n)\{}
 \NormalTok{  A <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{, n, n)}
 \NormalTok{  A[}\KeywordTok{upper.tri}\NormalTok{(A)] <-}\StringTok{ }\KeywordTok{rnorm}\NormalTok{(n }\OperatorTok{*}\StringTok{ }\NormalTok{(n }\OperatorTok{-}\StringTok{ }\DecValTok{1}\NormalTok{) }\OperatorTok{/}\StringTok{ }\DecValTok{2}\NormalTok{)}
   \CommentTok{# make symmetric}
 \NormalTok{  A <-}\StringTok{ }\NormalTok{A }\OperatorTok{+}\StringTok{ }\KeywordTok{t}\NormalTok{(A)}
   \CommentTok{# now find the largest eigenvalue}
 \NormalTok{  l1A <-}\StringTok{ }\KeywordTok{max}\NormalTok{(}\KeywordTok{eigen}\NormalTok{(A, }\DataTypeTok{only.values =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{symmetric =} \OtherTok{TRUE}\NormalTok{)}\OperatorTok{$}\NormalTok{values)}
-  \CommentTok{# set the diagonal to make it stable}
-  \KeywordTok{diag}\NormalTok{(A) <-}\StringTok{ }\FloatTok{-1.01} \OperatorTok{*}\StringTok{ }\NormalTok{l1A}
+  \ControlFlowTok{if}\NormalTok{ (l1A }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{)\{}
+    \CommentTok{# set the diagonal to make it stable}
+    \KeywordTok{diag}\NormalTok{(A) <-}\StringTok{ }\KeywordTok{diag}\NormalTok{(A) }\OperatorTok{-}\StringTok{ }\NormalTok{l1A }\OperatorTok{-}\StringTok{ }\FloatTok{0.01}
+\NormalTok{  \}}
   \KeywordTok{return}\NormalTok{(A)}
+\NormalTok{\}}
+
+\CommentTok{# function to get random growth rates}
+\NormalTok{build_randomr <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(n)\{}
+  \KeywordTok{return}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(n))}
 \NormalTok{\}}
 \end{Highlighting}
 \end{Shaded}
+
+Now, we build a random system with seven species, and integrate the dynamics:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{5}\NormalTok{) }\CommentTok{# for reproducibility}
+\NormalTok{n <-}\StringTok{ }\DecValTok{7}
+\NormalTok{A <-}\StringTok{ }\KeywordTok{build_Dstable}\NormalTok{(n)}
+\NormalTok{r <-}\StringTok{ }\KeywordTok{build_randomr}\NormalTok{(n)}
+\NormalTok{x0 <-}\StringTok{ }\KeywordTok{runif}\NormalTok{(n)}
+\NormalTok{out <-}\StringTok{ }\KeywordTok{integrate_GLV}\NormalTok{(r, A, x0)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-latex/rndzooex1-1} \end{center}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{out }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{filter}\NormalTok{(out}\OperatorTok{$}\NormalTok{time }\OperatorTok{==}\StringTok{ }\KeywordTok{max}\NormalTok{(out}\OperatorTok{$}\NormalTok{time)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{density =} \KeywordTok{ifelse}\NormalTok{(density }\OperatorTok{<}\StringTok{ }\DecValTok{10}\OperatorTok{^-}\DecValTok{6}\NormalTok{, }\DecValTok{0}\NormalTok{, density))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+# # A tibble: 7 x 3
+#    time species density
+#   <dbl> <chr>     <dbl>
+# 1   100 sp_1      0.429
+# 2   100 sp_2      0.276
+# 3   100 sp_3      0    
+# 4   100 sp_4      0.402
+# 5   100 sp_5      0    
+# 6   100 sp_6      0.645
+# 7   100 sp_7      0.578
+\end{verbatim}
+
+As you can see, in this case, two species (3 and 5) go extinct, while the other ones reach a feasible equilibrium. Let's try to start the system with species 3 and 5 at high abundance, to show that the equilibrium is indeed globally stable:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x0[}\DecValTok{3}\NormalTok{] <-}\StringTok{ }\DecValTok{10}
+\NormalTok{x0[}\DecValTok{5}\NormalTok{] <-}\StringTok{ }\DecValTok{10}
+\NormalTok{out <-}\StringTok{ }\KeywordTok{integrate_GLV}\NormalTok{(r, A, x0)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-latex/rndzooex2-1} \end{center}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{out }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{filter}\NormalTok{(out}\OperatorTok{$}\NormalTok{time }\OperatorTok{==}\StringTok{ }\KeywordTok{max}\NormalTok{(out}\OperatorTok{$}\NormalTok{time)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{density =} \KeywordTok{ifelse}\NormalTok{(density }\OperatorTok{<}\StringTok{ }\DecValTok{10}\OperatorTok{^-}\DecValTok{6}\NormalTok{, }\DecValTok{0}\NormalTok{, density))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+# # A tibble: 7 x 3
+#    time species density
+#   <dbl> <chr>     <dbl>
+# 1   100 sp_1      0.429
+# 2   100 sp_2      0.276
+# 3   100 sp_3      0    
+# 4   100 sp_4      0.402
+# 5   100 sp_5      0    
+# 6   100 sp_6      0.645
+# 7   100 sp_7      0.578
+\end{verbatim}
+
+As you can see, the system still goes to the same equilibrium, with 3 and 5 extinct. Turns out, for this type of system, one does not even need to integrate dynamics: the Lemke--Howson algorithm can be adapted to solve the problem efficiently. I have coded up the algorithm already, and you can load the function \texttt{get\_final\_composition(A,\ r)} by typing:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{source}\NormalTok{(}\StringTok{"https://raw.githubusercontent.com/StefanoAllesina/Sao_Paulo_School/master/code/L-H.R"}\NormalTok{)}
+\KeywordTok{get_final_composition}\NormalTok{(A, r) }\CommentTok{# use LH instead of integrating dynamics}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+# [1] 0.4290300 0.2761030 0.0000000 0.4021761 0.0000000 0.6453202 0.5776840
+\end{verbatim}
+
+\hypertarget{a-random-zoo}{%
+\section{A random zoo}\label{a-random-zoo}}
+
+In the case above, 5 species persisted. We can ask how many species will coexist in general under this parametrization. A good metaphor is that of the random zoo: take a large zoo, open all the cages, and return after fifty years. How many species will you find?
+
+To simulate the random zoo, we take random matrices and random growth rates with \(n\) species, and tally the number of coexisting species over several simulations:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\NormalTok{n <-}\StringTok{ }\DecValTok{5}
+\NormalTok{nsim <-}\StringTok{ }\DecValTok{2000}
+\NormalTok{results <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{simulation =} \DecValTok{1}\OperatorTok{:}\NormalTok{nsim, }\DataTypeTok{ncoexisting =} \KeywordTok{rep}\NormalTok{(}\OtherTok{NA}\NormalTok{, nsim))}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\NormalTok{nsim)\{}
+  \CommentTok{# build the matrix and vector}
+\NormalTok{  A <-}\StringTok{ }\KeywordTok{build_Dstable}\NormalTok{(n)}
+\NormalTok{  r <-}\StringTok{ }\KeywordTok{build_randomr}\NormalTok{(n)}
+\NormalTok{  xstar <-}\StringTok{ }\KeywordTok{get_final_composition}\NormalTok{(A, r)}
+\NormalTok{  results}\OperatorTok{$}\NormalTok{ncoexisting[i] <-}\StringTok{ }\KeywordTok{sum}\NormalTok{(xstar }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{)}
+\NormalTok{\}}
+\NormalTok{pl <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ results) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ ncoexisting) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_bar}\NormalTok{() }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{scale_x_continuous}\NormalTok{(}\StringTok{"number of species coexisting"}\NormalTok{, }\DataTypeTok{breaks =} \DecValTok{0}\OperatorTok{:}\DecValTok{10}\NormalTok{)}
+\KeywordTok{show}\NormalTok{(pl)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-latex/randomzoo-1} \end{center}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# add binomial distribution}
+\NormalTok{tbinom <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{ncoexisting =} \DecValTok{0}\OperatorTok{:}\NormalTok{n, }
+                 \DataTypeTok{expectation =}\NormalTok{ nsim }\OperatorTok{*}\StringTok{ }\KeywordTok{dbinom}\NormalTok{(}\DecValTok{0}\OperatorTok{:}\NormalTok{n, n, }\FloatTok{0.5}\NormalTok{))}
+\NormalTok{pl <-}\StringTok{ }\NormalTok{pl }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ tbinom, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ ncoexisting, }\DataTypeTok{y =}\NormalTok{ expectation))}
+\KeywordTok{show}\NormalTok{(pl)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-latex/randomzoo-2} \end{center}
+
+We find again that the number of coexisting species follows the binomial distribution with parameters \(n\) and \(1/2\) (i.e., exactly the same result found for non interacting species). To prove this fact, let's begin with showing that the probability of having all species coexisting is \(1 / 2^n\). For this, we need \(x^\star = -r A^{-1}\) to be feasible. For each possible \(A\) (invertible) and \(r\), we have that the vector \(-r A^{-1}\) will display a certain pattern of signs. Proving that the probability that \(n\) species coexist is \(1 / 2^n\) amounts to proving that all sign patterns are equally probable. To this end, define the matrix \(D_k = (-1)^{\delta_{ik}} \delta_{ij}\). This is a like the identity matrix, but with element \(k\) of the diagonal set to \(-1\) instead of \(1\). We have that:
+
+\[
+(D_k A D_k) D_k x^\star = -D_k r
+\]
+That is, by setting the \(k^\text{th}\) element of \(D_k\) to -1, we flip the sign of the \(k^\text{th}\) component of \(x^\star\). For example:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{2}\NormalTok{)}
+\NormalTok{A <-}\StringTok{ }\KeywordTok{build_Dstable}\NormalTok{(}\DecValTok{3}\NormalTok{)}
+\NormalTok{r <-}\StringTok{ }\KeywordTok{build_randomr}\NormalTok{(}\DecValTok{3}\NormalTok{)}
+\CommentTok{# the equilibrium is not feasible}
+\KeywordTok{solve}\NormalTok{(A, }\OperatorTok{-}\NormalTok{r)}
+\CommentTok{# build matrix D_1}
+\NormalTok{D_}\DecValTok{1}\NormalTok{ <-}\StringTok{ }\KeywordTok{diag}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\OperatorTok{-}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{))}
+\CommentTok{# the multiplication changes the sign of a component of the solution}
+\CommentTok{# making the equilibrium feasible}
+\KeywordTok{solve}\NormalTok{(D_}\DecValTok{1} \OperatorTok{%*%}\StringTok{ }\NormalTok{A }\OperatorTok{%*%}\StringTok{ }\NormalTok{D_}\DecValTok{1}\NormalTok{, }\OperatorTok{-}\NormalTok{D_}\DecValTok{1} \OperatorTok{%*%}\StringTok{ }\NormalTok{r)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+# [1] -11.75292  26.47508  22.73981
+#          [,1]
+# [1,] 11.75292
+# [2,] 26.47508
+# [3,] 22.73981
+\end{verbatim}
+
+Because of the symmetry assumption (i.e., we sampled all growth rates and off-diagonal elements from a distribution centered at zero), \((D_k A D_k)\) has the same distribution as \(A\), and \(D_k r\) the same distribution as \(r\). We can repeat the operation several times, connecting each possible starting point to the feasible solution. Therefore, the probability of all species coexisting amounts to the probability of having chosen the ``right'' sequence of \(D_k\), which happens with probability \(1 / 2^n\). Notice that the same proof holds when the coefficients of \(A\) are sampled in pairs from a bivariate distribution (rather than having symmetric matrices), as long as the distribution is centered at zero, and the matrix is \(D-\)stable (\citet{servan2018coexistence}).
+
+\hypertarget{assembly-and-saturated-equilibrium}{%
+\section{Assembly and saturated equilibrium}\label{assembly-and-saturated-equilibrium}}
+
+Now let's make it more complicated: we assemble an ecological community from the ground up. At each step, we introduce a species at low abundance, starting from an empty community. We then compute the new equilibrium, completing a step of the assembly:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{assembly_one_step <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x, r, A)\{}
+\NormalTok{  n <-}\StringTok{ }\KeywordTok{nrow}\NormalTok{(A)}
+\NormalTok{  invader <-}\StringTok{ }\KeywordTok{sample}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\NormalTok{n, }\DecValTok{1}\NormalTok{)}
+\NormalTok{  x[invader] <-}\StringTok{ }\FloatTok{0.001} \CommentTok{# introduce the invader at low abundance}
+\NormalTok{  present <-}\StringTok{ }\NormalTok{x }\OperatorTok{>}\StringTok{ }\DecValTok{0} \CommentTok{# these are the species present now}
+  \CommentTok{# compute new equilibrium}
+\NormalTok{  y <-}\StringTok{ }\KeywordTok{get_final_composition}\NormalTok{(A[present, present, }\DataTypeTok{drop =} \OtherTok{FALSE}\NormalTok{], r[present])}
+\NormalTok{  x[present] <-}\StringTok{ }\NormalTok{y}
+  \KeywordTok{return}\NormalTok{(x)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+Now we can take a species pool along with their parameters, and try to assemble the system until we can no longer add any more species (i.e., until we reach a saturated equilibrium):
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{7}\NormalTok{)}
+\NormalTok{n <-}\StringTok{ }\DecValTok{10}
+\NormalTok{A <-}\StringTok{ }\KeywordTok{build_Dstable}\NormalTok{(n)}
+\NormalTok{r <-}\StringTok{ }\KeywordTok{build_randomr}\NormalTok{(n)}
+\CommentTok{# start with no species}
+\NormalTok{x <-}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\DecValTok{0}\NormalTok{, n)}
+\CommentTok{# assemble for 50 steps and keep track of richness}
+\NormalTok{ninvasions <-}\StringTok{ }\DecValTok{40}
+\NormalTok{results <-}\StringTok{ }\KeywordTok{tibble}\NormalTok{(}\DataTypeTok{invasion =} \DecValTok{1}\OperatorTok{:}\NormalTok{ninvasions, }
+                  \DataTypeTok{richness =} \KeywordTok{rep}\NormalTok{(}\OtherTok{NA}\NormalTok{, ninvasions),}
+                  \DataTypeTok{composition =} \KeywordTok{rep}\NormalTok{(}\OtherTok{NA}\NormalTok{, ninvasions))}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\NormalTok{ninvasions)\{}
+\NormalTok{  x <-}\StringTok{ }\KeywordTok{assembly_one_step}\NormalTok{(x, r, A) }
+\NormalTok{  results}\OperatorTok{$}\NormalTok{richness[i] <-}\StringTok{ }\KeywordTok{sum}\NormalTok{(x }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{)}
+\NormalTok{  results}\OperatorTok{$}\NormalTok{composition[i] <-}\StringTok{ }\KeywordTok{paste}\NormalTok{((}\DecValTok{1}\OperatorTok{:}\NormalTok{n)[x}\OperatorTok{>}\DecValTok{0}\NormalTok{], }\DataTypeTok{collapse =} \StringTok{"-"}\NormalTok{)}
+\NormalTok{\}}
+\KeywordTok{print}\NormalTok{(}\KeywordTok{head}\NormalTok{(results))}
+\NormalTok{pl <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(results) }\OperatorTok{+}\StringTok{ }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ invasion, }\DataTypeTok{y =}\NormalTok{ richness, }\DataTypeTok{label =}\NormalTok{ composition) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_line}\NormalTok{() }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_text}\NormalTok{(}\DataTypeTok{hjust =} \DecValTok{0}\NormalTok{, }\DataTypeTok{nudge_y =} \FloatTok{0.25}\NormalTok{, }\DataTypeTok{angle =} \DecValTok{90}\NormalTok{)}\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{ylim}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, n }\OperatorTok{*}\StringTok{ }\FloatTok{1.25}\NormalTok{))}
+\KeywordTok{show}\NormalTok{(pl)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-latex/rndzooassembly-1} \end{center}
+
+\begin{verbatim}
+# # A tibble: 6 x 3
+#   invasion richness composition
+#      <int>    <int> <chr>      
+# 1        1        0 ""         
+# 2        2        0 ""         
+# 3        3        1 2          
+# 4        4        2 1-2        
+# 5        5        2 1-2        
+# 6        6        2 1-2
+\end{verbatim}
+
+Now let's roll back history and assemble again:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# start with no species}
+\NormalTok{x <-}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\DecValTok{0}\NormalTok{, n)}
+\CommentTok{# assemble for 50 steps and keep track of richness}
+\NormalTok{ninvasions <-}\StringTok{ }\DecValTok{40}
+\NormalTok{results <-}\StringTok{ }\KeywordTok{tibble}\NormalTok{(}\DataTypeTok{invasion =} \DecValTok{1}\OperatorTok{:}\NormalTok{ninvasions, }
+                  \DataTypeTok{richness =} \KeywordTok{rep}\NormalTok{(}\OtherTok{NA}\NormalTok{, ninvasions),}
+                  \DataTypeTok{composition =} \KeywordTok{rep}\NormalTok{(}\OtherTok{NA}\NormalTok{, ninvasions))}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\NormalTok{ninvasions)\{}
+\NormalTok{  x <-}\StringTok{ }\KeywordTok{assembly_one_step}\NormalTok{(x, r, A) }
+\NormalTok{  results}\OperatorTok{$}\NormalTok{richness[i] <-}\StringTok{ }\KeywordTok{sum}\NormalTok{(x }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{)}
+\NormalTok{  results}\OperatorTok{$}\NormalTok{composition[i] <-}\StringTok{ }\KeywordTok{paste}\NormalTok{((}\DecValTok{1}\OperatorTok{:}\NormalTok{n)[x}\OperatorTok{>}\DecValTok{0}\NormalTok{], }\DataTypeTok{collapse =} \StringTok{"-"}\NormalTok{)}
+\NormalTok{\}}
+\KeywordTok{print}\NormalTok{(}\KeywordTok{head}\NormalTok{(results))}
+\NormalTok{pl <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(results) }\OperatorTok{+}\StringTok{ }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ invasion, }\DataTypeTok{y =}\NormalTok{ richness, }\DataTypeTok{label =}\NormalTok{ composition) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_line}\NormalTok{() }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_text}\NormalTok{(}\DataTypeTok{hjust =} \DecValTok{0}\NormalTok{, }\DataTypeTok{nudge_y =} \FloatTok{0.25}\NormalTok{, }\DataTypeTok{angle =} \DecValTok{90}\NormalTok{)}\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{ylim}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, n }\OperatorTok{*}\StringTok{ }\FloatTok{1.25}\NormalTok{))}
+\KeywordTok{show}\NormalTok{(pl)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-latex/alternativehistory-1} \end{center}
+
+\begin{verbatim}
+# # A tibble: 6 x 3
+#   invasion richness composition
+#      <int>    <int> <chr>      
+# 1        1        1 4          
+# 2        2        1 4          
+# 3        3        1 4          
+# 4        4        1 4          
+# 5        5        2 4-10       
+# 6        6        2 4-10
+\end{verbatim}
+
+As you can see, despite taking a different assembly history, we reach the same final composition. In fact, this is exactly what we expect:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{get_final_composition}\NormalTok{(A, r)}
+\NormalTok{x}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+#  [1] 1.7588344 2.5440743 0.0000000 0.7860178 1.8730535 2.5502055 0.6961259
+#  [8] 1.6956878 0.0000000 0.0000000
+#  [1] 1.7588344 2.5440743 0.0000000 0.7860178 1.8730535 2.5502055 0.6961259
+#  [8] 1.6956878 0.0000000 0.0000000
+\end{verbatim}
+
+As such, given enough time, any assembly history for a symmetric, \(D-\)stable matrix \(A\) will eventually reach the final composition represented by the saturated equilibrium. CHECK WITH CARLOS
+
+Interestingly, this is not the case when the matrix is not symmetric. \citet{servan2018coexistence} conjectured however that the probability of finding a system whose final composition cannot be assembled one species at a time decreases rapidly with the size of the pool.
+
+\hypertarget{network-spandrels}{%
+\section{Network spandrels}\label{network-spandrels}}
+
+What is the network structure of the assembled community vs.~that of the initial pool? Can we detect a signature of the forces acting on the community such that some species can persist, while other go extinct? To answer these questions, we start by considering a larger pool of species:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\CommentTok{# initial pool}
+\NormalTok{A <-}\StringTok{ }\KeywordTok{build_Dstable}\NormalTok{(}\DecValTok{200}\NormalTok{)}
+\NormalTok{r <-}\StringTok{ }\KeywordTok{build_randomr}\NormalTok{(}\DecValTok{200}\NormalTok{)}
+\CommentTok{# final composition}
+\NormalTok{xstar <-}\StringTok{ }\KeywordTok{get_final_composition}\NormalTok{(A, r)}
+\NormalTok{A_pruned <-}\StringTok{ }\NormalTok{A[xstar }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{, xstar }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{]}
+\NormalTok{r_pruned <-}\StringTok{ }\NormalTok{r[xstar }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+Are the properties of matrix \(A\) different from those of the pruned version \(\tilde{A}\)? We probe this in two ways: first, we build a graph with the strongest interactions, and plot it.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(igraph)}
+\NormalTok{plot_graph_strong <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(B, }\DataTypeTok{quantile =} \FloatTok{0.5}\NormalTok{)\{}
+\NormalTok{  Bstrong <-}\StringTok{ }\NormalTok{B}
+  \KeywordTok{diag}\NormalTok{(Bstrong) <-}\StringTok{ }\DecValTok{0}
+\NormalTok{  Bstrong[}\KeywordTok{abs}\NormalTok{(Bstrong) }\OperatorTok{<}\StringTok{ }\KeywordTok{quantile}\NormalTok{(}\KeywordTok{abs}\NormalTok{(Bstrong), quantile)] <-}\StringTok{ }\DecValTok{0}
+\NormalTok{  gr <-}\StringTok{ }\KeywordTok{graph_from_adjacency_matrix}\NormalTok{(Bstrong, }\DataTypeTok{mode =} \StringTok{"undirected"}\NormalTok{)}
+  \KeywordTok{plot}\NormalTok{(gr, }\DataTypeTok{vertex.size=}\DecValTok{10}\NormalTok{, }\DataTypeTok{vertex.label=}\OtherTok{NA}\NormalTok{, }\DataTypeTok{layout=}\NormalTok{layout_with_fr)}
+\NormalTok{\}}
+
+\KeywordTok{plot_graph_strong}\NormalTok{(A)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-latex/unnamed-chunk-3-1} \end{center}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot_graph_strong}\NormalTok{(A_pruned)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-latex/unnamed-chunk-3-2} \end{center}
+
+There seems to be no special structure. A more powerful way to show the same is to plot the eigenvalues of \(A\) and \(\tilde{A}\). For a symmetric matrix with off-diagonal elements centered at zero, the eigenvalues should follow Wigner's semicircle law:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{plot_eigen <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(B)\{}
+\NormalTok{  evals <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{lambda =} \KeywordTok{eigen}\NormalTok{(B, }\DataTypeTok{only.values =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{symmetric =} \OtherTok{TRUE}\NormalTok{)}\OperatorTok{$}\NormalTok{values)}
+  \KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ evals) }\OperatorTok{+}\StringTok{ }
+\StringTok{    }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ lambda) }\OperatorTok{+}\StringTok{ }
+\StringTok{    }\KeywordTok{geom_histogram}\NormalTok{(}\DataTypeTok{bins =} \KeywordTok{as.integer}\NormalTok{(}\KeywordTok{nrow}\NormalTok{(evals) }\OperatorTok{/}\StringTok{ }\DecValTok{10}\NormalTok{), }\DataTypeTok{colour =} \StringTok{"black"}\NormalTok{)}
+\NormalTok{\}}
+\KeywordTok{plot_eigen}\NormalTok{(A)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-latex/unnamed-chunk-4-1} \end{center}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot_eigen}\NormalTok{(A_pruned)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-latex/unnamed-chunk-4-2} \end{center}
+
+As such, the matrix of interactions before/after dynamics seem to have the same properties. However, as shown in \citet{servan2018coexistence}, the distribution of the growth rates changes in a non-trivial way:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{toplot <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{r =}\NormalTok{ r, }\DataTypeTok{type =} \StringTok{"before"}\NormalTok{)}
+\NormalTok{toplot <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(toplot, }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{r =}\NormalTok{ r_pruned, }\DataTypeTok{type =} \StringTok{"after"}\NormalTok{))}
+\KeywordTok{ggplot}\NormalTok{(toplot) }\OperatorTok{+}\StringTok{ }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ r, }\DataTypeTok{fill =}\NormalTok{ type) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_histogram}\NormalTok{(}\DataTypeTok{position =} \StringTok{"dodge"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-latex/plotrbeforeafter-1} \end{center}
 
 \hypertarget{games}{%
 \chapter{Evolutionary Game Theory}\label{games}}
@@ -1124,7 +1545,7 @@ And if they are close to the 1/3?
 \begin{center}\includegraphics{A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-latex/rps3-1} \end{center}
 
 \hypertarget{equivalence-with-glv}{%
-\section{Equivalence with GLV}\label{equivalence-with-glv}}
+\subsection{Equivalence with GLV}\label{equivalence-with-glv}}
 
 For a given \(n-\)species GLV system, there is an equivalent \((n+1)-\)dimensional replicator equation with zeros in the last row of the matrix. To show this, let's take our functions for integrating GLV:
 

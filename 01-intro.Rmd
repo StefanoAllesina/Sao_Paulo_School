@@ -226,7 +226,7 @@ $$
 M = \left. {J} \right|_{ {x}^\star} = D(x^\star)A
 $$
 
-## Types of dynamics
+### Types of dynamics
 
 For a single population, there are only three types of dynamics that can be displayed by a GLV model: either the population grows to infinity, shrinks to zero, or asymptotically reaches a steady state. 
 
@@ -323,7 +323,7 @@ x0_4 <- 0.1 * runif(4)
 res_4 <- integrate_GLV(r_4, A_4, x0_4, maxtime = 500)
 ```
 
-## The equilibrium is the time-average
+### The equilibrium is the time-average
 
 Suppose that $x(t)$ has a periodic orbit of period $T$. Further, assume that the GLV has an interior equilibrium $x^\star$. We want to calculate the average density for each species:
 
@@ -373,7 +373,7 @@ res_4 %>% filter(time > 50) %>%
 solve(A_4, -r_4)
 ```
 
-## D-stability and Lyapunov function
+### D-stability and Lyapunov function
 
 Suppose that there is a positive diagonal matrix $C$ such that $CA + A^t C$ is negative definite (i.e., has only negative eigenvalues; the eigenvalues are real because the matrix is symmetric). Further, suppose that the GLV system with parameters $A$ and $r$ has a feasible equilibrium point $x^\star$. Then the function:
 

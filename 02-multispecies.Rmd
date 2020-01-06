@@ -1,49 +1,334 @@
+```{r knitrrz, echo=FALSE}
+knitr::opts_chunk$set(
+  eval      = TRUE,
+  comment   = "#",
+  results   = "hold",
+  message = FALSE,
+  warning = FALSE,
+  # collapse  = TRUE,
+  fig.align = "center")
+#library(png) 
+library(jpeg)
+#library(knitr)
+```
+
 # Multispecies GLV: assembly and invasibility {#multi}
 
 We have seen in the previous lecture that a large ecological community will almost invariably be unstable, possibly leading to extinctions. It is therefore natural to ask what happens when either a feasible equilibrium does not exist, or it is unstable. In particular, we want to know how many species can persist.
 
 ## Assembly
 
-We call assembly the process by which a community is constituted by adding species sequentially. Imagine starting with a bare environment, and introduce the first species. If the species can grow in the new environment, it will establish, and if not, it will go extinct. Mathematically, we assume that new species are introduced at very low abundance, so that they do not experience self-limitation due to crowding, and that invasion are spaced in time so that the dynamics can play out before the next invasion. For example, consider
+We call assembly the process by which a community is constituted by adding species sequentially. Imagine starting with a bare environment, and introducing the first species. If the species can grow in the new environment, it will establish, and if not, it will go extinct. Mathematically, we assume that new species are introduced at very low abundance, so that they do not experience self-limitation due to crowding, and that invasion are spaced in time so that the dynamics can play out before the next invasion happens. For example, consider the first species entering the system, and write the equation for the per-capita growth rate:
 
 $$
-\dfrac{1}{x_i(t)}\dfrac{dx_i(t)}{dt} = r_i + \sum_j A_{ij} x_j(t)
+\dfrac{1}{x_i(t)}\dfrac{dx_i(t)}{dt} = r_i + A_{ii} x_i(t)
 $$
-If the species is grown by itself, and we discard the quadratic effect, we have that initially:
+If $x_i(0) \ll 1$, we can set $A_{ii} x_i(0) \approx 0$, obtaining
 
 $$
 \dfrac{1}{x_i(t)}\dfrac{dx_i(t)}{dt} \approx r_i
 $$
 
-That is, the species will establish if it has a positive growth rate in the environment. Suppose that this is the case: the species 1 will then grow to its equilibrium abundance $x_i^\star$. Now add a second species. Its initial per-capita growth rate is going to be:
+That is, the species will establish if it has a positive growth rate in the new environment. Suppose that this is the case: then species $i$ will grow to its equilibrium abundance $x_i^\star = -r_i / A_{ii}$. Now add a second species. Its initial per-capita growth rate is going to be:
 
 $$
-\dfrac{1}{x_j(t)}\dfrac{dx_j(t)}{dt} = r_j + \sum_k A_{jj} x_k(t) \approx r_j + A_{ji}x_i^\star
+\dfrac{1}{x_j(t)}\dfrac{dx_j(t)}{dt} = r_j + \sum_k A_{jk} x_k(t) \approx r_j + A_{ji}x_i^\star
 $$
 
-The species $j$ can therefore growth when rare if $r_j + A_{ji}x_i^\star > 0$, i.e., $r_j > -A_{ji}x_i^\star$. If the species $j$ can grow when rare, it could a) grow initially, but then go extinct; b) displace species $i$, sending it to extinction; c) coexist with species $i$. 
-## Number of coexisting species: a random zoo
+Species $j$ can therefore growth when rare if $r_j + A_{ji}x_i^\star > 0$, i.e., $r_j > -A_{ji}x_i^\star$. We call this type of inequality and "invasion criterion".
 
-We can generalize the notions above to multiple species, by making a strong assumption on the matrix $A$. If the matrix $A$ is diagonally stable, we have seen before that all trajectories started at a positive point will converge to a unique equilibrium $x^\star$. At equilibrium, some of the species will have positive abundance, while other abundance zero. 
+If the species $j$ can grow when rare, in general, it could a) grow initially, but then go extinct; b) displace species $i$, sending it to extinction; c) coexist with species $i$. 
 
-```{r, randomzoo}
+## Assembly and D-stability
+
+We have seen in the previous lecture that whenever there exists a matrix $C$ such that $CA + A^t C$ is negative definite XXX
+
+TODO: Definition of saturated equilibrium (globally attractive, non invasible by other species)
+
+
+## How many species will coexist?
+
+Here we investigate the simplest case in which $A$ is symmetric and stable (and therefore $D-$stable) matrix with random coefficients, and $r$ is a vector of growth rates with random coefficients. For simplicity, we take the off-diagonal elements of $A$ and the growth rates from a normal distribution (the same would be found for any distribution symmetric about zero). This case was studied by @servan2018coexistence.
+
+First, we are going to consider a trivial case, then simulate a more complex one, and finally outline the proof in @servan2018coexistence.
+
+### A trivial case
+
+Suppose that the growth rates are drawn from a normal distribution, and that the matrix $A$ is diagonal and stable (i.e., species do not interact with each other; each species is self regulating). As such, a species will persist if and only if $r_i > 0$. If we draw the growth rates from any distribution centered at zero, then the probability of having a positive growth rate is $1/2$. Therefore, the number of coexisting species will follow the binomial distribution.
+
+### Simulating final composition
+
+Now, let's simulate cases in which species do interact with each other. First, we load the functions we've written before:
+
+```{r, glvfunctionsrz}
 library(tidyverse)
-# code to solve for the equilibrium without integration
-source("https://raw.githubusercontent.com/StefanoAllesina/randomzoo/master/R/lemke-howson.R")
+library(deSolve)
+# Generalized Lotka-Volterra model
+GLV <- function(t, x, parameters){
+  with(as.list(c(x, parameters)), {
+    x[x < 10^-8] <- 0 # prevent numerical problems
+    dxdt <- x * (r + A %*% x)
+    list(dxdt)
+  })
+}
+# function to plot output
+plot_ODE_output <- function(out){
+  out <- as.data.frame(out)
+  colnames(out) <- c("time", paste("sp", 1:(ncol(out) -1), sep = "_"))
+  out <- as_tibble(out) %>% gather(species, density, -time)
+  pl <- ggplot(data = out) + 
+    aes(x = time, y = density, colour = species) + 
+    geom_line()
+  show(pl)
+  return(out)
+}
+# general function to integrate GLV
+integrate_GLV <- function(r, A, x0, maxtime = 100, steptime = 0.5){
+  times <- seq(0, maxtime, by = steptime)
+  parameters <- list(r = r, A = A)
+  # solve numerically
+  out <- ode(y = x0, times = times, 
+           func = GLV, parms = parameters, 
+           method = "ode45")
+  # plot and make into tidy form
+  out <- plot_ODE_output(out)
+  return(out)
+}
+```
 
-# draw a random symmetric matrix, and make it stable
-# (and therefore diagonally stable)
-# with off-diagonals with mean zero
-build_random_symmetric_stable_matrix <- function(n){
+And then write functions to give us a (barely) stable, symmetric matrix $A$, and random growth rates:
+
+```{r builddstable}
+# function to build symmetric, D-stable matrix
+build_Dstable <- function(n){
   A <- matrix(0, n, n)
   A[upper.tri(A)] <- rnorm(n * (n - 1) / 2)
   # make symmetric
   A <- A + t(A)
   # now find the largest eigenvalue
   l1A <- max(eigen(A, only.values = TRUE, symmetric = TRUE)$values)
-  # set the diagonal to make it stable
-  diag(A) <- -1.01 * l1A
+  if (l1A > 0){
+    # set the diagonal to make it stable
+    diag(A) <- diag(A) - l1A - 0.01
+  }
   return(A)
 }
+
+# function to get random growth rates
+build_randomr <- function(n){
+  return(rnorm(n))
+}
+```
+
+Now, we build a random system with seven species, and integrate the dynamics:
+
+```{r rndzooex1}
+set.seed(5) # for reproducibility
+n <- 7
+A <- build_Dstable(n)
+r <- build_randomr(n)
+x0 <- runif(n)
+out <- integrate_GLV(r, A, x0)
+out %>% 
+  filter(out$time == max(out$time)) %>% 
+  mutate(density = ifelse(density < 10^-6, 0, density))
+```
+
+As you can see, in this case, two species (3 and 5) go extinct, while the other ones reach a feasible equilibrium. Let's try to start the system with species 3 and 5 at high abundance, to show that the equilibrium is indeed globally stable:
+
+```{r rndzooex2}
+x0[3] <- 10
+x0[5] <- 10
+out <- integrate_GLV(r, A, x0)
+out %>% 
+  filter(out$time == max(out$time)) %>% 
+  mutate(density = ifelse(density < 10^-6, 0, density))
+```
+
+As you can see, the system still goes to the same equilibrium, with 3 and 5 extinct. Turns out, for this type of system, one does not even need to integrate dynamics: the Lemke–Howson algorithm can be adapted to solve the problem efficiently. I have coded up the algorithm already, and you can load the function `get_final_composition(A, r)` by typing:
+
+```{r rndzooex3}
+source("https://raw.githubusercontent.com/StefanoAllesina/Sao_Paulo_School/master/code/L-H.R")
+get_final_composition(A, r) # use LH instead of integrating dynamics
+```
+
+## A random zoo
+
+In the case above, 5 species persisted. We can ask how many species will coexist in general under this parametrization. A good metaphor is that of the random zoo: take a large zoo, open all the cages, and return after fifty years. How many species will you find?
+
+To simulate the random zoo, we take random matrices and random growth rates with $n$ species, and tally the number of coexisting species over several simulations:
+
+```{r randomzoo}
+set.seed(1)
+n <- 5
+nsim <- 2000
+results <- data.frame(simulation = 1:nsim, ncoexisting = rep(NA, nsim))
+for (i in 1:nsim){
+  # build the matrix and vector
+  A <- build_Dstable(n)
+  r <- build_randomr(n)
+  xstar <- get_final_composition(A, r)
+  results$ncoexisting[i] <- sum(xstar > 0)
+}
+pl <- ggplot(data = results) + 
+  aes(x = ncoexisting) + 
+  geom_bar() + 
+  scale_x_continuous("number of species coexisting", breaks = 0:10)
+show(pl)
+# add binomial distribution
+tbinom <- data.frame(ncoexisting = 0:n, 
+                 expectation = nsim * dbinom(0:n, n, 0.5))
+pl <- pl + geom_point(data = tbinom, aes(x = ncoexisting, y = expectation))
+show(pl)
+```
+
+We find again that the number of coexisting species follows the binomial distribution with parameters $n$ and $1/2$ (i.e., exactly the same result found for non interacting species). To prove this fact, let's begin with showing that the probability of having all species coexisting is $1 / 2^n$. For this, we need $x^\star = -r A^{-1}$ to be feasible. For each possible $A$ (invertible) and $r$, we have that the vector $-r A^{-1}$ will display a certain pattern of signs. Proving that the probability that $n$ species coexist is $1 / 2^n$ amounts to proving that all sign patterns are equally probable. To this end, define the matrix $D_k = (-1)^{\delta_{ik}} \delta_{ij}$. This is a like the identity matrix, but with element $k$ of the diagonal set to $-1$ instead of $1$. We have that:
+
+$$
+(D_k A D_k) D_k x^\star = -D_k r
+$$
+That is, by setting the $k^\text{th}$ element of $D_k$ to -1, we flip the sign of the $k^\text{th}$ component of $x^\star$. For example:
+
+```{r proofrz}
+set.seed(2)
+A <- build_Dstable(3)
+r <- build_randomr(3)
+# the equilibrium is not feasible
+solve(A, -r)
+# build matrix D_1
+D_1 <- diag(c(-1, 1, 1))
+# the multiplication changes the sign of a component of the solution
+# making the equilibrium feasible
+solve(D_1 %*% A %*% D_1, -D_1 %*% r)
+```
+
+Because of the symmetry assumption (i.e., we sampled all growth rates and off-diagonal elements from a distribution centered at zero), $(D_k A D_k)$ has the same distribution as $A$, and $D_k r$ the same distribution as $r$. We can repeat the operation several times, connecting each possible starting point to the feasible solution. Therefore, the probability of all species coexisting amounts to the probability of having chosen the "right" sequence of $D_k$, which happens with probability $1 / 2^n$. Notice that the same proof holds when the coefficients of $A$ are sampled in pairs from a bivariate distribution (rather than having symmetric matrices), as long as the distribution is centered at zero, and the matrix is $D-$stable (@servan2018coexistence).
+
+## Assembly and saturated equilibrium
+
+Now let's make it more complicated: we assemble an ecological community from the ground up. At each step, we introduce a species at low abundance, starting from an empty community. We then compute the new equilibrium, completing a step of the assembly:
+
+```{r assembly}
+assembly_one_step <- function(x, r, A){
+  n <- nrow(A)
+  invader <- sample(1:n, 1)
+  x[invader] <- 0.001 # introduce the invader at low abundance
+  present <- x > 0 # these are the species present now
+  # compute new equilibrium
+  y <- get_final_composition(A[present, present, drop = FALSE], r[present])
+  x[present] <- y
+  return(x)
+}
+```
+
+Now we can take a species pool along with their parameters, and try to assemble the system until we can no longer add any more species (i.e., until we reach a saturated equilibrium):
+
+```{r rndzooassembly}
+set.seed(7)
+n <- 10
+A <- build_Dstable(n)
+r <- build_randomr(n)
+# start with no species
+x <- rep(0, n)
+# assemble for 50 steps and keep track of richness
+ninvasions <- 40
+results <- tibble(invasion = 1:ninvasions, 
+                  richness = rep(NA, ninvasions),
+                  composition = rep(NA, ninvasions))
+for (i in 1:ninvasions){
+  x <- assembly_one_step(x, r, A) 
+  results$richness[i] <- sum(x > 0)
+  results$composition[i] <- paste((1:n)[x>0], collapse = "-")
+}
+print(head(results))
+pl <- ggplot(results) + aes(x = invasion, y = richness, label = composition) + 
+  geom_point() + geom_line() + geom_text(hjust = 0, nudge_y = 0.25, angle = 90)+ 
+  ylim(c(0, n * 1.25))
+show(pl)
+```
+
+Now let's roll back history and assemble again:
+
+```{r alternativehistory}
+# start with no species
+x <- rep(0, n)
+# assemble for 50 steps and keep track of richness
+ninvasions <- 40
+results <- tibble(invasion = 1:ninvasions, 
+                  richness = rep(NA, ninvasions),
+                  composition = rep(NA, ninvasions))
+for (i in 1:ninvasions){
+  x <- assembly_one_step(x, r, A) 
+  results$richness[i] <- sum(x > 0)
+  results$composition[i] <- paste((1:n)[x>0], collapse = "-")
+}
+print(head(results))
+pl <- ggplot(results) + aes(x = invasion, y = richness, label = composition) + 
+  geom_point() + geom_line() + geom_text(hjust = 0, nudge_y = 0.25, angle = 90)+ 
+  ylim(c(0, n * 1.25))
+show(pl)
+```
+
+As you can see, despite taking a different assembly history, we reach the same final composition. In fact, this is exactly what we expect:
+
+```{r checkfinal}
+get_final_composition(A, r)
+x
+```
+
+As such, given enough time, any assembly history for a symmetric, $D-$stable matrix $A$ will eventually reach the final composition represented by the saturated equilibrium. CHECK WITH CARLOS
+
+Interestingly, this is not the case when the matrix is not symmetric. @servan2018coexistence conjectured however that the probability of finding a system whose final composition cannot be assembled one species at a time decreases rapidly with the size of the pool.
+
+## Network spandrels
+
+What is the network structure of the assembled community vs. that of the initial pool? Can we detect a signature of the forces acting on the community such that some species can persist, while other go extinct? To answer these questions, we start by considering a larger pool of species:
+
+```{r beforeafter}
+set.seed(1)
+# initial pool
+A <- build_Dstable(200)
+r <- build_randomr(200)
+# final composition
+xstar <- get_final_composition(A, r)
+A_pruned <- A[xstar > 0, xstar > 0]
+r_pruned <- r[xstar > 0]
+```
+
+Are the properties of matrix $A$ different from those of the pruned version $\tilde{A}$? We probe this in two ways: first, we build a graph with the strongest interactions, and plot it.
+
+```{r plotnetworksrz}
+library(igraph)
+plot_graph_strong <- function(B, quantile = 0.5){
+  Bstrong <- B
+  diag(Bstrong) <- 0
+  Bstrong[abs(Bstrong) < quantile(abs(Bstrong), quantile)] <- 0
+  gr <- graph_from_adjacency_matrix(Bstrong, mode = "undirected")
+  plot(gr, vertex.size=10, vertex.label=NA, layout=layout_with_fr)
+}
+
+plot_graph_strong(A)
+plot_graph_strong(A_pruned)
+```
+
+There seems to be no special structure. A more powerful way to show the same is to plot the eigenvalues of $A$ and $\tilde{A}$. For a symmetric matrix with off-diagonal elements centered at zero, the eigenvalues should follow Wigner's semicircle law:
+
+```{r ploteigenrz}
+plot_eigen <- function(B){
+  evals <- data.frame(lambda = eigen(B, only.values = TRUE, symmetric = TRUE)$values)
+  ggplot(data = evals) + 
+    aes(x = lambda) + 
+    geom_histogram(bins = as.integer(nrow(evals) / 10), colour = "black")
+}
+plot_eigen(A)
+plot_eigen(A_pruned)
+```
+
+As such, the matrix of interactions before/after dynamics seem to have the same properties. However, as shown in @servan2018coexistence, the distribution of the growth rates changes in a non-trivial way:
+
+```{r plotrbeforeafter}
+toplot <- data.frame(r = r, type = "before")
+toplot <- rbind(toplot, data.frame(r = r_pruned, type = "after"))
+ggplot(toplot) + aes(x = r, fill = type) + geom_histogram(position = "dodge")
 ```
 
