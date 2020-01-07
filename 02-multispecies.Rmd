@@ -18,7 +18,7 @@ We have seen in the previous lecture that a large ecological community will almo
 
 ## Assembly
 
-We call assembly the process by which a community is constituted by adding species sequentially. Imagine starting with a bare environment, and introducing the first species. If the species can grow in the new environment, it will establish, and if not, it will go extinct. Mathematically, we assume that new species are introduced at very low abundance, so that they do not experience self-limitation due to crowding, and that invasion are spaced in time so that the dynamics can play out before the next invasion happens. For example, consider the first species entering the system, and write the equation for the per-capita growth rate:
+We call **assembly the process by which a community is constituted by adding species sequentially**. Imagine starting with a bare environment, and introducing the first species. If the species can grow in the new environment, it will establish, and if not, it will go extinct. Mathematically, we assume that **new species are introduced at very low abundance**, so that they do not experience self-limitation due to crowding, and that **invasion are spaced in time** so that the dynamics can play out before the next invasion happens. For example, consider the first species entering the system, and write the equation for the per-capita growth rate:
 
 $$
 \dfrac{1}{x_i(t)}\dfrac{dx_i(t)}{dt} = r_i + A_{ii} x_i(t)
@@ -35,26 +35,64 @@ $$
 \dfrac{1}{x_j(t)}\dfrac{dx_j(t)}{dt} = r_j + \sum_k A_{jk} x_k(t) \approx r_j + A_{ji}x_i^\star
 $$
 
-Species $j$ can therefore growth when rare if $r_j + A_{ji}x_i^\star > 0$, i.e., $r_j > -A_{ji}x_i^\star$. We call this type of inequality and "invasion criterion".
+Species $j$ can therefore growth when rare if $r_j + A_{ji}x_i^\star > 0$, i.e., $r_j > -A_{ji}x_i^\star$. We call this type of inequality and **"invasion criterion"**.
 
 If the species $j$ can grow when rare, in general, it could a) grow initially, but then go extinct; b) displace species $i$, sending it to extinction; c) coexist with species $i$. 
+
+## Invasion in multispecies communities
+
+Now consider a pool of species (e.g., a metacommunity) and an environment (e.g., an island) in which some of the species are present, and coexisting at an equilibrium. We have $n$ species in the pool, and $k$ species in the environment. We want to write conditions for the invasibility of the equilibrium. To this end, we can re-arrange the rows and columns of $A$, and the elements of $r$ to obtain two blocks: one for the $k$ species already in the community, and one for the $n-k$ potential invaders.
+
+The fixed point $x^{\star}$ can be written as 
+$$
+x^\star = \left(\begin{array}{l}
+x^{(k)} \\
+0^{(n-k)} 
+\end{array} \right)
+$$
+where $x_k$ contains the density of the coexisting species. Similarly, the growth rates are
+
+$$
+r = \left(\begin{array}{l}
+r^{(k)} \\
+r^{(n-k)} 
+\end{array} \right)
+$$
+and the interaction matrix
+
+$$
+A = \begin{pmatrix}
+A^{(k,k)} & A^{(k, n- k)}\\
+A^{(n-k,k)} & A^{(n-k, n- k)}\\
+  \end{pmatrix}
+$$
+where each block $A^{(a,b)}$ contains the effects of the species in set $b$ on the growth of the species in $a$. For feasibility we need:
+
+$$
+x^{(k)} = -r^{(k)}\left(A^{(k,k)} \right)^{-1} > 0
+$$
+Now we want to write the condition for the non-invasibility of the resident community by the other species in the metacommunity. For each species in $(n-k)$, we need to have a negative growth rate when invading:
+
+$$
+r^{(n-k)} + A^{(n-k,k)}x^{(k)} < 0
+$$
+
+an equilibrium $x^\star$ for which a) the $x^{(k)}$ is feasible stable (when considering only the species in $k$) and b) no other species can invade when rare is called the **feasible, stable, non-invasible solution** or the **saturated equilibrium**.
 
 ## Assembly and D-stability
 
 We have seen in the previous lecture that whenever there exists a matrix $C$ such that $CA + A^t C$ is negative definite XXX
 
-TODO: Definition of saturated equilibrium (globally attractive, non invasible by other species)
-
 
 ## How many species will coexist?
 
-Here we investigate the simplest case in which $A$ is symmetric and stable (and therefore $D-$stable) matrix with random coefficients, and $r$ is a vector of growth rates with random coefficients. For simplicity, we take the off-diagonal elements of $A$ and the growth rates from a normal distribution (the same would be found for any distribution symmetric about zero). This case was studied by @servan2018coexistence.
+Here we investigate the simplest case in which $A$ is symmetric and stable (and therefore $D-$stable) matrix with random coefficients, and $r$ is a vector of growth rates with random coefficients. For simplicity, we take the off-diagonal elements of $A$ and the growth rates from a normal distribution centered at zero (the same would be found for any distribution symmetric about zero). This case was studied by @servan2018coexistence.
 
 First, we are going to consider a trivial case, then simulate a more complex one, and finally outline the proof in @servan2018coexistence.
 
 ### A trivial case
 
-Suppose that the growth rates are drawn from a normal distribution, and that the matrix $A$ is diagonal and stable (i.e., species do not interact with each other; each species is self regulating). As such, a species will persist if and only if $r_i > 0$. If we draw the growth rates from any distribution centered at zero, then the probability of having a positive growth rate is $1/2$. Therefore, the number of coexisting species will follow the binomial distribution.
+Suppose that the growth rates are drawn from a normal distribution centered at zero, and that the matrix $A$ is diagonal and stable (i.e., species do not interact with each other; each species is self regulating). As such, a species will persist if and only if $r_i > 0$. If we draw the growth rates from any distribution centered at zero, then the probability of having a positive growth rate is $1/2$. Therefore, the number of coexisting species will follow the binomial distribution with parameters $n$ and $1/2$.
 
 ### Simulating final composition
 
@@ -182,11 +220,12 @@ pl <- pl + geom_point(data = tbinom, aes(x = ncoexisting, y = expectation))
 show(pl)
 ```
 
-We find again that the number of coexisting species follows the binomial distribution with parameters $n$ and $1/2$ (i.e., exactly the same result found for non interacting species). To prove this fact, let's begin with showing that the probability of having all species coexisting is $1 / 2^n$. For this, we need $x^\star = -r A^{-1}$ to be feasible. For each possible $A$ (invertible) and $r$, we have that the vector $-r A^{-1}$ will display a certain pattern of signs. Proving that the probability that $n$ species coexist is $1 / 2^n$ amounts to proving that all sign patterns are equally probable. To this end, define the matrix $D_k = (-1)^{\delta_{ik}} \delta_{ij}$. This is a like the identity matrix, but with element $k$ of the diagonal set to $-1$ instead of $1$. We have that:
+We find again that the number of coexisting species follows the binomial distribution with parameters $n$ and $1/2$ (i.e., exactly the same result found for non interacting species). To prove this fact, let's begin with showing that the probability of having all species coexisting is $1 / 2^n$. For this, we need $x^\star = -r A^{-1}$ to be feasible. For each possible $A$ (invertible) and $r$, we have that the vector $-r A^{-1}$ will display a certain pattern of signs. Proving that the probability that all $n$ species coexist is $1 / 2^n$ amounts to proving that all sign patterns are equally probable. To this end, define the matrix $D_k = (-1)^{\delta_{ik}} \delta_{ij}$. This is like the identity matrix, but with element $k$ of the diagonal set to $-1$ instead of $1$. We have that:
 
 $$
 (D_k A D_k) D_k x^\star = -D_k r
 $$
+
 That is, by setting the $k^\text{th}$ element of $D_k$ to -1, we flip the sign of the $k^\text{th}$ component of $x^\star$. For example:
 
 ```{r proofrz}
@@ -202,7 +241,7 @@ D_1 <- diag(c(-1, 1, 1))
 solve(D_1 %*% A %*% D_1, -D_1 %*% r)
 ```
 
-Because of the symmetry assumption (i.e., we sampled all growth rates and off-diagonal elements from a distribution centered at zero), $(D_k A D_k)$ has the same distribution as $A$, and $D_k r$ the same distribution as $r$. We can repeat the operation several times, connecting each possible starting point to the feasible solution. Therefore, the probability of all species coexisting amounts to the probability of having chosen the "right" sequence of $D_k$, which happens with probability $1 / 2^n$. Notice that the same proof holds when the coefficients of $A$ are sampled in pairs from a bivariate distribution (rather than having symmetric matrices), as long as the distribution is centered at zero, and the matrix is $D-$stable (@servan2018coexistence).
+Because of the symmetry assumption (i.e., we sampled all growth rates and off-diagonal elements from a distribution centered at zero), $(D_k A D_k)$ has the same distribution as $A$, and $D_k r$ the same distribution as $r$. We can repeat the operation several times, connecting each possible starting point to the feasible solution. Therefore, the probability of all species coexisting amounts to the probability of having chosen the "right" sequence of $D_k$, which happens with probability $1 / 2^n$. Notice that the same proof holds when the coefficients of $A$ are sampled in pairs from a bivariate distribution (rather than having symmetric matrices), as long as the distribution is centered at zero, and the matrix is $D-$stable (@servan2018coexistence). Using the same argument, one can prove that, under this parametrization, the probability of observing $k$ species coexisting and $n -k$ not being able to invade is exactly $\binom{n}{k} \frac{1}{2^n}$ (@servan2018coexistence).
 
 ## Assembly and saturated equilibrium
 
@@ -269,14 +308,14 @@ pl <- ggplot(results) + aes(x = invasion, y = richness, label = composition) +
 show(pl)
 ```
 
-As you can see, despite taking a different assembly history, we reach the same final composition. In fact, this is exactly what we expect:
+As you can see, despite taking a different assembly history, we reach the same final composition. In fact, this is exactly what we would expect if we were to throw all species in the environment at the same time:
 
 ```{r checkfinal}
 get_final_composition(A, r)
 x
 ```
 
-As such, given enough time, any assembly history for a symmetric, $D-$stable matrix $A$ will eventually reach the final composition represented by the saturated equilibrium. CHECK WITH CARLOS
+As such, given enough time, any assembly history for a symmetric, $D-$stable matrix $A$ will eventually reach the final composition represented by the saturated equilibrium (Serván, unpublished). 
 
 Interestingly, this is not the case when the matrix is not symmetric. @servan2018coexistence conjectured however that the probability of finding a system whose final composition cannot be assembled one species at a time decreases rapidly with the size of the pool.
 
@@ -299,11 +338,11 @@ Are the properties of matrix $A$ different from those of the pruned version $\ti
 
 ```{r plotnetworksrz}
 library(igraph)
-plot_graph_strong <- function(B, quantile = 0.5){
-  Bstrong <- B
+plot_graph_strong <- function(B, quantile = 0.75){
+  Bstrong <- abs(B)
   diag(Bstrong) <- 0
-  Bstrong[abs(Bstrong) < quantile(abs(Bstrong), quantile)] <- 0
-  gr <- graph_from_adjacency_matrix(Bstrong, mode = "undirected")
+  Bstrong[Bstrong < quantile(Bstrong, quantile)] <- 0
+  gr <- graph_from_adjacency_matrix((Bstrong > 0) * 1, mode = "undirected")
   plot(gr, vertex.size=10, vertex.label=NA, layout=layout_with_fr)
 }
 
@@ -332,3 +371,41 @@ toplot <- rbind(toplot, data.frame(r = r_pruned, type = "after"))
 ggplot(toplot) + aes(x = r, fill = type) + geom_histogram(position = "dodge")
 ```
 
+But what if species were to be related to each other? For example, suppose $r_i = 1$ for all species, and build a matrix in which the interactions of species $i + 1$ are obtained by mutating slightly those of species $i$:
+
+```{r similarrz}
+n <- 200
+r <- rep(1, 200)
+A <- matrix(0, n, n)
+# set first species
+A[1, 1] <- -1
+# now each species is obtained by mutating the previous one
+for (i in 2:n){
+  ai <- A[i -1,] * (1 - 0.05 * runif(n))
+  A[i, ] <- A[i, ] + ai
+  A[, i] <- A[, i] + ai
+  A[i, i] <- -1
+}
+# make D-stable
+l1 <- max(eigen(A, only.values = TRUE, symmetric = TRUE)$values)
+if (l1 > 0) diag(A) <- diag(A) - l1 * 1.01
+```
+
+Now each species is similar to the previous one:
+```{r similarimage}
+image(A[1:n, n:1])
+```
+
+Perform the pruning, and plot networks and eigenvalues:
+```{r structruredspandrels}
+xstar <- get_final_composition(A, r)
+A_pruned <- A[xstar > 0, xstar > 0]
+r_pruned <- r[xstar > 0]
+
+plot_graph_strong(A)
+plot_graph_strong(A_pruned)
+plot_eigen(A)
+plot_eigen(A_pruned)
+```
+
+Meaning that if our matrix $A$ is structured, we will recover a structured matrix after pruning, while if $A$ is unstructured, we will recover an unstructured matrix. @maynard2018network showed that a well-defined network structure could be a "network spandrel" (cfr. @gould1979spandrels and @sole2006network) arising from the way new species are introduced, rather than a "signature of stability". 

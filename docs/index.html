@@ -24,7 +24,7 @@
 <meta name="author" content="Stefano Allesina" />
 
 
-<meta name="date" content="2020-01-06" />
+<meta name="date" content="2020-01-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -158,14 +158,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="3" data-path="multi.html"><a href="multi.html"><i class="fa fa-check"></i><b>3</b> Multispecies GLV: assembly and invasibility</a><ul>
 <li class="chapter" data-level="3.1" data-path="multi.html"><a href="multi.html#assembly"><i class="fa fa-check"></i><b>3.1</b> Assembly</a></li>
-<li class="chapter" data-level="3.2" data-path="multi.html"><a href="multi.html#assembly-and-d-stability"><i class="fa fa-check"></i><b>3.2</b> Assembly and D-stability</a></li>
-<li class="chapter" data-level="3.3" data-path="multi.html"><a href="multi.html#how-many-species-will-coexist"><i class="fa fa-check"></i><b>3.3</b> How many species will coexist?</a><ul>
-<li class="chapter" data-level="3.3.1" data-path="multi.html"><a href="multi.html#a-trivial-case"><i class="fa fa-check"></i><b>3.3.1</b> A trivial case</a></li>
-<li class="chapter" data-level="3.3.2" data-path="multi.html"><a href="multi.html#simulating-final-composition"><i class="fa fa-check"></i><b>3.3.2</b> Simulating final composition</a></li>
+<li class="chapter" data-level="3.2" data-path="multi.html"><a href="multi.html#invasion-in-multispecies-communities"><i class="fa fa-check"></i><b>3.2</b> Invasion in multispecies communities</a></li>
+<li class="chapter" data-level="3.3" data-path="multi.html"><a href="multi.html#assembly-and-d-stability"><i class="fa fa-check"></i><b>3.3</b> Assembly and D-stability</a></li>
+<li class="chapter" data-level="3.4" data-path="multi.html"><a href="multi.html#how-many-species-will-coexist"><i class="fa fa-check"></i><b>3.4</b> How many species will coexist?</a><ul>
+<li class="chapter" data-level="3.4.1" data-path="multi.html"><a href="multi.html#a-trivial-case"><i class="fa fa-check"></i><b>3.4.1</b> A trivial case</a></li>
+<li class="chapter" data-level="3.4.2" data-path="multi.html"><a href="multi.html#simulating-final-composition"><i class="fa fa-check"></i><b>3.4.2</b> Simulating final composition</a></li>
 </ul></li>
-<li class="chapter" data-level="3.4" data-path="multi.html"><a href="multi.html#a-random-zoo"><i class="fa fa-check"></i><b>3.4</b> A random zoo</a></li>
-<li class="chapter" data-level="3.5" data-path="multi.html"><a href="multi.html#assembly-and-saturated-equilibrium"><i class="fa fa-check"></i><b>3.5</b> Assembly and saturated equilibrium</a></li>
-<li class="chapter" data-level="3.6" data-path="multi.html"><a href="multi.html#network-spandrels"><i class="fa fa-check"></i><b>3.6</b> Network spandrels</a></li>
+<li class="chapter" data-level="3.5" data-path="multi.html"><a href="multi.html#a-random-zoo"><i class="fa fa-check"></i><b>3.5</b> A random zoo</a></li>
+<li class="chapter" data-level="3.6" data-path="multi.html"><a href="multi.html#assembly-and-saturated-equilibrium"><i class="fa fa-check"></i><b>3.6</b> Assembly and saturated equilibrium</a></li>
+<li class="chapter" data-level="3.7" data-path="multi.html"><a href="multi.html#network-spandrels"><i class="fa fa-check"></i><b>3.7</b> Network spandrels</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="games.html"><a href="games.html"><i class="fa fa-check"></i><b>4</b> Evolutionary Game Theory</a><ul>
 <li class="chapter" data-level="4.1" data-path="games.html"><a href="games.html#game-theory"><i class="fa fa-check"></i><b>4.1</b> Game theory</a></li>
@@ -215,18 +216,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="header">
 <h1 class="title">A Tour of the Generalized Lotka-Volterra Model</h1>
 <p class="author"><em>Stefano Allesina</em></p>
-<p class="date"><em>2020-01-06</em></p>
+<p class="date"><em>2020-01-07</em></p>
 </div>
 <div id="introduction" class="section level1">
 <h1><span class="header-section-number">1</span> Introduction</h1>
-<p>These lectures were prepared for the ICTP-SAIFR/IFT-UNESP “School on Community Ecology: from patterns to principles”, held in São Paulo, Brazil, January 20-25, 2020.</p>
+<p>These lectures were prepared for the ICTP-SAIFR/IFT-UNESP <a href="https://www.ictp-saifr.org/community-ecology-from-patterns-to-principles/"><strong>“School on Community Ecology: from patterns to principles”</strong></a>, held in São Paulo, Brazil, January 20-25, 2020.</p>
 <p>The four 90-minute lectures provide a semi-rigorous introduction to the Generalized Lotka-Volterra model, along with its applications to community ecology. Throughout the text, I have included code that can be used to simulate the processes that are introduced from a mathematical point of view.</p>
 <p>The emphasis is squarely on models for large communities, composed of <span class="math inline">\(n \gg 1\)</span> species. In particular, I often refer to “random” communities, i.e., dynamical systems with random parameters. This allows me to derive interesting results that are meant to describe the “typical” or “expected” community.</p>
 <p>At the end of each lecture, I refer to my own work in the area, highlighting some of the strongest contributions from my laboratory at the University of Chicago.</p>
 <div id="prerequisites" class="section level2">
 <h2><span class="header-section-number">1.1</span> Prerequisites</h2>
-<p>The lectures are fairly self-contained, but some working knowledge of calculus, dynamical systems, linear algebra, game theory would be beneficial.</p>
-<p>The code is written in <code>R</code>, and meant to run using a fairly recent version of <code>R</code> along with the packages <code>tidyverse</code>, <code>deSolve</code>, <code>MASS</code>, <code>lpSolve</code> that need to be installed.</p>
+<p>The lectures are fairly self-contained, but some working knowledge of calculus, dynamical systems, linear algebra, and game theory would be beneficial.</p>
+<p>The code is written in <code>R</code>, and meant to be run using a fairly recent version of <code>R</code> along with the packages <code>tidyverse</code>, <code>deSolve</code>, <code>MASS</code>, <code>lpSolve</code> and <code>igraph</code>, which need to be installed.</p>
 </div>
 <div id="sources" class="section level2">
 <h2><span class="header-section-number">1.2</span> Sources</h2>

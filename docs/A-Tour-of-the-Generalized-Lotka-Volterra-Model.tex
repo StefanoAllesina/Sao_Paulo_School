@@ -124,7 +124,7 @@
   \postauthor{\par}
       \predate{\centering\large\emph}
   \postdate{\par}
-    \date{2020-01-06}
+    \date{2020-01-07}
 
 \usepackage{booktabs}
 \usepackage{graphicx}
@@ -139,7 +139,7 @@
 \hypertarget{introduction}{%
 \chapter{Introduction}\label{introduction}}
 
-These lectures were prepared for the ICTP-SAIFR/IFT-UNESP ``School on Community Ecology: from patterns to principles'', held in São Paulo, Brazil, January 20-25, 2020.
+These lectures were prepared for the ICTP-SAIFR/IFT-UNESP \href{https://www.ictp-saifr.org/community-ecology-from-patterns-to-principles/}{\textbf{``School on Community Ecology: from patterns to principles''}}, held in São Paulo, Brazil, January 20-25, 2020.
 
 The four 90-minute lectures provide a semi-rigorous introduction to the Generalized Lotka-Volterra model, along with its applications to community ecology. Throughout the text, I have included code that can be used to simulate the processes that are introduced from a mathematical point of view.
 
@@ -150,9 +150,9 @@ At the end of each lecture, I refer to my own work in the area, highlighting som
 \hypertarget{prerequisites}{%
 \section{Prerequisites}\label{prerequisites}}
 
-The lectures are fairly self-contained, but some working knowledge of calculus, dynamical systems, linear algebra, game theory would be beneficial.
+The lectures are fairly self-contained, but some working knowledge of calculus, dynamical systems, linear algebra, and game theory would be beneficial.
 
-The code is written in \texttt{R}, and meant to run using a fairly recent version of \texttt{R} along with the packages \texttt{tidyverse}, \texttt{deSolve}, \texttt{MASS}, \texttt{lpSolve} that need to be installed.
+The code is written in \texttt{R}, and meant to be run using a fairly recent version of \texttt{R} along with the packages \texttt{tidyverse}, \texttt{deSolve}, \texttt{MASS}, \texttt{lpSolve} and \texttt{igraph}, which need to be installed.
 
 \hypertarget{sources}{%
 \section{Sources}\label{sources}}
@@ -169,22 +169,22 @@ These notes were prepared by summarizing and interpolating a variety of sources,
 
 Alfred J. Lotka (1880-1949) was born to French-speaking American parents in Lemberg (then part of the Habsburg empire, now Lviv, Ukraine). He studied in France, Germany and England, receiving a BSc in 1901 and a DSc in 1912 from Birmingham university. He moved to the US in 1902, and worked at the US Patent office, as an editor of Scientific American, and as a statistician at the Metropolitan Life Insturance Company in NYC. He wrote more than a hundred papers and five books, spanning a large range of topics. He's best known for the book \emph{Elements of Physical Biology}, his contributions to demography, and one of the first studies dealing with bibliometrics \citep{lotka1926frequency}.
 
-Starting in 1910 (reprinted as \citet{lotka2002contribution}) he investigated coupled differential equations relating to chemical as well as ecological dynamics. In \citet{lotka1920analytical} he studied a system of two ODEs that gave rise to perpetual oscillations: ``It was, therefore, with considerable surprise that the writer, on applying his method to certain special cases, found these to lead to undamped, and hence indefinitely continued, oscillations.'' He went on to describe ``1. A species of organism \(S_1\), a plant species, say, deriving its nourishment from a source presented in such large excess that the mass of the source may be considered constant during the period of time with which we are concerned. 2. A species \(S_2\), for example a herbivorous animal species, feeding on \(S_1\).''
+Starting in 1910 (reprinted as \citet{lotka2002contribution}) he investigated coupled differential equations relating to chemical as well as ecological dynamics. In \citet{lotka1920analytical} he studied a system of two ODEs that gave rise to perpetual oscillations: \emph{``It was, therefore, with considerable surprise that the writer, on applying his method to certain special cases, found these to lead to undamped, and hence indefinitely continued, oscillations.''} He went on to describe \emph{``1. A species of organism \(S_1\), a plant species, say, deriving its nourishment from a source presented in such large excess that the mass of the source may be considered constant during the period of time with which we are concerned. 2. A species \(S_2\), for example a herbivorous animal species, feeding on \(S_1\).''}
 
-The equations he derived (and then studied later in more detail) are now termed Lotka-Volterra equations.
+The equations he had derived (and then studied later in more detail) are now termed Lotka-Volterra equations.
 
 \begin{center}\includegraphics[width=0.25\linewidth]{images/Volterra} \end{center}
 
-Vito Volterra (1860-1940) was born in Ancona (then part of the Papal State) in a poor jewish family. The financial situation precipitated with the death of his father, when Vito was two. Vito and his mother went to live with relatives in Turin and then Florence. Volterra showed amazing mathematical talent at a very early age. Antonio Roiti, professor of physics in Florence, noticed the budding mathematician and hired him as his assistant, so that he could continue his studies. He went on to enroll at the Scuola Normale in Pisa, receiving a degree in Physics in 1882. At age 23 he was made full professor of Rational Mechanics in Pisa, and then in 1900 of Mathematical Physics in Rome. For thirty years, he contributed important studies in mathematics, and enriched academic life in Italy (for example, he was the first director of the National Center for Research). In 1931 he refused to take an oath of loyalty to the fascist regime (only 12 professors out of 1250 refused), and was therefore forced to resign (his take on the fascist enterprise: ``Empires die, but Euclid's theorems keep their youth forever'').
+Vito Volterra (1860-1940) was born in Ancona (then part of the Papal State) in a poor jewish family. The financial situation precipitated with the death of his father, when Vito was two. Vito and his mother went to live with relatives in Turin and then Florence. Volterra showed amazing mathematical talent at a very young age. Antonio Roiti, professor of physics in Florence, noticed the budding mathematician and hired him as his assistant, so that he could continue his studies. He went on to enroll at the Scuola Normale in Pisa, receiving a degree in Physics in 1882. At age 23 he was made full professor of Rational Mechanics in Pisa, and then in 1900 of Mathematical Physics in Rome. For thirty years, he contributed important studies in mathematics, and enriched academic life in Italy (for example, he was the first director of the National Center for Research). In 1931 he refused to take an oath of loyalty to the fascist regime (only 12 professors out of 1250 refused), and was therefore forced to resign (his take on the fascist enterprise: \emph{``Empires die, but Euclid's theorems keep their youth forever''}).
 
-His interest in mathematical ecology is due to Umberto D'Ancona (his son-in-law), who had studied the trends in fisheries in the Adriatic sea before and immediately after WWI. In 1914-1918 fisheries in the Adriatic had stopped completely because of the conflict. D'Ancona had noticed that, while herbivorous fish had remained about constant, the piscivorous fish had increased dramatically in numbers. The problem piqued Volterra who immediately published a sophisticated study, proposing the same equations studied by Lotka. In a short letter to Nature \citep{volterra1926fluctuations}, he stated the so-called ``Volterra's Effect'' (which he termed ``Law III''): ``a complete closure of the fishery was a form of `protection' under which the voracious fishes were much the better and prospered accordingly, but the ordinary food-fishes, on which these are accustomed to prey, were worse off than before.'' This brief paper was a summary of the much extensive \citet{volterra1926variazioni}.
+His interest in mathematical ecology is due to Umberto D'Ancona (his son-in-law), who had studied the trends in fisheries in the Adriatic sea before and immediately after WWI. In 1914-1918 fisheries in the Adriatic had stopped completely because of the conflict. D'Ancona had noticed that, while herbivorous fish had remained about constant, the piscivorous fish had increased dramatically in numbers. The problem piqued Volterra who immediately published a sophisticated study, proposing the same equations studied by Lotka. In a short letter to Nature \citep{volterra1926fluctuations}, he stated the so-called ``Volterra's Effect'' (which he termed ``Law III''): \emph{``a complete closure of the fishery was a form of `protection' under which the voracious fishes were much the better and prospered accordingly, but the ordinary food-fishes, on which these are accustomed to prey, were worse off than before.''} This brief paper was a summary of the much extensive \citet{volterra1926variazioni}.
 
 \hypertarget{lotka-volterra-interactions}{%
 \subsection{Lotka-Volterra interactions}\label{lotka-volterra-interactions}}
 
-In 1927, Lotka wrote to Nature to raise the issue that the equations studied by Volterra and the figures presented in Volterra's brief article were identical to those found in \emph{Elements of Physical Biology} (published in 1925). He concludes that ``It would be gratifying if Prof.~Volterra's publication should direct attention to a field and method of inquiry which apparently has hitherto passed almost unnoticed.''
+In 1927, Lotka wrote to Nature to raise the issue that the equations studied by Volterra and the figures presented in Volterra's brief article were identical to those found in \emph{Elements of Physical Biology} (published in 1925). He concluded: \emph{``It would be gratifying if Prof.~Volterra's publication should direct attention to a field and method of inquiry which apparently has hitherto passed almost unnoticed.''}
 
-Volterra graciously conceded ``I recognize his priority, and am sorry not to have known his work, and therefore not have been able to mention it.'' He however listed a few points in which the two authors had pursued different directions, and concluded ``Working independently the one from the other, we have found some common results, and this confirms the exactitude and the interest in the position of the problem. I agree with him in his conclusions that these studies and these methods of research deserve to receive greated attention from scholars, and should give rise to important applications.''
+Volterra graciously conceded \emph{``I recognize his priority, and am sorry not to have known his work, and therefore not have been able to mention it.''} He however listed a few points in which the two authors had pursued different directions, and concluded \emph{``Working independently the one from the other, we have found some common results, and this confirms the exactitude and the interest in the position of the problem. I agree with him in his conclusions that these studies and these methods of research deserve to receive greated attention from scholars, and should give rise to important applications.''}
 
 \hypertarget{basic-formulation}{%
 \section{Basic formulation}\label{basic-formulation}}
@@ -211,7 +211,7 @@ This is a separable ODE, with solution:
 \[
 x(t) = \frac{r}{e^{-r \left(k+t\right)}-a}
 \]
-where \(k\) is a constant. Setting \(x(0) = x_0\) (i.e., providing an initial condition), solving for the constant and substituting:
+where \(k\) is a constant. Setting \(x(0) = x_0\) (i.e., providing an initial condition), solving for the constant and substituting, we obtain:
 
 \[
 x(t) = \frac{r {x_0} e^{r t}}{r-a {x_0} \left(e^{r t}-1\right)}
@@ -302,7 +302,7 @@ Suppose that the GLV has no feasible equilibrium. Then all trajectories (if boun
 \hypertarget{stability-of-an-equilibrium}{%
 \subsection{Stability of an equilibrium}\label{stability-of-an-equilibrium}}
 
-Suppose that a feasible equilibrium \(x^\star\) exists. Then we can ask whether it is \textbf{attractive}, i.e.~if trajectories started at initial condition \(x(0)\) will eventually reach \(x^\star\). This problem is in general difficult to solve (but see below); as an alternative we can test for \textbf{local asymptotic stability}, i.e., ask whether \textbf{the system will return to the equilibrium if perturbed infinitesimally away from it}. In general, whenever we describe an ecological community as a system of nonlinear, autonomous ODEs:
+Suppose that a feasible equilibrium \(x^\star\) exists. Then we can ask whether it is \textbf{attractive}, i.e.~if trajectories started at initial condition \(x(0)\) will eventually reach \(x^\star\). This problem is in general difficult to solve (but see below); as an alternative, we can test for \textbf{local asymptotic stability}, i.e., ask whether \textbf{the system will return to the equilibrium if perturbed infinitesimally away from it}. In general, whenever we describe an ecological community as a system of nonlinear, autonomous ODEs:
 
 \[
 \frac{d x_i (t)}{d t} = f_i (x(t)) \;,
@@ -512,7 +512,7 @@ And with four or more species we can have chaos:
 \hypertarget{the-equilibrium-is-the-time-average}{%
 \subsection{The equilibrium is the time-average}\label{the-equilibrium-is-the-time-average}}
 
-Suppose that \(x(t)\) has a periodic orbit of period \(T\). Further, assume that the GLV has an interior equilibrium \(x^\star\). We want to calculate the average density for each species:
+Suppose that \(x(t)\) has a periodic orbit of period \(T\) (we assume \(x(0) = x(T)\)). Further, assume that the GLV has an interior equilibrium \(x^\star\). We want to calculate the average density for each species:
 
 \[
 \frac{1}{T} \int_0^T x(t) dt
@@ -649,7 +649,7 @@ A simple numerical example with two species:
 
 As we have seen above, an equilibrium \(x^\star\) is stable if the community matrix for the equilibrium has all eigenvalues with negative real part. In general, to determine the equilibrium and its stability, we would need to specify all the growth rates (\(r\), \(n\) values), as well as the matrix of interactions (\(A\), \(n^2\) values). This is impractical to do for large systems (though we will try this out later). But can something quite general be said about the limit in which many species are in the community?
 
-\citet{may1972will} attempted to answer this question by considering a \textbf{random community matrix}. In a GLV system, the diagonal elements \(m_{ii} = a_{ii} x_i^\star\) are influenced by self-regulation (i.e., as in a carrying capacity), while the off-diagonal elements \(m_{ij} = a_{ij} x_i^\star\) model the effect of species \(j\) on the equilibrium of species \(i\). May considered the following algorithm to build a random community matrix. Take a large community, resting at an unspecified equilibrium; we build the community matrix by setting
+\citet{may1972will} attempted to answer this question by considering a \textbf{random community matrix}. In a GLV system, the diagonal elements \(m_{ii} = a_{ii} x_i^\star\) are influenced by self-regulation (i.e., as in a carrying capacity), while the off-diagonal elements \(m_{ij} = a_{ij} x_i^\star\) model the effect of species \(j\) on the equilibrium of species \(i\). May considered the following algorithm to build a random community matrix. Take a large community, resting at an unspecified, feasible equilibrium; we build the community matrix by setting:
 
 \begin{itemize}
 \tightlist
@@ -674,6 +674,8 @@ For example, the code uses a normal distribution:
 \NormalTok{\}}
 \end{Highlighting}
 \end{Shaded}
+
+Note that the average of the eigenvalues of a matrix \(A\) is given by the average of its diagonal elements \(\frac{1}{n}\sum_i \lambda_i = \frac{1}{n} \text{Tr}(A) = \frac{1}{n} \sum_i A_{ii}\). As such, if \(A = dI + B\), the eigenvalues of \(A\) will be those of \(B\) shifted by \(d\).
 
 We want to determine whether the equilibrium will be stable, given \(n\), \(C\), \(d\) and \(\sigma^2\). To do so, we need to find the location of the ``rightmost'' eigenvalue of \(M\). For example, let's plot the eigenvalues of a large matrix:
 
@@ -716,7 +718,7 @@ The eigenvalues fall into an almost perfect circle! Turns out, that this is the 
   \end{cases}
 \]
 
-This result can be used to calculate the radius of the eigenvalue distribution of the matrices studied by May: when the off-diagonal coefficients \(M_{ij}\) are 0 with probability \(1-C\) and are sampled independently from a distribution with mean \(0\) and variance \(\sigma^2\) with probability \(C\), we have that \(\mathbb E[M_{ij}] = 0\) and \(\mathbb E[M_{ij}^2] = C \sigma^2\). This means that if we were to divide the coefficients of \({M}\) by \(\sqrt{C \sigma^2}\) we would recover the unit variance, and the matrix would follow the circular law when \(S\) is large. Armed with this, we can calculate the radius: if the radius of \({M} / \sqrt{S C \sigma^2}\) converges to 1 when the matrix is large, then the radius of \({M}\) is approximately \(\sqrt{S C \sigma^2}\). For stability, we need a sufficiently negative diagonal, yielding May's stability criterion:
+This result can be used to calculate the radius of the eigenvalue distribution of the matrices studied by May: when the off-diagonal coefficients \(M_{ij}\) are 0 with probability \(1-C\) and are sampled independently from a distribution with mean \(0\) and variance \(\sigma^2\) with probability \(C\), we have that \(\mathbb E[M_{ij}] = 0\) and \(\mathbb E[M_{ij}^2] = C \sigma^2\). This means that if we were to divide the coefficients of \({M}\) by \(\sqrt{C \sigma^2}\) we would recover the unit variance, and the matrix would follow the circular law when \(S\) is large. Armed with this, we can calculate the radius: if the radius of \({M} / \sqrt{S C \sigma^2}\) converges to 1 when the matrix is large, then the radius of \({M}\) is approximately \(\sqrt{S C \sigma^2}\). For stability, we need a sufficiently negative diagonal (setting the center of the circle), yielding May's stability criterion:
 
 \[
 \sqrt{S C \sigma^2} < d
@@ -875,7 +877,7 @@ We have seen in the previous lecture that a large ecological community will almo
 \hypertarget{assembly}{%
 \section{Assembly}\label{assembly}}
 
-We call assembly the process by which a community is constituted by adding species sequentially. Imagine starting with a bare environment, and introducing the first species. If the species can grow in the new environment, it will establish, and if not, it will go extinct. Mathematically, we assume that new species are introduced at very low abundance, so that they do not experience self-limitation due to crowding, and that invasion are spaced in time so that the dynamics can play out before the next invasion happens. For example, consider the first species entering the system, and write the equation for the per-capita growth rate:
+We call \textbf{assembly the process by which a community is constituted by adding species sequentially}. Imagine starting with a bare environment, and introducing the first species. If the species can grow in the new environment, it will establish, and if not, it will go extinct. Mathematically, we assume that \textbf{new species are introduced at very low abundance}, so that they do not experience self-limitation due to crowding, and that \textbf{invasion are spaced in time} so that the dynamics can play out before the next invasion happens. For example, consider the first species entering the system, and write the equation for the per-capita growth rate:
 
 \[
 \dfrac{1}{x_i(t)}\dfrac{dx_i(t)}{dt} = r_i + A_{ii} x_i(t)
@@ -892,28 +894,67 @@ That is, the species will establish if it has a positive growth rate in the new 
 \dfrac{1}{x_j(t)}\dfrac{dx_j(t)}{dt} = r_j + \sum_k A_{jk} x_k(t) \approx r_j + A_{ji}x_i^\star
 \]
 
-Species \(j\) can therefore growth when rare if \(r_j + A_{ji}x_i^\star > 0\), i.e., \(r_j > -A_{ji}x_i^\star\). We call this type of inequality and ``invasion criterion''.
+Species \(j\) can therefore growth when rare if \(r_j + A_{ji}x_i^\star > 0\), i.e., \(r_j > -A_{ji}x_i^\star\). We call this type of inequality and \textbf{``invasion criterion''}.
 
 If the species \(j\) can grow when rare, in general, it could a) grow initially, but then go extinct; b) displace species \(i\), sending it to extinction; c) coexist with species \(i\).
+
+\hypertarget{invasion-in-multispecies-communities}{%
+\section{Invasion in multispecies communities}\label{invasion-in-multispecies-communities}}
+
+Now consider a pool of species (e.g., a metacommunity) and an environment (e.g., an island) in which some of the species are present, and coexisting at an equilibrium. We have \(n\) species in the pool, and \(k\) species in the environment. We want to write conditions for the invasibility of the equilibrium. To this end, we can re-arrange the rows and columns of \(A\), and the elements of \(r\) to obtain two blocks: one for the \(k\) species already in the community, and one for the \(n-k\) potential invaders.
+
+The fixed point \(x^{\star}\) can be written as
+\[
+x^\star = \left(\begin{array}{l}
+x^{(k)} \\
+0^{(n-k)} 
+\end{array} \right)
+\]
+where \(x_k\) contains the density of the coexisting species. Similarly, the growth rates are
+
+\[
+r = \left(\begin{array}{l}
+r^{(k)} \\
+r^{(n-k)} 
+\end{array} \right)
+\]
+and the interaction matrix
+
+\[
+A = \begin{pmatrix}
+A^{(k,k)} & A^{(k, n- k)}\\
+A^{(n-k,k)} & A^{(n-k, n- k)}\\
+  \end{pmatrix}
+\]
+where each block \(A^{(a,b)}\) contains the effects of the species in set \(b\) on the growth of the species in \(a\). For feasibility we need:
+
+\[
+x^{(k)} = -r^{(k)}\left(A^{(k,k)} \right)^{-1} > 0
+\]
+Now we want to write the condition for the non-invasibility of the resident community by the other species in the metacommunity. For each species in \((n-k)\), we need to have a negative growth rate when invading:
+
+\[
+r^{(n-k)} + A^{(n-k,k)}x^{(k)} < 0
+\]
+
+an equilibrium \(x^\star\) for which a) the \(x^{(k)}\) is feasible stable (when considering only the species in \(k\)) and b) no other species can invade when rare is called the \textbf{feasible, stable, non-invasible solution} or the \textbf{saturated equilibrium}.
 
 \hypertarget{assembly-and-d-stability}{%
 \section{Assembly and D-stability}\label{assembly-and-d-stability}}
 
 We have seen in the previous lecture that whenever there exists a matrix \(C\) such that \(CA + A^t C\) is negative definite XXX
 
-TODO: Definition of saturated equilibrium (globally attractive, non invasible by other species)
-
 \hypertarget{how-many-species-will-coexist}{%
 \section{How many species will coexist?}\label{how-many-species-will-coexist}}
 
-Here we investigate the simplest case in which \(A\) is symmetric and stable (and therefore \(D-\)stable) matrix with random coefficients, and \(r\) is a vector of growth rates with random coefficients. For simplicity, we take the off-diagonal elements of \(A\) and the growth rates from a normal distribution (the same would be found for any distribution symmetric about zero). This case was studied by \citet{servan2018coexistence}.
+Here we investigate the simplest case in which \(A\) is symmetric and stable (and therefore \(D-\)stable) matrix with random coefficients, and \(r\) is a vector of growth rates with random coefficients. For simplicity, we take the off-diagonal elements of \(A\) and the growth rates from a normal distribution centered at zero (the same would be found for any distribution symmetric about zero). This case was studied by \citet{servan2018coexistence}.
 
 First, we are going to consider a trivial case, then simulate a more complex one, and finally outline the proof in \citet{servan2018coexistence}.
 
 \hypertarget{a-trivial-case}{%
 \subsection{A trivial case}\label{a-trivial-case}}
 
-Suppose that the growth rates are drawn from a normal distribution, and that the matrix \(A\) is diagonal and stable (i.e., species do not interact with each other; each species is self regulating). As such, a species will persist if and only if \(r_i > 0\). If we draw the growth rates from any distribution centered at zero, then the probability of having a positive growth rate is \(1/2\). Therefore, the number of coexisting species will follow the binomial distribution.
+Suppose that the growth rates are drawn from a normal distribution centered at zero, and that the matrix \(A\) is diagonal and stable (i.e., species do not interact with each other; each species is self regulating). As such, a species will persist if and only if \(r_i > 0\). If we draw the growth rates from any distribution centered at zero, then the probability of having a positive growth rate is \(1/2\). Therefore, the number of coexisting species will follow the binomial distribution with parameters \(n\) and \(1/2\).
 
 \hypertarget{simulating-final-composition}{%
 \subsection{Simulating final composition}\label{simulating-final-composition}}
@@ -1108,11 +1149,12 @@ To simulate the random zoo, we take random matrices and random growth rates with
 
 \begin{center}\includegraphics{A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-latex/randomzoo-2} \end{center}
 
-We find again that the number of coexisting species follows the binomial distribution with parameters \(n\) and \(1/2\) (i.e., exactly the same result found for non interacting species). To prove this fact, let's begin with showing that the probability of having all species coexisting is \(1 / 2^n\). For this, we need \(x^\star = -r A^{-1}\) to be feasible. For each possible \(A\) (invertible) and \(r\), we have that the vector \(-r A^{-1}\) will display a certain pattern of signs. Proving that the probability that \(n\) species coexist is \(1 / 2^n\) amounts to proving that all sign patterns are equally probable. To this end, define the matrix \(D_k = (-1)^{\delta_{ik}} \delta_{ij}\). This is a like the identity matrix, but with element \(k\) of the diagonal set to \(-1\) instead of \(1\). We have that:
+We find again that the number of coexisting species follows the binomial distribution with parameters \(n\) and \(1/2\) (i.e., exactly the same result found for non interacting species). To prove this fact, let's begin with showing that the probability of having all species coexisting is \(1 / 2^n\). For this, we need \(x^\star = -r A^{-1}\) to be feasible. For each possible \(A\) (invertible) and \(r\), we have that the vector \(-r A^{-1}\) will display a certain pattern of signs. Proving that the probability that all \(n\) species coexist is \(1 / 2^n\) amounts to proving that all sign patterns are equally probable. To this end, define the matrix \(D_k = (-1)^{\delta_{ik}} \delta_{ij}\). This is like the identity matrix, but with element \(k\) of the diagonal set to \(-1\) instead of \(1\). We have that:
 
 \[
 (D_k A D_k) D_k x^\star = -D_k r
 \]
+
 That is, by setting the \(k^\text{th}\) element of \(D_k\) to -1, we flip the sign of the \(k^\text{th}\) component of \(x^\star\). For example:
 
 \begin{Shaded}
@@ -1138,7 +1180,7 @@ That is, by setting the \(k^\text{th}\) element of \(D_k\) to -1, we flip the si
 # [3,] 22.73981
 \end{verbatim}
 
-Because of the symmetry assumption (i.e., we sampled all growth rates and off-diagonal elements from a distribution centered at zero), \((D_k A D_k)\) has the same distribution as \(A\), and \(D_k r\) the same distribution as \(r\). We can repeat the operation several times, connecting each possible starting point to the feasible solution. Therefore, the probability of all species coexisting amounts to the probability of having chosen the ``right'' sequence of \(D_k\), which happens with probability \(1 / 2^n\). Notice that the same proof holds when the coefficients of \(A\) are sampled in pairs from a bivariate distribution (rather than having symmetric matrices), as long as the distribution is centered at zero, and the matrix is \(D-\)stable (\citet{servan2018coexistence}).
+Because of the symmetry assumption (i.e., we sampled all growth rates and off-diagonal elements from a distribution centered at zero), \((D_k A D_k)\) has the same distribution as \(A\), and \(D_k r\) the same distribution as \(r\). We can repeat the operation several times, connecting each possible starting point to the feasible solution. Therefore, the probability of all species coexisting amounts to the probability of having chosen the ``right'' sequence of \(D_k\), which happens with probability \(1 / 2^n\). Notice that the same proof holds when the coefficients of \(A\) are sampled in pairs from a bivariate distribution (rather than having symmetric matrices), as long as the distribution is centered at zero, and the matrix is \(D-\)stable (\citet{servan2018coexistence}). Using the same argument, one can prove that, under this parametrization, the probability of observing \(k\) species coexisting and \(n -k\) not being able to invade is exactly \(\binom{n}{k} \frac{1}{2^n}\) (\citet{servan2018coexistence}).
 
 \hypertarget{assembly-and-saturated-equilibrium}{%
 \section{Assembly and saturated equilibrium}\label{assembly-and-saturated-equilibrium}}
@@ -1240,7 +1282,7 @@ Now let's roll back history and assemble again:
 # 6        6        2 4-10
 \end{verbatim}
 
-As you can see, despite taking a different assembly history, we reach the same final composition. In fact, this is exactly what we expect:
+As you can see, despite taking a different assembly history, we reach the same final composition. In fact, this is exactly what we would expect if we were to throw all species in the environment at the same time:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1256,7 +1298,7 @@ As you can see, despite taking a different assembly history, we reach the same f
 #  [8] 1.6956878 0.0000000 0.0000000
 \end{verbatim}
 
-As such, given enough time, any assembly history for a symmetric, \(D-\)stable matrix \(A\) will eventually reach the final composition represented by the saturated equilibrium. CHECK WITH CARLOS
+As such, given enough time, any assembly history for a symmetric, \(D-\)stable matrix \(A\) will eventually reach the final composition represented by the saturated equilibrium (Serván, unpublished).
 
 Interestingly, this is not the case when the matrix is not symmetric. \citet{servan2018coexistence} conjectured however that the probability of finding a system whose final composition cannot be assembled one species at a time decreases rapidly with the size of the pool.
 
@@ -1283,11 +1325,11 @@ Are the properties of matrix \(A\) different from those of the pruned version \(
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{library}\NormalTok{(igraph)}
-\NormalTok{plot_graph_strong <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(B, }\DataTypeTok{quantile =} \FloatTok{0.5}\NormalTok{)\{}
-\NormalTok{  Bstrong <-}\StringTok{ }\NormalTok{B}
+\NormalTok{plot_graph_strong <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(B, }\DataTypeTok{quantile =} \FloatTok{0.75}\NormalTok{)\{}
+\NormalTok{  Bstrong <-}\StringTok{ }\KeywordTok{abs}\NormalTok{(B)}
   \KeywordTok{diag}\NormalTok{(Bstrong) <-}\StringTok{ }\DecValTok{0}
-\NormalTok{  Bstrong[}\KeywordTok{abs}\NormalTok{(Bstrong) }\OperatorTok{<}\StringTok{ }\KeywordTok{quantile}\NormalTok{(}\KeywordTok{abs}\NormalTok{(Bstrong), quantile)] <-}\StringTok{ }\DecValTok{0}
-\NormalTok{  gr <-}\StringTok{ }\KeywordTok{graph_from_adjacency_matrix}\NormalTok{(Bstrong, }\DataTypeTok{mode =} \StringTok{"undirected"}\NormalTok{)}
+\NormalTok{  Bstrong[Bstrong }\OperatorTok{<}\StringTok{ }\KeywordTok{quantile}\NormalTok{(Bstrong, quantile)] <-}\StringTok{ }\DecValTok{0}
+\NormalTok{  gr <-}\StringTok{ }\KeywordTok{graph_from_adjacency_matrix}\NormalTok{((Bstrong }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) }\OperatorTok{*}\StringTok{ }\DecValTok{1}\NormalTok{, }\DataTypeTok{mode =} \StringTok{"undirected"}\NormalTok{)}
   \KeywordTok{plot}\NormalTok{(gr, }\DataTypeTok{vertex.size=}\DecValTok{10}\NormalTok{, }\DataTypeTok{vertex.label=}\OtherTok{NA}\NormalTok{, }\DataTypeTok{layout=}\NormalTok{layout_with_fr)}
 \NormalTok{\}}
 
@@ -1295,7 +1337,7 @@ Are the properties of matrix \(A\) different from those of the pruned version \(
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-latex/unnamed-chunk-3-1} \end{center}
+\begin{center}\includegraphics{A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-latex/plotnetworksrz-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1303,7 +1345,7 @@ Are the properties of matrix \(A\) different from those of the pruned version \(
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-latex/unnamed-chunk-3-2} \end{center}
+\begin{center}\includegraphics{A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-latex/plotnetworksrz-2} \end{center}
 
 There seems to be no special structure. A more powerful way to show the same is to plot the eigenvalues of \(A\) and \(\tilde{A}\). For a symmetric matrix with off-diagonal elements centered at zero, the eigenvalues should follow Wigner's semicircle law:
 
@@ -1319,7 +1361,7 @@ There seems to be no special structure. A more powerful way to show the same is 
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-latex/unnamed-chunk-4-1} \end{center}
+\begin{center}\includegraphics{A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-latex/ploteigenrz-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1327,7 +1369,7 @@ There seems to be no special structure. A more powerful way to show the same is 
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-latex/unnamed-chunk-4-2} \end{center}
+\begin{center}\includegraphics{A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-latex/ploteigenrz-2} \end{center}
 
 As such, the matrix of interactions before/after dynamics seem to have the same properties. However, as shown in \citet{servan2018coexistence}, the distribution of the growth rates changes in a non-trivial way:
 
@@ -1340,6 +1382,78 @@ As such, the matrix of interactions before/after dynamics seem to have the same 
 \end{Shaded}
 
 \begin{center}\includegraphics{A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-latex/plotrbeforeafter-1} \end{center}
+
+But what if species were to be related to each other? For example, suppose \(r_i = 1\) for all species, and build a matrix in which the interactions of species \(i + 1\) are obtained by mutating slightly those of species \(i\):
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{n <-}\StringTok{ }\DecValTok{200}
+\NormalTok{r <-}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{200}\NormalTok{)}
+\NormalTok{A <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{, n, n)}
+\CommentTok{# set first species}
+\NormalTok{A[}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{] <-}\StringTok{ }\DecValTok{-1}
+\CommentTok{# now each species is obtained by mutating the previous one}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{2}\OperatorTok{:}\NormalTok{n)\{}
+\NormalTok{  ai <-}\StringTok{ }\NormalTok{A[i }\DecValTok{-1}\NormalTok{,] }\OperatorTok{*}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{-}\StringTok{ }\FloatTok{0.05} \OperatorTok{*}\StringTok{ }\KeywordTok{runif}\NormalTok{(n))}
+\NormalTok{  A[i, ] <-}\StringTok{ }\NormalTok{A[i, ] }\OperatorTok{+}\StringTok{ }\NormalTok{ai}
+\NormalTok{  A[, i] <-}\StringTok{ }\NormalTok{A[, i] }\OperatorTok{+}\StringTok{ }\NormalTok{ai}
+\NormalTok{  A[i, i] <-}\StringTok{ }\DecValTok{-1}
+\NormalTok{\}}
+\CommentTok{# make D-stable}
+\NormalTok{l1 <-}\StringTok{ }\KeywordTok{max}\NormalTok{(}\KeywordTok{eigen}\NormalTok{(A, }\DataTypeTok{only.values =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{symmetric =} \OtherTok{TRUE}\NormalTok{)}\OperatorTok{$}\NormalTok{values)}
+\ControlFlowTok{if}\NormalTok{ (l1 }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) }\KeywordTok{diag}\NormalTok{(A) <-}\StringTok{ }\KeywordTok{diag}\NormalTok{(A) }\OperatorTok{-}\StringTok{ }\NormalTok{l1 }\OperatorTok{*}\StringTok{ }\FloatTok{1.01}
+\end{Highlighting}
+\end{Shaded}
+
+Now each species is similar to the previous one:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{image}\NormalTok{(A[}\DecValTok{1}\OperatorTok{:}\NormalTok{n, n}\OperatorTok{:}\DecValTok{1}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-latex/similarimage-1} \end{center}
+
+Perform the pruning, and plot networks and eigenvalues:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{xstar <-}\StringTok{ }\KeywordTok{get_final_composition}\NormalTok{(A, r)}
+\NormalTok{A_pruned <-}\StringTok{ }\NormalTok{A[xstar }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{, xstar }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{]}
+\NormalTok{r_pruned <-}\StringTok{ }\NormalTok{r[xstar }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{]}
+
+\KeywordTok{plot_graph_strong}\NormalTok{(A)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-latex/structruredspandrels-1} \end{center}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot_graph_strong}\NormalTok{(A_pruned)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-latex/structruredspandrels-2} \end{center}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot_eigen}\NormalTok{(A)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-latex/structruredspandrels-3} \end{center}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot_eigen}\NormalTok{(A_pruned)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-latex/structruredspandrels-4} \end{center}
+
+Meaning that if our matrix \(A\) is structured, we will recover a structured matrix after pruning, while if \(A\) is unstructured, we will recover an unstructured matrix. \citet{maynard2018network} showed that a well-defined network structure could be a ``network spandrel'' (cfr. \citet{gould1979spandrels} and \citet{sole2006network}) arising from the way new species are introduced, rather than a ``signature of stability''.
 
 \hypertarget{games}{%
 \chapter{Evolutionary Game Theory}\label{games}}

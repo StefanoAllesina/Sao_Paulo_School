@@ -22,24 +22,24 @@ knitr::include_graphics("images/Lotka.jpg")
 
 Alfred J. Lotka (1880-1949) was born to French-speaking American parents in Lemberg (then part of the Habsburg empire, now Lviv, Ukraine). He studied in France, Germany and England, receiving a BSc in 1901 and a DSc in 1912 from Birmingham university. He moved to the US in 1902, and worked at the US Patent office, as an editor of Scientific American, and as a statistician at the Metropolitan Life Insturance Company in NYC. He wrote more than a hundred papers and five books, spanning a large range of topics. He's best known for the book *Elements of Physical Biology*, his contributions to demography, and one of the first studies dealing with bibliometrics [@lotka1926frequency]. 
 
-Starting in 1910 (reprinted as @lotka2002contribution) he investigated coupled differential equations relating to chemical as well as ecological dynamics. In @lotka1920analytical he studied a system of two ODEs that gave rise to perpetual oscillations: "It was, therefore, with considerable surprise that the writer, on applying his method to certain special cases, found these to lead to undamped, and hence indefinitely continued, oscillations." He went on to describe "1. A species of organism $S_1$, a plant species, say, deriving its nourishment from a source presented in such large excess that the mass of the source may be considered constant during the period of time with which we are concerned. 2. A species $S_2$, for example a herbivorous animal species, feeding on $S_1$." 
+Starting in 1910 (reprinted as @lotka2002contribution) he investigated coupled differential equations relating to chemical as well as ecological dynamics. In @lotka1920analytical he studied a system of two ODEs that gave rise to perpetual oscillations: *"It was, therefore, with considerable surprise that the writer, on applying his method to certain special cases, found these to lead to undamped, and hence indefinitely continued, oscillations."* He went on to describe *"1. A species of organism $S_1$, a plant species, say, deriving its nourishment from a source presented in such large excess that the mass of the source may be considered constant during the period of time with which we are concerned. 2. A species $S_2$, for example a herbivorous animal species, feeding on $S_1$."* 
 
-The equations he derived (and then studied later in more detail) are now termed Lotka-Volterra equations.
+The equations he had derived (and then studied later in more detail) are now termed Lotka-Volterra equations.
 
 ```{r, volterra, echo=FALSE,out.width = "25%"}
 # All defaults
 knitr::include_graphics("images/Volterra.jpg")
 ```
 
-Vito Volterra (1860-1940) was born in Ancona (then part of the Papal State) in a poor jewish family. The financial situation precipitated with the death of his father, when Vito was two. Vito and his mother went to live with relatives in Turin and then Florence. Volterra showed amazing mathematical talent at a very early age. Antonio Roiti, professor of physics in Florence, noticed the budding mathematician and hired him as his assistant, so that he could continue his studies. He went on to enroll at the Scuola Normale in Pisa, receiving a degree in Physics in 1882. At age 23 he was made full professor of Rational Mechanics in Pisa, and then in 1900 of Mathematical Physics in Rome. For thirty years, he contributed important studies in mathematics, and enriched academic life in Italy (for example, he was the first director of the National Center for Research). In 1931 he refused to take an oath of loyalty to the fascist regime (only 12 professors out of 1250 refused), and was therefore forced to resign (his take on the fascist enterprise: "Empires die, but Euclid's theorems keep their youth forever"). 
+Vito Volterra (1860-1940) was born in Ancona (then part of the Papal State) in a poor jewish family. The financial situation precipitated with the death of his father, when Vito was two. Vito and his mother went to live with relatives in Turin and then Florence. Volterra showed amazing mathematical talent at a very young age. Antonio Roiti, professor of physics in Florence, noticed the budding mathematician and hired him as his assistant, so that he could continue his studies. He went on to enroll at the Scuola Normale in Pisa, receiving a degree in Physics in 1882. At age 23 he was made full professor of Rational Mechanics in Pisa, and then in 1900 of Mathematical Physics in Rome. For thirty years, he contributed important studies in mathematics, and enriched academic life in Italy (for example, he was the first director of the National Center for Research). In 1931 he refused to take an oath of loyalty to the fascist regime (only 12 professors out of 1250 refused), and was therefore forced to resign (his take on the fascist enterprise: *"Empires die, but Euclid's theorems keep their youth forever"*). 
 
-His interest in mathematical ecology is due to Umberto D'Ancona (his son-in-law), who had studied the trends in fisheries in the Adriatic sea before and immediately after WWI. In 1914-1918 fisheries in the Adriatic had stopped completely because of the conflict. D'Ancona had noticed that, while herbivorous fish had remained about constant, the piscivorous fish had increased dramatically in numbers. The problem piqued Volterra who immediately published a sophisticated study, proposing the same equations studied by Lotka. In a short letter to Nature [@volterra1926fluctuations], he stated the so-called "Volterra's Effect" (which he termed "Law III"): "a complete closure of the fishery was a form of 'protection' under which the voracious fishes were much the better and prospered accordingly, but the ordinary food-fishes, on which these are accustomed to prey, were worse off than before." This brief paper was a summary of the much extensive @volterra1926variazioni.
+His interest in mathematical ecology is due to Umberto D'Ancona (his son-in-law), who had studied the trends in fisheries in the Adriatic sea before and immediately after WWI. In 1914-1918 fisheries in the Adriatic had stopped completely because of the conflict. D'Ancona had noticed that, while herbivorous fish had remained about constant, the piscivorous fish had increased dramatically in numbers. The problem piqued Volterra who immediately published a sophisticated study, proposing the same equations studied by Lotka. In a short letter to Nature [@volterra1926fluctuations], he stated the so-called "Volterra's Effect" (which he termed "Law III"): *"a complete closure of the fishery was a form of 'protection' under which the voracious fishes were much the better and prospered accordingly, but the ordinary food-fishes, on which these are accustomed to prey, were worse off than before."* This brief paper was a summary of the much extensive @volterra1926variazioni.
 
 ### Lotka-Volterra interactions
 
-In 1927, Lotka wrote to Nature to raise the issue that the equations studied by Volterra and the figures presented in Volterra's brief article were identical to those found in *Elements of Physical Biology* (published in 1925). He concludes that "It would be gratifying if Prof. Volterra's publication should direct attention to a field and method of inquiry which apparently has hitherto passed almost unnoticed."
+In 1927, Lotka wrote to Nature to raise the issue that the equations studied by Volterra and the figures presented in Volterra's brief article were identical to those found in *Elements of Physical Biology* (published in 1925). He concluded: *"It would be gratifying if Prof. Volterra's publication should direct attention to a field and method of inquiry which apparently has hitherto passed almost unnoticed."*
 
-Volterra graciously conceded "I recognize his priority, and am sorry not to have known his work, and therefore not have been able to mention it." He however listed a few points in which the two authors had pursued different directions, and concluded "Working independently the one from the other, we have found some common results, and this confirms the exactitude and the interest in the position of the problem. I agree with him in his conclusions that these studies and these methods of research deserve to receive greated attention from scholars, and should give rise to important applications."
+Volterra graciously conceded *"I recognize his priority, and am sorry not to have known his work, and therefore not have been able to mention it."* He however listed a few points in which the two authors had pursued different directions, and concluded *"Working independently the one from the other, we have found some common results, and this confirms the exactitude and the interest in the position of the problem. I agree with him in his conclusions that these studies and these methods of research deserve to receive greated attention from scholars, and should give rise to important applications."*
 
 ## Basic formulation
 
@@ -64,7 +64,7 @@ This is a separable ODE, with solution:
 $$
 x(t) = \frac{r}{e^{-r \left(k+t\right)}-a}
 $$
-where $k$ is a constant. Setting $x(0) = x_0$ (i.e., providing an initial condition), solving for the constant and substituting:
+where $k$ is a constant. Setting $x(0) = x_0$ (i.e., providing an initial condition), solving for the constant and substituting, we obtain:
 
 ---
 # Notes on derivation
@@ -153,7 +153,7 @@ Suppose that the GLV has no feasible equilibrium. Then all trajectories (if boun
 
 ### Stability of an equilibrium
 
-Suppose that a feasible equilibrium $x^\star$ exists. Then we can ask whether it is **attractive**, i.e. if trajectories started at initial condition $x(0)$ will eventually reach $x^\star$. This problem is in general difficult to solve (but see below); as an alternative we can test for **local asymptotic stability**, i.e., ask whether **the system will return to the equilibrium if perturbed infinitesimally away from it**. In general, whenever we describe an ecological community as a system of nonlinear, autonomous ODEs:
+Suppose that a feasible equilibrium $x^\star$ exists. Then we can ask whether it is **attractive**, i.e. if trajectories started at initial condition $x(0)$ will eventually reach $x^\star$. This problem is in general difficult to solve (but see below); as an alternative, we can test for **local asymptotic stability**, i.e., ask whether **the system will return to the equilibrium if perturbed infinitesimally away from it**. In general, whenever we describe an ecological community as a system of nonlinear, autonomous ODEs:
 
 $$
 \frac{d x_i (t)}{d t} = f_i (x(t)) \;,
@@ -325,7 +325,7 @@ res_4 <- integrate_GLV(r_4, A_4, x0_4, maxtime = 500)
 
 ### The equilibrium is the time-average
 
-Suppose that $x(t)$ has a periodic orbit of period $T$. Further, assume that the GLV has an interior equilibrium $x^\star$. We want to calculate the average density for each species:
+Suppose that $x(t)$ has a periodic orbit of period $T$ (we assume $x(0) = x(T)$). Further, assume that the GLV has an interior equilibrium $x^\star$. We want to calculate the average density for each species:
 
 $$
 \frac{1}{T} \int_0^T x(t) dt
@@ -417,7 +417,7 @@ res <- integrate_GLV(r, A, abs(rnorm(2)))
 
 As we have seen above, an equilibrium $x^\star$ is stable if the community matrix for the equilibrium has all eigenvalues with negative real part. In general, to determine the equilibrium and its stability, we would need to specify all the growth rates ($r$, $n$ values), as well as the matrix of interactions ($A$, $n^2$ values). This is impractical to do for large systems (though we will try this out later). But can something quite general be said about the limit in which many species are in the community?
 
-@may1972will attempted to answer this question by considering a **random community matrix**. In a GLV system, the diagonal elements $m_{ii} = a_{ii} x_i^\star$ are influenced by self-regulation (i.e., as in a carrying capacity), while the off-diagonal elements $m_{ij} = a_{ij} x_i^\star$ model the effect of species $j$ on the equilibrium of species $i$. May considered the following algorithm to build a random community matrix. Take a large community, resting at an unspecified equilibrium; we build the community matrix by setting
+@may1972will attempted to answer this question by considering a **random community matrix**. In a GLV system, the diagonal elements $m_{ii} = a_{ii} x_i^\star$ are influenced by self-regulation (i.e., as in a carrying capacity), while the off-diagonal elements $m_{ij} = a_{ij} x_i^\star$ model the effect of species $j$ on the equilibrium of species $i$. May considered the following algorithm to build a random community matrix. Take a large community, resting at an unspecified, feasible equilibrium; we build the community matrix by setting:
 
 - $m_{ij} = 0$  with probability $(1-C)$; with probability $C$ we draw $m_{ij}$ from a distribution with mean zero and variance $\sigma^2$. $C$ is the proportion of realized connections, termed the "connectance" of the system.
 - the diagonal elements are set to $-d$, modeling self-regulation.
@@ -434,6 +434,8 @@ build_May_normal <- function(n, C, d, sigma){
   return(M)
 }
 ```
+
+Note that the average of the eigenvalues of a matrix $A$ is given by the average of its diagonal elements $\frac{1}{n}\sum_i \lambda_i = \frac{1}{n} \text{Tr}(A) = \frac{1}{n} \sum_i A_{ii}$. As such, if $A = dI + B$, the eigenvalues of $A$ will be those of $B$ shifted by $d$.
 
 We want to determine whether the equilibrium will be stable, given $n$, $C$, $d$ and $\sigma^2$. To do so, we need to find the location of the "rightmost" eigenvalue of $M$. For example, let's plot the eigenvalues of a large matrix:
 ```{r, exmay}
@@ -471,7 +473,7 @@ $$
   \end{cases}
 $$
 
-This result can be used to calculate the radius of the eigenvalue distribution of the matrices studied by May: when the off-diagonal coefficients $M_{ij}$ are 0 with probability $1-C$ and are sampled independently from a distribution with mean $0$ and variance $\sigma^2$ with probability $C$, we have that $\mathbb E[M_{ij}] = 0$ and $\mathbb E[M_{ij}^2] = C \sigma^2$. This means that if we were to divide the coefficients of ${M}$ by $\sqrt{C \sigma^2}$ we would recover the unit variance, and the matrix would follow the circular law when $S$ is large. Armed with this, we can calculate the radius: if the radius of ${M} / \sqrt{S C \sigma^2}$ converges to 1 when the matrix is large, then the radius of ${M}$ is approximately $\sqrt{S C \sigma^2}$. For stability, we need a sufficiently negative diagonal, yielding May's stability criterion:
+This result can be used to calculate the radius of the eigenvalue distribution of the matrices studied by May: when the off-diagonal coefficients $M_{ij}$ are 0 with probability $1-C$ and are sampled independently from a distribution with mean $0$ and variance $\sigma^2$ with probability $C$, we have that $\mathbb E[M_{ij}] = 0$ and $\mathbb E[M_{ij}^2] = C \sigma^2$. This means that if we were to divide the coefficients of ${M}$ by $\sqrt{C \sigma^2}$ we would recover the unit variance, and the matrix would follow the circular law when $S$ is large. Armed with this, we can calculate the radius: if the radius of ${M} / \sqrt{S C \sigma^2}$ converges to 1 when the matrix is large, then the radius of ${M}$ is approximately $\sqrt{S C \sigma^2}$. For stability, we need a sufficiently negative diagonal (setting the center of the circle), yielding May's stability criterion:
 
 $$
 \sqrt{S C \sigma^2} < d

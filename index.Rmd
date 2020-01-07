@@ -34,7 +34,7 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-These lectures were prepared for the ICTP-SAIFR/IFT-UNESP "School on Community Ecology: from patterns to principles", held in São Paulo, Brazil, January 20-25, 2020.
+These lectures were prepared for the ICTP-SAIFR/IFT-UNESP [**"School on Community Ecology: from patterns to principles"**](https://www.ictp-saifr.org/community-ecology-from-patterns-to-principles/), held in São Paulo, Brazil, January 20-25, 2020.
 
 The four 90-minute lectures provide a semi-rigorous introduction to the Generalized Lotka-Volterra model, along with its applications to community ecology. Throughout the text, I have included code that can be used to simulate the processes that are introduced from a mathematical point of view. 
 
@@ -44,11 +44,12 @@ At the end of each lecture, I refer to my own work in the area, highlighting som
 
 ## Prerequisites
 
-The lectures are fairly self-contained, but some working knowledge of calculus, dynamical systems, linear algebra, game theory would be beneficial.
+The lectures are fairly self-contained, but some working knowledge of calculus, dynamical systems, linear algebra, and game theory would be beneficial.
 
-The code is written in `R`, and meant to run using a fairly recent version of `R` along with the packages `tidyverse`, `deSolve`, `MASS`, `lpSolve` that need to be installed.
+The code is written in `R`, and meant to be run using a fairly recent version of `R` along with the packages `tidyverse`, `deSolve`, `MASS`, `lpSolve` and `igraph`, which need to be installed.
 
 ## Sources
 
 These notes were prepared by summarizing and interpolating a variety of sources, including @hadeler2017topics, @hofbauer1998evolutionary, and @baigent2016lotka.
+
 

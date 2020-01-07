@@ -24,7 +24,7 @@
 <meta name="author" content="Stefano Allesina" />
 
 
-<meta name="date" content="2020-01-06" />
+<meta name="date" content="2020-01-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -158,14 +158,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="3" data-path="multi.html"><a href="multi.html"><i class="fa fa-check"></i><b>3</b> Multispecies GLV: assembly and invasibility</a><ul>
 <li class="chapter" data-level="3.1" data-path="multi.html"><a href="multi.html#assembly"><i class="fa fa-check"></i><b>3.1</b> Assembly</a></li>
-<li class="chapter" data-level="3.2" data-path="multi.html"><a href="multi.html#assembly-and-d-stability"><i class="fa fa-check"></i><b>3.2</b> Assembly and D-stability</a></li>
-<li class="chapter" data-level="3.3" data-path="multi.html"><a href="multi.html#how-many-species-will-coexist"><i class="fa fa-check"></i><b>3.3</b> How many species will coexist?</a><ul>
-<li class="chapter" data-level="3.3.1" data-path="multi.html"><a href="multi.html#a-trivial-case"><i class="fa fa-check"></i><b>3.3.1</b> A trivial case</a></li>
-<li class="chapter" data-level="3.3.2" data-path="multi.html"><a href="multi.html#simulating-final-composition"><i class="fa fa-check"></i><b>3.3.2</b> Simulating final composition</a></li>
+<li class="chapter" data-level="3.2" data-path="multi.html"><a href="multi.html#invasion-in-multispecies-communities"><i class="fa fa-check"></i><b>3.2</b> Invasion in multispecies communities</a></li>
+<li class="chapter" data-level="3.3" data-path="multi.html"><a href="multi.html#assembly-and-d-stability"><i class="fa fa-check"></i><b>3.3</b> Assembly and D-stability</a></li>
+<li class="chapter" data-level="3.4" data-path="multi.html"><a href="multi.html#how-many-species-will-coexist"><i class="fa fa-check"></i><b>3.4</b> How many species will coexist?</a><ul>
+<li class="chapter" data-level="3.4.1" data-path="multi.html"><a href="multi.html#a-trivial-case"><i class="fa fa-check"></i><b>3.4.1</b> A trivial case</a></li>
+<li class="chapter" data-level="3.4.2" data-path="multi.html"><a href="multi.html#simulating-final-composition"><i class="fa fa-check"></i><b>3.4.2</b> Simulating final composition</a></li>
 </ul></li>
-<li class="chapter" data-level="3.4" data-path="multi.html"><a href="multi.html#a-random-zoo"><i class="fa fa-check"></i><b>3.4</b> A random zoo</a></li>
-<li class="chapter" data-level="3.5" data-path="multi.html"><a href="multi.html#assembly-and-saturated-equilibrium"><i class="fa fa-check"></i><b>3.5</b> Assembly and saturated equilibrium</a></li>
-<li class="chapter" data-level="3.6" data-path="multi.html"><a href="multi.html#network-spandrels"><i class="fa fa-check"></i><b>3.6</b> Network spandrels</a></li>
+<li class="chapter" data-level="3.5" data-path="multi.html"><a href="multi.html#a-random-zoo"><i class="fa fa-check"></i><b>3.5</b> A random zoo</a></li>
+<li class="chapter" data-level="3.6" data-path="multi.html"><a href="multi.html#assembly-and-saturated-equilibrium"><i class="fa fa-check"></i><b>3.6</b> Assembly and saturated equilibrium</a></li>
+<li class="chapter" data-level="3.7" data-path="multi.html"><a href="multi.html#network-spandrels"><i class="fa fa-check"></i><b>3.7</b> Network spandrels</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="games.html"><a href="games.html"><i class="fa fa-check"></i><b>4</b> Evolutionary Game Theory</a><ul>
 <li class="chapter" data-level="4.1" data-path="games.html"><a href="games.html#game-theory"><i class="fa fa-check"></i><b>4.1</b> Game theory</a></li>
@@ -217,7 +218,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>We have seen in the previous lecture that a large ecological community will almost invariably be unstable, possibly leading to extinctions. It is therefore natural to ask what happens when either a feasible equilibrium does not exist, or it is unstable. In particular, we want to know how many species can persist.</p>
 <div id="assembly" class="section level2">
 <h2><span class="header-section-number">3.1</span> Assembly</h2>
-<p>We call assembly the process by which a community is constituted by adding species sequentially. Imagine starting with a bare environment, and introducing the first species. If the species can grow in the new environment, it will establish, and if not, it will go extinct. Mathematically, we assume that new species are introduced at very low abundance, so that they do not experience self-limitation due to crowding, and that invasion are spaced in time so that the dynamics can play out before the next invasion happens. For example, consider the first species entering the system, and write the equation for the per-capita growth rate:</p>
+<p>We call <strong>assembly the process by which a community is constituted by adding species sequentially</strong>. Imagine starting with a bare environment, and introducing the first species. If the species can grow in the new environment, it will establish, and if not, it will go extinct. Mathematically, we assume that <strong>new species are introduced at very low abundance</strong>, so that they do not experience self-limitation due to crowding, and that <strong>invasion are spaced in time</strong> so that the dynamics can play out before the next invasion happens. For example, consider the first species entering the system, and write the equation for the per-capita growth rate:</p>
 <p><span class="math display">\[
 \dfrac{1}{x_i(t)}\dfrac{dx_i(t)}{dt} = r_i + A_{ii} x_i(t)
 \]</span>
@@ -229,24 +230,57 @@ If <span class="math inline">\(x_i(0) \ll 1\)</span>, we can set <span class="ma
 <p><span class="math display">\[
 \dfrac{1}{x_j(t)}\dfrac{dx_j(t)}{dt} = r_j + \sum_k A_{jk} x_k(t) \approx r_j + A_{ji}x_i^\star
 \]</span></p>
-<p>Species <span class="math inline">\(j\)</span> can therefore growth when rare if <span class="math inline">\(r_j + A_{ji}x_i^\star &gt; 0\)</span>, i.e., <span class="math inline">\(r_j &gt; -A_{ji}x_i^\star\)</span>. We call this type of inequality and “invasion criterion”.</p>
+<p>Species <span class="math inline">\(j\)</span> can therefore growth when rare if <span class="math inline">\(r_j + A_{ji}x_i^\star &gt; 0\)</span>, i.e., <span class="math inline">\(r_j &gt; -A_{ji}x_i^\star\)</span>. We call this type of inequality and <strong>“invasion criterion”</strong>.</p>
 <p>If the species <span class="math inline">\(j\)</span> can grow when rare, in general, it could a) grow initially, but then go extinct; b) displace species <span class="math inline">\(i\)</span>, sending it to extinction; c) coexist with species <span class="math inline">\(i\)</span>.</p>
 </div>
+<div id="invasion-in-multispecies-communities" class="section level2">
+<h2><span class="header-section-number">3.2</span> Invasion in multispecies communities</h2>
+<p>Now consider a pool of species (e.g., a metacommunity) and an environment (e.g., an island) in which some of the species are present, and coexisting at an equilibrium. We have <span class="math inline">\(n\)</span> species in the pool, and <span class="math inline">\(k\)</span> species in the environment. We want to write conditions for the invasibility of the equilibrium. To this end, we can re-arrange the rows and columns of <span class="math inline">\(A\)</span>, and the elements of <span class="math inline">\(r\)</span> to obtain two blocks: one for the <span class="math inline">\(k\)</span> species already in the community, and one for the <span class="math inline">\(n-k\)</span> potential invaders.</p>
+<p>The fixed point <span class="math inline">\(x^{\star}\)</span> can be written as
+<span class="math display">\[
+x^\star = \left(\begin{array}{l}
+x^{(k)} \\
+0^{(n-k)} 
+\end{array} \right)
+\]</span>
+where <span class="math inline">\(x_k\)</span> contains the density of the coexisting species. Similarly, the growth rates are</p>
+<p><span class="math display">\[
+r = \left(\begin{array}{l}
+r^{(k)} \\
+r^{(n-k)} 
+\end{array} \right)
+\]</span>
+and the interaction matrix</p>
+<p><span class="math display">\[
+A = \begin{pmatrix}
+A^{(k,k)} &amp; A^{(k, n- k)}\\
+A^{(n-k,k)} &amp; A^{(n-k, n- k)}\\
+  \end{pmatrix}
+\]</span>
+where each block <span class="math inline">\(A^{(a,b)}\)</span> contains the effects of the species in set <span class="math inline">\(b\)</span> on the growth of the species in <span class="math inline">\(a\)</span>. For feasibility we need:</p>
+<p><span class="math display">\[
+x^{(k)} = -r^{(k)}\left(A^{(k,k)} \right)^{-1} &gt; 0
+\]</span>
+Now we want to write the condition for the non-invasibility of the resident community by the other species in the metacommunity. For each species in <span class="math inline">\((n-k)\)</span>, we need to have a negative growth rate when invading:</p>
+<p><span class="math display">\[
+r^{(n-k)} + A^{(n-k,k)}x^{(k)} &lt; 0
+\]</span></p>
+<p>an equilibrium <span class="math inline">\(x^\star\)</span> for which a) the <span class="math inline">\(x^{(k)}\)</span> is feasible stable (when considering only the species in <span class="math inline">\(k\)</span>) and b) no other species can invade when rare is called the <strong>feasible, stable, non-invasible solution</strong> or the <strong>saturated equilibrium</strong>.</p>
+</div>
 <div id="assembly-and-d-stability" class="section level2">
-<h2><span class="header-section-number">3.2</span> Assembly and D-stability</h2>
+<h2><span class="header-section-number">3.3</span> Assembly and D-stability</h2>
 <p>We have seen in the previous lecture that whenever there exists a matrix <span class="math inline">\(C\)</span> such that <span class="math inline">\(CA + A^t C\)</span> is negative definite XXX</p>
-<p>TODO: Definition of saturated equilibrium (globally attractive, non invasible by other species)</p>
 </div>
 <div id="how-many-species-will-coexist" class="section level2">
-<h2><span class="header-section-number">3.3</span> How many species will coexist?</h2>
-<p>Here we investigate the simplest case in which <span class="math inline">\(A\)</span> is symmetric and stable (and therefore <span class="math inline">\(D-\)</span>stable) matrix with random coefficients, and <span class="math inline">\(r\)</span> is a vector of growth rates with random coefficients. For simplicity, we take the off-diagonal elements of <span class="math inline">\(A\)</span> and the growth rates from a normal distribution (the same would be found for any distribution symmetric about zero). This case was studied by <span class="citation">Serván et al. (<a href="#ref-servan2018coexistence" role="doc-biblioref">2018</a>)</span>.</p>
+<h2><span class="header-section-number">3.4</span> How many species will coexist?</h2>
+<p>Here we investigate the simplest case in which <span class="math inline">\(A\)</span> is symmetric and stable (and therefore <span class="math inline">\(D-\)</span>stable) matrix with random coefficients, and <span class="math inline">\(r\)</span> is a vector of growth rates with random coefficients. For simplicity, we take the off-diagonal elements of <span class="math inline">\(A\)</span> and the growth rates from a normal distribution centered at zero (the same would be found for any distribution symmetric about zero). This case was studied by <span class="citation">Serván et al. (<a href="#ref-servan2018coexistence" role="doc-biblioref">2018</a>)</span>.</p>
 <p>First, we are going to consider a trivial case, then simulate a more complex one, and finally outline the proof in <span class="citation">Serván et al. (<a href="#ref-servan2018coexistence" role="doc-biblioref">2018</a>)</span>.</p>
 <div id="a-trivial-case" class="section level3">
-<h3><span class="header-section-number">3.3.1</span> A trivial case</h3>
-<p>Suppose that the growth rates are drawn from a normal distribution, and that the matrix <span class="math inline">\(A\)</span> is diagonal and stable (i.e., species do not interact with each other; each species is self regulating). As such, a species will persist if and only if <span class="math inline">\(r_i &gt; 0\)</span>. If we draw the growth rates from any distribution centered at zero, then the probability of having a positive growth rate is <span class="math inline">\(1/2\)</span>. Therefore, the number of coexisting species will follow the binomial distribution.</p>
+<h3><span class="header-section-number">3.4.1</span> A trivial case</h3>
+<p>Suppose that the growth rates are drawn from a normal distribution centered at zero, and that the matrix <span class="math inline">\(A\)</span> is diagonal and stable (i.e., species do not interact with each other; each species is self regulating). As such, a species will persist if and only if <span class="math inline">\(r_i &gt; 0\)</span>. If we draw the growth rates from any distribution centered at zero, then the probability of having a positive growth rate is <span class="math inline">\(1/2\)</span>. Therefore, the number of coexisting species will follow the binomial distribution with parameters <span class="math inline">\(n\)</span> and <span class="math inline">\(1/2\)</span>.</p>
 </div>
 <div id="simulating-final-composition" class="section level3">
-<h3><span class="header-section-number">3.3.2</span> Simulating final composition</h3>
+<h3><span class="header-section-number">3.4.2</span> Simulating final composition</h3>
 <p>Now, let’s simulate cases in which species do interact with each other. First, we load the functions we’ve written before:</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="multi.html#cb25-1"></a><span class="kw">library</span>(tidyverse)</span>
 <span id="cb25-2"><a href="multi.html#cb25-2"></a><span class="kw">library</span>(deSolve)</span>
@@ -347,7 +381,7 @@ If <span class="math inline">\(x_i(0) \ll 1\)</span>, we can set <span class="ma
 </div>
 </div>
 <div id="a-random-zoo" class="section level2">
-<h2><span class="header-section-number">3.4</span> A random zoo</h2>
+<h2><span class="header-section-number">3.5</span> A random zoo</h2>
 <p>In the case above, 5 species persisted. We can ask how many species will coexist in general under this parametrization. A good metaphor is that of the random zoo: take a large zoo, open all the cages, and return after fifty years. How many species will you find?</p>
 <p>To simulate the random zoo, we take random matrices and random growth rates with <span class="math inline">\(n\)</span> species, and tally the number of coexisting species over several simulations:</p>
 <div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="multi.html#cb35-1"></a><span class="kw">set.seed</span>(<span class="dv">1</span>)</span>
@@ -373,11 +407,11 @@ If <span class="math inline">\(x_i(0) \ll 1\)</span>, we can set <span class="ma
 <span id="cb36-4"><a href="multi.html#cb36-4"></a>pl &lt;-<span class="st"> </span>pl <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="dt">data =</span> tbinom, <span class="kw">aes</span>(<span class="dt">x =</span> ncoexisting, <span class="dt">y =</span> expectation))</span>
 <span id="cb36-5"><a href="multi.html#cb36-5"></a><span class="kw">show</span>(pl)</span></code></pre></div>
 <p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/randomzoo-2.png" width="672" style="display: block; margin: auto;" /></p>
-<p>We find again that the number of coexisting species follows the binomial distribution with parameters <span class="math inline">\(n\)</span> and <span class="math inline">\(1/2\)</span> (i.e., exactly the same result found for non interacting species). To prove this fact, let’s begin with showing that the probability of having all species coexisting is <span class="math inline">\(1 / 2^n\)</span>. For this, we need <span class="math inline">\(x^\star = -r A^{-1}\)</span> to be feasible. For each possible <span class="math inline">\(A\)</span> (invertible) and <span class="math inline">\(r\)</span>, we have that the vector <span class="math inline">\(-r A^{-1}\)</span> will display a certain pattern of signs. Proving that the probability that <span class="math inline">\(n\)</span> species coexist is <span class="math inline">\(1 / 2^n\)</span> amounts to proving that all sign patterns are equally probable. To this end, define the matrix <span class="math inline">\(D_k = (-1)^{\delta_{ik}} \delta_{ij}\)</span>. This is a like the identity matrix, but with element <span class="math inline">\(k\)</span> of the diagonal set to <span class="math inline">\(-1\)</span> instead of <span class="math inline">\(1\)</span>. We have that:</p>
+<p>We find again that the number of coexisting species follows the binomial distribution with parameters <span class="math inline">\(n\)</span> and <span class="math inline">\(1/2\)</span> (i.e., exactly the same result found for non interacting species). To prove this fact, let’s begin with showing that the probability of having all species coexisting is <span class="math inline">\(1 / 2^n\)</span>. For this, we need <span class="math inline">\(x^\star = -r A^{-1}\)</span> to be feasible. For each possible <span class="math inline">\(A\)</span> (invertible) and <span class="math inline">\(r\)</span>, we have that the vector <span class="math inline">\(-r A^{-1}\)</span> will display a certain pattern of signs. Proving that the probability that all <span class="math inline">\(n\)</span> species coexist is <span class="math inline">\(1 / 2^n\)</span> amounts to proving that all sign patterns are equally probable. To this end, define the matrix <span class="math inline">\(D_k = (-1)^{\delta_{ik}} \delta_{ij}\)</span>. This is like the identity matrix, but with element <span class="math inline">\(k\)</span> of the diagonal set to <span class="math inline">\(-1\)</span> instead of <span class="math inline">\(1\)</span>. We have that:</p>
 <p><span class="math display">\[
 (D_k A D_k) D_k x^\star = -D_k r
-\]</span>
-That is, by setting the <span class="math inline">\(k^\text{th}\)</span> element of <span class="math inline">\(D_k\)</span> to -1, we flip the sign of the <span class="math inline">\(k^\text{th}\)</span> component of <span class="math inline">\(x^\star\)</span>. For example:</p>
+\]</span></p>
+<p>That is, by setting the <span class="math inline">\(k^\text{th}\)</span> element of <span class="math inline">\(D_k\)</span> to -1, we flip the sign of the <span class="math inline">\(k^\text{th}\)</span> component of <span class="math inline">\(x^\star\)</span>. For example:</p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="multi.html#cb37-1"></a><span class="kw">set.seed</span>(<span class="dv">2</span>)</span>
 <span id="cb37-2"><a href="multi.html#cb37-2"></a>A &lt;-<span class="st"> </span><span class="kw">build_Dstable</span>(<span class="dv">3</span>)</span>
 <span id="cb37-3"><a href="multi.html#cb37-3"></a>r &lt;-<span class="st"> </span><span class="kw">build_randomr</span>(<span class="dv">3</span>)</span>
@@ -393,10 +427,10 @@ That is, by setting the <span class="math inline">\(k^\text{th}\)</span> element
 # [1,] 11.75292
 # [2,] 26.47508
 # [3,] 22.73981</code></pre>
-<p>Because of the symmetry assumption (i.e., we sampled all growth rates and off-diagonal elements from a distribution centered at zero), <span class="math inline">\((D_k A D_k)\)</span> has the same distribution as <span class="math inline">\(A\)</span>, and <span class="math inline">\(D_k r\)</span> the same distribution as <span class="math inline">\(r\)</span>. We can repeat the operation several times, connecting each possible starting point to the feasible solution. Therefore, the probability of all species coexisting amounts to the probability of having chosen the “right” sequence of <span class="math inline">\(D_k\)</span>, which happens with probability <span class="math inline">\(1 / 2^n\)</span>. Notice that the same proof holds when the coefficients of <span class="math inline">\(A\)</span> are sampled in pairs from a bivariate distribution (rather than having symmetric matrices), as long as the distribution is centered at zero, and the matrix is <span class="math inline">\(D-\)</span>stable (<span class="citation">Serván et al. (<a href="#ref-servan2018coexistence" role="doc-biblioref">2018</a>)</span>).</p>
+<p>Because of the symmetry assumption (i.e., we sampled all growth rates and off-diagonal elements from a distribution centered at zero), <span class="math inline">\((D_k A D_k)\)</span> has the same distribution as <span class="math inline">\(A\)</span>, and <span class="math inline">\(D_k r\)</span> the same distribution as <span class="math inline">\(r\)</span>. We can repeat the operation several times, connecting each possible starting point to the feasible solution. Therefore, the probability of all species coexisting amounts to the probability of having chosen the “right” sequence of <span class="math inline">\(D_k\)</span>, which happens with probability <span class="math inline">\(1 / 2^n\)</span>. Notice that the same proof holds when the coefficients of <span class="math inline">\(A\)</span> are sampled in pairs from a bivariate distribution (rather than having symmetric matrices), as long as the distribution is centered at zero, and the matrix is <span class="math inline">\(D-\)</span>stable (<span class="citation">Serván et al. (<a href="#ref-servan2018coexistence" role="doc-biblioref">2018</a>)</span>). Using the same argument, one can prove that, under this parametrization, the probability of observing <span class="math inline">\(k\)</span> species coexisting and <span class="math inline">\(n -k\)</span> not being able to invade is exactly <span class="math inline">\(\binom{n}{k} \frac{1}{2^n}\)</span> (<span class="citation">Serván et al. (<a href="#ref-servan2018coexistence" role="doc-biblioref">2018</a>)</span>).</p>
 </div>
 <div id="assembly-and-saturated-equilibrium" class="section level2">
-<h2><span class="header-section-number">3.5</span> Assembly and saturated equilibrium</h2>
+<h2><span class="header-section-number">3.6</span> Assembly and saturated equilibrium</h2>
 <p>Now let’s make it more complicated: we assemble an ecological community from the ground up. At each step, we introduce a species at low abundance, starting from an empty community. We then compute the new equilibrium, completing a step of the assembly:</p>
 <div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="multi.html#cb39-1"></a>assembly_one_step &lt;-<span class="st"> </span><span class="cf">function</span>(x, r, A){</span>
 <span id="cb39-2"><a href="multi.html#cb39-2"></a>  n &lt;-<span class="st"> </span><span class="kw">nrow</span>(A)</span>
@@ -468,18 +502,18 @@ That is, by setting the <span class="math inline">\(k^\text{th}\)</span> element
 # 4        4        1 4          
 # 5        5        2 4-10       
 # 6        6        2 4-10</code></pre>
-<p>As you can see, despite taking a different assembly history, we reach the same final composition. In fact, this is exactly what we expect:</p>
+<p>As you can see, despite taking a different assembly history, we reach the same final composition. In fact, this is exactly what we would expect if we were to throw all species in the environment at the same time:</p>
 <div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="multi.html#cb44-1"></a><span class="kw">get_final_composition</span>(A, r)</span>
 <span id="cb44-2"><a href="multi.html#cb44-2"></a>x</span></code></pre></div>
 <pre><code>#  [1] 1.7588344 2.5440743 0.0000000 0.7860178 1.8730535 2.5502055 0.6961259
 #  [8] 1.6956878 0.0000000 0.0000000
 #  [1] 1.7588344 2.5440743 0.0000000 0.7860178 1.8730535 2.5502055 0.6961259
 #  [8] 1.6956878 0.0000000 0.0000000</code></pre>
-<p>As such, given enough time, any assembly history for a symmetric, <span class="math inline">\(D-\)</span>stable matrix <span class="math inline">\(A\)</span> will eventually reach the final composition represented by the saturated equilibrium. CHECK WITH CARLOS</p>
+<p>As such, given enough time, any assembly history for a symmetric, <span class="math inline">\(D-\)</span>stable matrix <span class="math inline">\(A\)</span> will eventually reach the final composition represented by the saturated equilibrium (Serván, unpublished).</p>
 <p>Interestingly, this is not the case when the matrix is not symmetric. <span class="citation">Serván et al. (<a href="#ref-servan2018coexistence" role="doc-biblioref">2018</a>)</span> conjectured however that the probability of finding a system whose final composition cannot be assembled one species at a time decreases rapidly with the size of the pool.</p>
 </div>
 <div id="network-spandrels" class="section level2">
-<h2><span class="header-section-number">3.6</span> Network spandrels</h2>
+<h2><span class="header-section-number">3.7</span> Network spandrels</h2>
 <p>What is the network structure of the assembled community vs. that of the initial pool? Can we detect a signature of the forces acting on the community such that some species can persist, while other go extinct? To answer these questions, we start by considering a larger pool of species:</p>
 <div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="multi.html#cb46-1"></a><span class="kw">set.seed</span>(<span class="dv">1</span>)</span>
 <span id="cb46-2"><a href="multi.html#cb46-2"></a><span class="co"># initial pool</span></span>
@@ -491,18 +525,18 @@ That is, by setting the <span class="math inline">\(k^\text{th}\)</span> element
 <span id="cb46-8"><a href="multi.html#cb46-8"></a>r_pruned &lt;-<span class="st"> </span>r[xstar <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>]</span></code></pre></div>
 <p>Are the properties of matrix <span class="math inline">\(A\)</span> different from those of the pruned version <span class="math inline">\(\tilde{A}\)</span>? We probe this in two ways: first, we build a graph with the strongest interactions, and plot it.</p>
 <div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="multi.html#cb47-1"></a><span class="kw">library</span>(igraph)</span>
-<span id="cb47-2"><a href="multi.html#cb47-2"></a>plot_graph_strong &lt;-<span class="st"> </span><span class="cf">function</span>(B, <span class="dt">quantile =</span> <span class="fl">0.5</span>){</span>
-<span id="cb47-3"><a href="multi.html#cb47-3"></a>  Bstrong &lt;-<span class="st"> </span>B</span>
+<span id="cb47-2"><a href="multi.html#cb47-2"></a>plot_graph_strong &lt;-<span class="st"> </span><span class="cf">function</span>(B, <span class="dt">quantile =</span> <span class="fl">0.75</span>){</span>
+<span id="cb47-3"><a href="multi.html#cb47-3"></a>  Bstrong &lt;-<span class="st"> </span><span class="kw">abs</span>(B)</span>
 <span id="cb47-4"><a href="multi.html#cb47-4"></a>  <span class="kw">diag</span>(Bstrong) &lt;-<span class="st"> </span><span class="dv">0</span></span>
-<span id="cb47-5"><a href="multi.html#cb47-5"></a>  Bstrong[<span class="kw">abs</span>(Bstrong) <span class="op">&lt;</span><span class="st"> </span><span class="kw">quantile</span>(<span class="kw">abs</span>(Bstrong), quantile)] &lt;-<span class="st"> </span><span class="dv">0</span></span>
-<span id="cb47-6"><a href="multi.html#cb47-6"></a>  gr &lt;-<span class="st"> </span><span class="kw">graph_from_adjacency_matrix</span>(Bstrong, <span class="dt">mode =</span> <span class="st">&quot;undirected&quot;</span>)</span>
+<span id="cb47-5"><a href="multi.html#cb47-5"></a>  Bstrong[Bstrong <span class="op">&lt;</span><span class="st"> </span><span class="kw">quantile</span>(Bstrong, quantile)] &lt;-<span class="st"> </span><span class="dv">0</span></span>
+<span id="cb47-6"><a href="multi.html#cb47-6"></a>  gr &lt;-<span class="st"> </span><span class="kw">graph_from_adjacency_matrix</span>((Bstrong <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">*</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">mode =</span> <span class="st">&quot;undirected&quot;</span>)</span>
 <span id="cb47-7"><a href="multi.html#cb47-7"></a>  <span class="kw">plot</span>(gr, <span class="dt">vertex.size=</span><span class="dv">10</span>, <span class="dt">vertex.label=</span><span class="ot">NA</span>, <span class="dt">layout=</span>layout_with_fr)</span>
 <span id="cb47-8"><a href="multi.html#cb47-8"></a>}</span>
 <span id="cb47-9"><a href="multi.html#cb47-9"></a></span>
 <span id="cb47-10"><a href="multi.html#cb47-10"></a><span class="kw">plot_graph_strong</span>(A)</span></code></pre></div>
-<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/plotnetworksrz-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="multi.html#cb48-1"></a><span class="kw">plot_graph_strong</span>(A_pruned)</span></code></pre></div>
-<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-3-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/plotnetworksrz-2.png" width="672" style="display: block; margin: auto;" /></p>
 <p>There seems to be no special structure. A more powerful way to show the same is to plot the eigenvalues of <span class="math inline">\(A\)</span> and <span class="math inline">\(\tilde{A}\)</span>. For a symmetric matrix with off-diagonal elements centered at zero, the eigenvalues should follow Wigner’s semicircle law:</p>
 <div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="multi.html#cb49-1"></a>plot_eigen &lt;-<span class="st"> </span><span class="cf">function</span>(B){</span>
 <span id="cb49-2"><a href="multi.html#cb49-2"></a>  evals &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">lambda =</span> <span class="kw">eigen</span>(B, <span class="dt">only.values =</span> <span class="ot">TRUE</span>, <span class="dt">symmetric =</span> <span class="ot">TRUE</span>)<span class="op">$</span>values)</span>
@@ -511,21 +545,63 @@ That is, by setting the <span class="math inline">\(k^\text{th}\)</span> element
 <span id="cb49-5"><a href="multi.html#cb49-5"></a><span class="st">    </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="kw">as.integer</span>(<span class="kw">nrow</span>(evals) <span class="op">/</span><span class="st"> </span><span class="dv">10</span>), <span class="dt">colour =</span> <span class="st">&quot;black&quot;</span>)</span>
 <span id="cb49-6"><a href="multi.html#cb49-6"></a>}</span>
 <span id="cb49-7"><a href="multi.html#cb49-7"></a><span class="kw">plot_eigen</span>(A)</span></code></pre></div>
-<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/ploteigenrz-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="multi.html#cb50-1"></a><span class="kw">plot_eigen</span>(A_pruned)</span></code></pre></div>
-<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/unnamed-chunk-4-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/ploteigenrz-2.png" width="672" style="display: block; margin: auto;" /></p>
 <p>As such, the matrix of interactions before/after dynamics seem to have the same properties. However, as shown in <span class="citation">Serván et al. (<a href="#ref-servan2018coexistence" role="doc-biblioref">2018</a>)</span>, the distribution of the growth rates changes in a non-trivial way:</p>
 <div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="multi.html#cb51-1"></a>toplot &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">r =</span> r, <span class="dt">type =</span> <span class="st">&quot;before&quot;</span>)</span>
 <span id="cb51-2"><a href="multi.html#cb51-2"></a>toplot &lt;-<span class="st"> </span><span class="kw">rbind</span>(toplot, <span class="kw">data.frame</span>(<span class="dt">r =</span> r_pruned, <span class="dt">type =</span> <span class="st">&quot;after&quot;</span>))</span>
 <span id="cb51-3"><a href="multi.html#cb51-3"></a><span class="kw">ggplot</span>(toplot) <span class="op">+</span><span class="st"> </span><span class="kw">aes</span>(<span class="dt">x =</span> r, <span class="dt">fill =</span> type) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>)</span></code></pre></div>
 <p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/plotrbeforeafter-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>But what if species were to be related to each other? For example, suppose <span class="math inline">\(r_i = 1\)</span> for all species, and build a matrix in which the interactions of species <span class="math inline">\(i + 1\)</span> are obtained by mutating slightly those of species <span class="math inline">\(i\)</span>:</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="multi.html#cb52-1"></a>n &lt;-<span class="st"> </span><span class="dv">200</span></span>
+<span id="cb52-2"><a href="multi.html#cb52-2"></a>r &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">200</span>)</span>
+<span id="cb52-3"><a href="multi.html#cb52-3"></a>A &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, n, n)</span>
+<span id="cb52-4"><a href="multi.html#cb52-4"></a><span class="co"># set first species</span></span>
+<span id="cb52-5"><a href="multi.html#cb52-5"></a>A[<span class="dv">1</span>, <span class="dv">1</span>] &lt;-<span class="st"> </span><span class="dv">-1</span></span>
+<span id="cb52-6"><a href="multi.html#cb52-6"></a><span class="co"># now each species is obtained by mutating the previous one</span></span>
+<span id="cb52-7"><a href="multi.html#cb52-7"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>n){</span>
+<span id="cb52-8"><a href="multi.html#cb52-8"></a>  ai &lt;-<span class="st"> </span>A[i <span class="dv">-1</span>,] <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.05</span> <span class="op">*</span><span class="st"> </span><span class="kw">runif</span>(n))</span>
+<span id="cb52-9"><a href="multi.html#cb52-9"></a>  A[i, ] &lt;-<span class="st"> </span>A[i, ] <span class="op">+</span><span class="st"> </span>ai</span>
+<span id="cb52-10"><a href="multi.html#cb52-10"></a>  A[, i] &lt;-<span class="st"> </span>A[, i] <span class="op">+</span><span class="st"> </span>ai</span>
+<span id="cb52-11"><a href="multi.html#cb52-11"></a>  A[i, i] &lt;-<span class="st"> </span><span class="dv">-1</span></span>
+<span id="cb52-12"><a href="multi.html#cb52-12"></a>}</span>
+<span id="cb52-13"><a href="multi.html#cb52-13"></a><span class="co"># make D-stable</span></span>
+<span id="cb52-14"><a href="multi.html#cb52-14"></a>l1 &lt;-<span class="st"> </span><span class="kw">max</span>(<span class="kw">eigen</span>(A, <span class="dt">only.values =</span> <span class="ot">TRUE</span>, <span class="dt">symmetric =</span> <span class="ot">TRUE</span>)<span class="op">$</span>values)</span>
+<span id="cb52-15"><a href="multi.html#cb52-15"></a><span class="cf">if</span> (l1 <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="kw">diag</span>(A) &lt;-<span class="st"> </span><span class="kw">diag</span>(A) <span class="op">-</span><span class="st"> </span>l1 <span class="op">*</span><span class="st"> </span><span class="fl">1.01</span></span></code></pre></div>
+<p>Now each species is similar to the previous one:</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="multi.html#cb53-1"></a><span class="kw">image</span>(A[<span class="dv">1</span><span class="op">:</span>n, n<span class="op">:</span><span class="dv">1</span>])</span></code></pre></div>
+<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/similarimage-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Perform the pruning, and plot networks and eigenvalues:</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="multi.html#cb54-1"></a>xstar &lt;-<span class="st"> </span><span class="kw">get_final_composition</span>(A, r)</span>
+<span id="cb54-2"><a href="multi.html#cb54-2"></a>A_pruned &lt;-<span class="st"> </span>A[xstar <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>, xstar <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>]</span>
+<span id="cb54-3"><a href="multi.html#cb54-3"></a>r_pruned &lt;-<span class="st"> </span>r[xstar <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>]</span>
+<span id="cb54-4"><a href="multi.html#cb54-4"></a></span>
+<span id="cb54-5"><a href="multi.html#cb54-5"></a><span class="kw">plot_graph_strong</span>(A)</span></code></pre></div>
+<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/structruredspandrels-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="multi.html#cb55-1"></a><span class="kw">plot_graph_strong</span>(A_pruned)</span></code></pre></div>
+<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/structruredspandrels-2.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="multi.html#cb56-1"></a><span class="kw">plot_eigen</span>(A)</span></code></pre></div>
+<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/structruredspandrels-3.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="multi.html#cb57-1"></a><span class="kw">plot_eigen</span>(A_pruned)</span></code></pre></div>
+<p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/structruredspandrels-4.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Meaning that if our matrix <span class="math inline">\(A\)</span> is structured, we will recover a structured matrix after pruning, while if <span class="math inline">\(A\)</span> is unstructured, we will recover an unstructured matrix. <span class="citation">Maynard, Serván, and Allesina (<a href="#ref-maynard2018network" role="doc-biblioref">2018</a>)</span> showed that a well-defined network structure could be a “network spandrel” (cfr. <span class="citation">Gould and Lewontin (<a href="#ref-gould1979spandrels" role="doc-biblioref">1979</a>)</span> and <span class="citation">Solé and Valverde (<a href="#ref-sole2006network" role="doc-biblioref">2006</a>)</span>) arising from the way new species are introduced, rather than a “signature of stability”.</p>
 
 </div>
 </div>
 <h3>References</h3>
 <div id="refs" class="references">
+<div id="ref-gould1979spandrels">
+<p>Gould, Stephen Jay, and Richard C Lewontin. 1979. “The Spandrels of San Marco and the Panglossian Paradigm: A Critique of the Adaptationist Programme.” <em>Proceedings of the Royal Society of London. Series B. Biological Sciences</em> 205 (1161): 581–98.</p>
+</div>
+<div id="ref-maynard2018network">
+<p>Maynard, Daniel S, Carlos A Serván, and Stefano Allesina. 2018. “Network Spandrels Reflect Ecological Assembly.” <em>Ecology Letters</em> 21 (3): 324–34.</p>
+</div>
 <div id="ref-servan2018coexistence">
 <p>Serván, Carlos A, José A Capitán, Jacopo Grilli, Kent E Morrison, and Stefano Allesina. 2018. “Coexistence of Many Species in Random Ecosystems.” <em>Nature Ecology &amp; Evolution</em> 2 (8): 1237.</p>
+</div>
+<div id="ref-sole2006network">
+<p>Solé, Ricard V, and Sergi Valverde. 2006. “Are Network Motifs the Spandrels of Cellular Complexity?” <em>Trends in Ecology &amp; Evolution</em> 21 (8): 419–22.</p>
 </div>
 </div>
             </section>
