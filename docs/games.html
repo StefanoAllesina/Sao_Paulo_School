@@ -224,7 +224,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>We start by anayzing games in which two players face each other, each choosing one strategy out of a set. Importantly, we consider static games in which each player makes their decision without having knowledge of the decision of the other player. Player 1 chooses a “pure” strategy <span class="math inline">\(s_1\)</span> from the set of pure strategies <span class="math inline">\(S_1\)</span>, while player 2 chooses <span class="math inline">\(s_2 \in S_2\)</span>. We call <span class="math inline">\(\pi_k (s_1, s_2)\)</span> the <strong>payoff</strong> for player <span class="math inline">\(k\)</span> when player 1 chooses <span class="math inline">\(s_1\)</span> and player 2 <span class="math inline">\(s_2\)</span>. In a matrix game, we can arrange the payoffs for each player in a matrix. We call <span class="math inline">\(A\)</span> the matrix of payoffs for player one and <span class="math inline">\(B\)</span> that for player two.</p>
 <div id="example-the-prisoners-dilemma" class="section level3">
 <h3><span class="header-section-number">4.2.1</span> Example: the prisoner’s dilemma</h3>
-<p>Two prisoners alleggedly committed a crime, but the police do not have enough evidence to convict them. They therefore approach each player separately, proposing a deal: if the prisoner confesses (“defect” the other prisoner), then their sentence will be reduced. In particular: i) if both confess (both “defect”), they are sentenced to 4 years in prison; ii) if one confesses (“defect”) and the other keeps quiet (“cooperate” with the other prisoner), then the one who has confessed is let free, and the other sentenced to 5 years; iii) if both keep quiet (“cooperate”), then they are both sentenced to two years of detention for some accessory crime.</p>
+<p>Two prisoners alleggedly committed a crime, but the police do not have enough evidence to convict them. They therefore approach each prisoner separately, proposing a deal: if the prisoner confesses (“defect” the other prisoner), then their sentence will be reduced. In particular: i) if both confess (both “defect”), they are sentenced to 4 years in prison; ii) if one confesses (“defect”) and the other keeps quiet (“cooperate” with the other prisoner), then the one who has confessed is let free, and the other sentenced to 5 years; iii) if both keep quiet (“cooperate”), then they are both sentenced to two years of detention for some accessory crime.</p>
 <p>In matrix form, we have (rows for pl 1 strategy C/D; cols for pl 2 strategy):</p>
 <p><span class="math display">\[
 A = \begin{pmatrix}
@@ -276,11 +276,11 @@ meaning that <span class="math inline">\(x\)</span> plays against itself not wor
 </div>
 <div id="replicator-dynamics" class="section level2">
 <h2><span class="header-section-number">4.6</span> Replicator dynamics</h2>
-<p>The replicator equation can be written as:</p>
+<p>The replicator equation for this type of games can be written as:</p>
 <p><span class="math display">\[
 \dfrac{d x}{dt} = D(x)(A x - x^t A x)
 \]</span></p>
-<p>Where <span class="math inline">\(f = A x\)</span> is a vector reporting the fitness of each population at time <span class="math inline">\(t\)</span>, and <span class="math inline">\(\bar{f} = x^t A t\)</span> is the average fitness at time <span class="math inline">\(t\)</span>. As such, one can write the replicator equation more compactly as:</p>
+<p>If we define <span class="math inline">\(f = A x\)</span> as a vector reporting the “fitness”" of each population at time <span class="math inline">\(t\)</span>, and <span class="math inline">\(\bar{f} = x^t A t\)</span> as the average fitness at time <span class="math inline">\(t\)</span> we can write the replicator equation more compactly as:</p>
 <p><span class="math display">\[
 \dfrac{d x_i}{dt} = x_i (f_i - \bar{f})
 \]</span></p>
@@ -395,7 +395,6 @@ A = \begin{pmatrix}
 <span id="cb62-5"><a href="games.html#cb62-5"></a>x0 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.1</span>, <span class="dv">3</span>, <span class="dv">1</span>)</span>
 <span id="cb62-6"><a href="games.html#cb62-6"></a>glvex &lt;-<span class="st"> </span><span class="kw">integrate_GLV</span>(r, A, x0)</span></code></pre></div>
 <p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/exampleglvtore1-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>And now build an equivalent RE system. Form a matrix <span class="math inline">\(B\)</span> with the matrix <span class="math inline">\(A\)</span> in the first <span class="math inline">\(n\)</span> rows and columns, and the vector <span class="math inline">\(r\)</span> as the <span class="math inline">\((n+1)\)</span>th column:</p>
 <div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="games.html#cb63-1"></a>B &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, <span class="dv">4</span>, <span class="dv">4</span>)</span>
 <span id="cb63-2"><a href="games.html#cb63-2"></a>B[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>] &lt;-<span class="st"> </span>A</span>
 <span id="cb63-3"><a href="games.html#cb63-3"></a>B[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="dv">4</span>] &lt;-<span class="st"> </span>r</span>
@@ -513,7 +512,7 @@ meaning that if a feasible equilibrium <span class="math inline">\(x^\star\)</sp
 <p>In the rock-paper-scissor example above, species cycled neutrally around the unique equilibrium point. To show that this is in fact the behavior of this type of RE, we write a Lyapunov function. By finding a constant of motion we can show that the species will follow closed orbits.</p>
 <p>Suppose <span class="math inline">\(x_{i}^\star &gt; 0\)</span> is the equilibrium for the system. We write:</p>
 <p><span class="math display">\[
-V(x) = -\sum_i x_i^\ast \log \frac{x_i}{x_i^\ast} .
+V(x) = -\sum_i x_i^\star \log \frac{x_i}{x_i^\star} .
 \]</span></p>
 <p>Because of Gibbs’ inequality, <span class="math inline">\(V(x) \geq 0\)</span> for any <span class="math inline">\(x\)</span>, and is equal to zero only if <span class="math inline">\(x = x^\star\)</span>. Note also that at equilibrium <span class="math inline">\(2 \sum_j H_{ij} x_j^\star = 1\)</span>. We write:</p>
 <p><span class="math display">\[
@@ -532,7 +531,7 @@ V(x) = -\sum_i x_i^\ast \log \frac{x_i}{x_i^\ast} .
   &amp;= 0 
 \end{aligned}
 \]</span></p>
-<p>We have found a constant of motion, meaning that the system will follow closed orbits. Hence, unless we start the system precisely at <span class="math inline">\(x^\ast\)</span>, the abundances will cycle neutrally around the equilibrium.</p>
+<p>We have found a constant of motion, meaning that the system will follow closed orbits. Hence, unless we start the system precisely at <span class="math inline">\(x^\star\)</span>, the abundances will cycle neutrally around the equilibrium.</p>
 <p>Let’s try with a larger system:</p>
 <div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="games.html#cb72-1"></a>n &lt;-<span class="st"> </span><span class="dv">5</span></span>
 <span id="cb72-2"><a href="games.html#cb72-2"></a><span class="co"># search for random H yielding all species coexisting</span></span>

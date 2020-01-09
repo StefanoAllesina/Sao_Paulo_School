@@ -1491,7 +1491,7 @@ We start by anayzing games in which two players face each other, each choosing o
 \hypertarget{example-the-prisoners-dilemma}{%
 \subsection{Example: the prisoner's dilemma}\label{example-the-prisoners-dilemma}}
 
-Two prisoners alleggedly committed a crime, but the police do not have enough evidence to convict them. They therefore approach each player separately, proposing a deal: if the prisoner confesses (``defect'' the other prisoner), then their sentence will be reduced. In particular: i) if both confess (both ``defect''), they are sentenced to 4 years in prison; ii) if one confesses (``defect'') and the other keeps quiet (``cooperate'' with the other prisoner), then the one who has confessed is let free, and the other sentenced to 5 years; iii) if both keep quiet (``cooperate''), then they are both sentenced to two years of detention for some accessory crime.
+Two prisoners alleggedly committed a crime, but the police do not have enough evidence to convict them. They therefore approach each prisoner separately, proposing a deal: if the prisoner confesses (``defect'' the other prisoner), then their sentence will be reduced. In particular: i) if both confess (both ``defect''), they are sentenced to 4 years in prison; ii) if one confesses (``defect'') and the other keeps quiet (``cooperate'' with the other prisoner), then the one who has confessed is let free, and the other sentenced to 5 years; iii) if both keep quiet (``cooperate''), then they are both sentenced to two years of detention for some accessory crime.
 
 In matrix form, we have (rows for pl 1 strategy C/D; cols for pl 2 strategy):
 
@@ -1558,13 +1558,13 @@ We next connect NE and ESS with dynamical systems.
 \hypertarget{replicator-dynamics}{%
 \section{Replicator dynamics}\label{replicator-dynamics}}
 
-The replicator equation can be written as:
+The replicator equation for this type of games can be written as:
 
 \[
 \dfrac{d x}{dt} = D(x)(A x - x^t A x)
 \]
 
-Where \(f = A x\) is a vector reporting the fitness of each population at time \(t\), and \(\bar{f} = x^t A t\) is the average fitness at time \(t\). As such, one can write the replicator equation more compactly as:
+If we define \(f = A x\) as a vector reporting the ``fitness''" of each population at time \(t\), and \(\bar{f} = x^t A t\) as the average fitness at time \(t\) we can write the replicator equation more compactly as:
 
 \[
 \dfrac{d x_i}{dt} = x_i (f_i - \bar{f})
@@ -1722,8 +1722,6 @@ And integrate the simple system:
 \end{Shaded}
 
 \begin{center}\includegraphics{A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-latex/exampleglvtore1-1} \end{center}
-
-And now build an equivalent RE system. Form a matrix \(B\) with the matrix \(A\) in the first \(n\) rows and columns, and the vector \(r\) as the \((n+1)\)th column:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1900,7 +1898,7 @@ In the rock-paper-scissor example above, species cycled neutrally around the uni
 Suppose \(x_{i}^\star > 0\) is the equilibrium for the system. We write:
 
 \[
-V(x) = -\sum_i x_i^\ast \log \frac{x_i}{x_i^\ast} .
+V(x) = -\sum_i x_i^\star \log \frac{x_i}{x_i^\star} .
 \]
 
 Because of Gibbs' inequality, \(V(x) \geq 0\) for any \(x\), and is equal to zero only if \(x = x^\star\). Note also that at equilibrium \(2 \sum_j H_{ij} x_j^\star = 1\). We write:
@@ -1922,7 +1920,7 @@ Because of Gibbs' inequality, \(V(x) \geq 0\) for any \(x\), and is equal to zer
 \end{aligned}
 \]
 
-We have found a constant of motion, meaning that the system will follow closed orbits. Hence, unless we start the system precisely at \(x^\ast\), the abundances will cycle neutrally around the equilibrium.
+We have found a constant of motion, meaning that the system will follow closed orbits. Hence, unless we start the system precisely at \(x^\star\), the abundances will cycle neutrally around the equilibrium.
 
 Let's try with a larger system:
 
