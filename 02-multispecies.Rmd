@@ -35,22 +35,22 @@ $$
 \dfrac{1}{x_j(t)}\dfrac{dx_j(t)}{dt} = r_j + \sum_k A_{jk} x_k(t) \approx r_j + A_{ji}x_i^\star
 $$
 
-Species $j$ can therefore growth when rare if $r_j + A_{ji}x_i^\star > 0$, i.e., $r_j > -A_{ji}x_i^\star$. We call this type of inequality and **"invasion criterion"**.
+Species $j$ can therefore growth when rare if $r_j + A_{ji}x_i^\star > 0$, i.e., $r_j > -A_{ji}x_i^\star$. We call this type of inequality an **"invasion criterion"**.
 
-If the species $j$ can grow when rare, in general, it could a) grow initially, but then go extinct; b) displace species $i$, sending it to extinction; c) coexist with species $i$. 
+If the species $j$ can grow when rare, in general, it could a) grow initially, but then go extinct; b) displace species $i$, sending it to extinction; c) coexist with species $i$. By reiterating invasions with different species, we can assemble a large ecological community.
 
 ## Invasion in multispecies communities
 
 Now consider a pool of species (e.g., a metacommunity) and an environment (e.g., an island) in which some of the species are present, and coexisting at an equilibrium. We have $n$ species in the pool, and $k$ species in the environment. We want to write conditions for the invasibility of the equilibrium. To this end, we can re-arrange the rows and columns of $A$, and the elements of $r$ to obtain two blocks: one for the $k$ species already in the community, and one for the $n-k$ potential invaders.
 
-The fixed point $x^{\star}$ can be written as 
+The fixed point $\bar{x}$ can be written as 
 $$
-x^\star = \left(\begin{array}{l}
+\bar{x} = \left(\begin{array}{l}
 x^{(k)} \\
 0^{(n-k)} 
 \end{array} \right)
 $$
-where $x_k$ contains the density of the coexisting species. Similarly, the growth rates are
+where $x^{(k)}$ contains the density of the coexisting species. Similarly, the growth rates are
 
 $$
 r = \left(\begin{array}{l}
@@ -77,16 +77,33 @@ $$
 r^{(n-k)} + A^{(n-k,k)}x^{(k)} < 0
 $$
 
-an equilibrium $x^\star$ for which a) the $x^{(k)}$ is feasible stable (when considering only the species in $k$) and b) no other species can invade when rare is called the **feasible, stable, non-invasible solution** or the **saturated equilibrium**.
+an equilibrium $\bar{x}$ for which a) the $x^{(k)}$ is feasible and stable (when considering only the species in $k$) and b) no other species can invade when rare is called the **feasible, stable, non-invasible solution** or the **saturated equilibrium**.
 
-## Assembly and D-stability
+## Lyapunov stability and saturated equilibria
 
-We have seen in the previous lecture that whenever there exists a matrix $C$ such that $CA + A^t C$ is negative definite XXX
+We have seen in the previous lecture that whenever there exists a matrix $C$ such that $CA + A^t C$ is negative definite and we have a feasible equilibrium $x^\star$ then the equilibrium is globally stable. Now we consider the case in which a feasible equilibrium does not exist. However, we can prove that a **saturated equilibrium** exists and is unique: we have an equilibrium $\bar{x}$ in which some components are positive and some are zero such that $k$ species coexist at a globally stable equilibrium, and the remaining $(n-k)$ species cannot invade it. 
 
+Following @hofbauer1998evolutionary (section 15.3), we write:
+
+$$
+V(x) = -\sum_i c_i (\bar{x}_i \log x_i - x_i)
+$$
+yielding:
+
+$$
+\begin{aligned}
+\dfrac{V(x)}{dt} &= -\sum_i c_i \left(\bar{x}_i \frac{d \log x_i}{dt} - \frac{d x_i}{dt} \right) \\
+&= -\sum_i c_i \left( \bar{x}_i - x_i \right)  \left( r_i + \sum_j A_{ij} x_j \right) \\
+&= -\sum_i c_i \left( \bar{x}_i - x_i \right)  \left( r_i + \sum_j A_{ij} (x_j - \bar{x}_j) +  \sum_j A_{ij} \bar{x}_j \right) \\
+&= \sum_{i,j} \left( \bar{x}_i - x_i \right) c_i A_{ij} \left( \bar{x}_j - x_j \right) - \sum_i c_i \left( \bar{x}_i - x_i \right) \left(r_i + \sum_j A_{ij} \bar{x}_j \right)
+\end{aligned}
+$$
+
+The first term is negative for all $x \neq \bar{x}$, and is zero at the saturated equilibrium point. The second term is zero for all $\bar{x}_i > 0$: $r_i + \sum_j A_{ij} \bar{x}_j = 0$, given that $\bar{x}$ is an equilibrium for the species at positive density; for the remaining species (for which $\bar{x}_i = 0$), this amounts to the invasion criterion above, and must therefore be negative. As such $V(x)$ is a Lyapunov function for the system, assuming negative values everywhere but at $\bar{x}$.
 
 ## How many species will coexist?
 
-Here we investigate the simplest case in which $A$ is symmetric and stable (and therefore $D-$stable) matrix with random coefficients, and $r$ is a vector of growth rates with random coefficients. For simplicity, we take the off-diagonal elements of $A$ and the growth rates from a normal distribution centered at zero (the same would be found for any distribution symmetric about zero). This case was studied by @servan2018coexistence.
+Here we investigate the simplest case in which $A$ is symmetric and stable (and therefore Lyapunov Diagonally stable) matrix with random coefficients, and $r$ is a vector of growth rates with random coefficients. For simplicity, we take the off-diagonal elements of $A$ and the growth rates from a normal distribution centered at zero (the same would be found for any distribution symmetric about zero). This case was studied by @servan2018coexistence.
 
 First, we are going to consider a trivial case, then simulate a more complex one, and finally outline the proof in @servan2018coexistence.
 
@@ -137,8 +154,8 @@ integrate_GLV <- function(r, A, x0, maxtime = 100, steptime = 0.5){
 And then write functions to give us a (barely) stable, symmetric matrix $A$, and random growth rates:
 
 ```{r builddstable}
-# function to build symmetric, D-stable matrix
-build_Dstable <- function(n){
+# function to build symmetric, Lyapunov Diagonally-stable matrix
+build_LDstable <- function(n){
   A <- matrix(0, n, n)
   A[upper.tri(A)] <- rnorm(n * (n - 1) / 2)
   # make symmetric
@@ -163,7 +180,7 @@ Now, we build a random system with seven species, and integrate the dynamics:
 ```{r rndzooex1}
 set.seed(5) # for reproducibility
 n <- 7
-A <- build_Dstable(n)
+A <- build_LDstable(n)
 r <- build_randomr(n)
 x0 <- runif(n)
 out <- integrate_GLV(r, A, x0)
@@ -183,7 +200,7 @@ out %>%
   mutate(density = ifelse(density < 10^-6, 0, density))
 ```
 
-As you can see, the system still goes to the same equilibrium, with 3 and 5 extinct. Turns out, for this type of system, one does not even need to integrate dynamics: the Lemke–Howson algorithm can be adapted to solve the problem efficiently. I have coded up the algorithm already, and you can load the function `get_final_composition(A, r)` by typing:
+As you can see, the system still goes to the same equilibrium, with 3 and 5 extinct. Turns out, for this type of system, one does not even need to integrate dynamics: the Lemke–Howson algorithm can be adapted to solve the problem efficiently [@servan2018coexistence]. I have coded up the algorithm already, and you can load the function `get_final_composition(A, r)` by typing:
 
 ```{r rndzooex3}
 source("https://raw.githubusercontent.com/StefanoAllesina/Sao_Paulo_School/master/code/L-H.R")
@@ -203,7 +220,7 @@ nsim <- 2000
 results <- data.frame(simulation = 1:nsim, ncoexisting = rep(NA, nsim))
 for (i in 1:nsim){
   # build the matrix and vector
-  A <- build_Dstable(n)
+  A <- build_LDstable(n)
   r <- build_randomr(n)
   xstar <- get_final_composition(A, r)
   results$ncoexisting[i] <- sum(xstar > 0)
@@ -230,7 +247,7 @@ That is, by setting the $k^\text{th}$ element of $D_k$ to -1, we flip the sign o
 
 ```{r proofrz}
 set.seed(2)
-A <- build_Dstable(3)
+A <- build_LDstable(3)
 r <- build_randomr(3)
 # the equilibrium is not feasible
 solve(A, -r)
@@ -265,11 +282,11 @@ Now we can take a species pool along with their parameters, and try to assemble 
 ```{r rndzooassembly}
 set.seed(7)
 n <- 10
-A <- build_Dstable(n)
+A <- build_LDstable(n)
 r <- build_randomr(n)
 # start with no species
 x <- rep(0, n)
-# assemble for 50 steps and keep track of richness
+# assemble for 40 steps and keep track of richness and composition
 ninvasions <- 40
 results <- tibble(invasion = 1:ninvasions, 
                   richness = rep(NA, ninvasions),
@@ -291,7 +308,7 @@ Now let's roll back history and assemble again:
 ```{r alternativehistory}
 # start with no species
 x <- rep(0, n)
-# assemble for 50 steps and keep track of richness
+# assemble for 40 steps and keep track of richness
 ninvasions <- 40
 results <- tibble(invasion = 1:ninvasions, 
                   richness = rep(NA, ninvasions),
@@ -315,9 +332,9 @@ get_final_composition(A, r)
 x
 ```
 
-As such, given enough time, any assembly history for a symmetric, $D-$stable matrix $A$ will eventually reach the final composition represented by the saturated equilibrium (Serván, unpublished). 
+As such, given enough time, any assembly history for a symmetric, stable matrix $A$ will eventually reach the final composition represented by the saturated equilibrium (Serván, unpublished). 
 
-Interestingly, this is not the case when the matrix is not symmetric. @servan2018coexistence conjectured however that the probability of finding a system whose final composition cannot be assembled one species at a time decreases rapidly with the size of the pool.
+Interestingly, this is not the case when the matrix is not symmetric. @servan2018coexistence conjectured however that the probability of finding a system whose final composition cannot be assembled one species at a time decreases rapidly with the size of the pool, as long as $A$ is Lyapunov Diagonally stable.
 
 ## Network spandrels
 
@@ -326,7 +343,7 @@ What is the network structure of the assembled community vs. that of the initial
 ```{r beforeafter}
 set.seed(1)
 # initial pool
-A <- build_Dstable(200)
+A <- build_LDstable(200)
 r <- build_randomr(200)
 # final composition
 xstar <- get_final_composition(A, r)
@@ -386,7 +403,7 @@ for (i in 2:n){
   A[, i] <- A[, i] + ai
   A[i, i] <- -1
 }
-# make D-stable
+# make LD-stable
 l1 <- max(eigen(A, only.values = TRUE, symmetric = TRUE)$values)
 if (l1 > 0) diag(A) <- diag(A) - l1 * 1.01
 ```

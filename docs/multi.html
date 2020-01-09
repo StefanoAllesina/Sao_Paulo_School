@@ -24,7 +24,7 @@
 <meta name="author" content="Stefano Allesina" />
 
 
-<meta name="date" content="2020-01-07" />
+<meta name="date" content="2020-01-09" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -151,7 +151,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.4.2" data-path="intro.html"><a href="intro.html#stability-of-an-equilibrium"><i class="fa fa-check"></i><b>2.4.2</b> Stability of an equilibrium</a></li>
 <li class="chapter" data-level="2.4.3" data-path="intro.html"><a href="intro.html#types-of-dynamics"><i class="fa fa-check"></i><b>2.4.3</b> Types of dynamics</a></li>
 <li class="chapter" data-level="2.4.4" data-path="intro.html"><a href="intro.html#the-equilibrium-is-the-time-average"><i class="fa fa-check"></i><b>2.4.4</b> The equilibrium is the time-average</a></li>
-<li class="chapter" data-level="2.4.5" data-path="intro.html"><a href="intro.html#d-stability-and-lyapunov-function"><i class="fa fa-check"></i><b>2.4.5</b> D-stability and Lyapunov function</a></li>
+<li class="chapter" data-level="2.4.5" data-path="intro.html"><a href="intro.html#lyapunov-diagonal-stability-and-global-stability"><i class="fa fa-check"></i><b>2.4.5</b> Lyapunov diagonal stability and global stability</a></li>
 </ul></li>
 <li class="chapter" data-level="2.5" data-path="intro.html"><a href="intro.html#stability-of-large-random-communities"><i class="fa fa-check"></i><b>2.5</b> Stability of large random communities</a></li>
 <li class="chapter" data-level="2.6" data-path="intro.html"><a href="intro.html#further-readings"><i class="fa fa-check"></i><b>2.6</b> Further readings</a></li>
@@ -159,7 +159,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3" data-path="multi.html"><a href="multi.html"><i class="fa fa-check"></i><b>3</b> Multispecies GLV: assembly and invasibility</a><ul>
 <li class="chapter" data-level="3.1" data-path="multi.html"><a href="multi.html#assembly"><i class="fa fa-check"></i><b>3.1</b> Assembly</a></li>
 <li class="chapter" data-level="3.2" data-path="multi.html"><a href="multi.html#invasion-in-multispecies-communities"><i class="fa fa-check"></i><b>3.2</b> Invasion in multispecies communities</a></li>
-<li class="chapter" data-level="3.3" data-path="multi.html"><a href="multi.html#assembly-and-d-stability"><i class="fa fa-check"></i><b>3.3</b> Assembly and D-stability</a></li>
+<li class="chapter" data-level="3.3" data-path="multi.html"><a href="multi.html#lyapunov-stability-and-saturated-equilibria"><i class="fa fa-check"></i><b>3.3</b> Lyapunov stability and saturated equilibria</a></li>
 <li class="chapter" data-level="3.4" data-path="multi.html"><a href="multi.html#how-many-species-will-coexist"><i class="fa fa-check"></i><b>3.4</b> How many species will coexist?</a><ul>
 <li class="chapter" data-level="3.4.1" data-path="multi.html"><a href="multi.html#a-trivial-case"><i class="fa fa-check"></i><b>3.4.1</b> A trivial case</a></li>
 <li class="chapter" data-level="3.4.2" data-path="multi.html"><a href="multi.html#simulating-final-composition"><i class="fa fa-check"></i><b>3.4.2</b> Simulating final composition</a></li>
@@ -230,20 +230,20 @@ If <span class="math inline">\(x_i(0) \ll 1\)</span>, we can set <span class="ma
 <p><span class="math display">\[
 \dfrac{1}{x_j(t)}\dfrac{dx_j(t)}{dt} = r_j + \sum_k A_{jk} x_k(t) \approx r_j + A_{ji}x_i^\star
 \]</span></p>
-<p>Species <span class="math inline">\(j\)</span> can therefore growth when rare if <span class="math inline">\(r_j + A_{ji}x_i^\star &gt; 0\)</span>, i.e., <span class="math inline">\(r_j &gt; -A_{ji}x_i^\star\)</span>. We call this type of inequality and <strong>“invasion criterion”</strong>.</p>
-<p>If the species <span class="math inline">\(j\)</span> can grow when rare, in general, it could a) grow initially, but then go extinct; b) displace species <span class="math inline">\(i\)</span>, sending it to extinction; c) coexist with species <span class="math inline">\(i\)</span>.</p>
+<p>Species <span class="math inline">\(j\)</span> can therefore growth when rare if <span class="math inline">\(r_j + A_{ji}x_i^\star &gt; 0\)</span>, i.e., <span class="math inline">\(r_j &gt; -A_{ji}x_i^\star\)</span>. We call this type of inequality an <strong>“invasion criterion”</strong>.</p>
+<p>If the species <span class="math inline">\(j\)</span> can grow when rare, in general, it could a) grow initially, but then go extinct; b) displace species <span class="math inline">\(i\)</span>, sending it to extinction; c) coexist with species <span class="math inline">\(i\)</span>. By reiterating invasions with different species, we can assemble a large ecological community.</p>
 </div>
 <div id="invasion-in-multispecies-communities" class="section level2">
 <h2><span class="header-section-number">3.2</span> Invasion in multispecies communities</h2>
 <p>Now consider a pool of species (e.g., a metacommunity) and an environment (e.g., an island) in which some of the species are present, and coexisting at an equilibrium. We have <span class="math inline">\(n\)</span> species in the pool, and <span class="math inline">\(k\)</span> species in the environment. We want to write conditions for the invasibility of the equilibrium. To this end, we can re-arrange the rows and columns of <span class="math inline">\(A\)</span>, and the elements of <span class="math inline">\(r\)</span> to obtain two blocks: one for the <span class="math inline">\(k\)</span> species already in the community, and one for the <span class="math inline">\(n-k\)</span> potential invaders.</p>
-<p>The fixed point <span class="math inline">\(x^{\star}\)</span> can be written as
+<p>The fixed point <span class="math inline">\(\bar{x}\)</span> can be written as
 <span class="math display">\[
-x^\star = \left(\begin{array}{l}
+\bar{x} = \left(\begin{array}{l}
 x^{(k)} \\
 0^{(n-k)} 
 \end{array} \right)
 \]</span>
-where <span class="math inline">\(x_k\)</span> contains the density of the coexisting species. Similarly, the growth rates are</p>
+where <span class="math inline">\(x^{(k)}\)</span> contains the density of the coexisting species. Similarly, the growth rates are</p>
 <p><span class="math display">\[
 r = \left(\begin{array}{l}
 r^{(k)} \\
@@ -265,15 +265,29 @@ Now we want to write the condition for the non-invasibility of the resident comm
 <p><span class="math display">\[
 r^{(n-k)} + A^{(n-k,k)}x^{(k)} &lt; 0
 \]</span></p>
-<p>an equilibrium <span class="math inline">\(x^\star\)</span> for which a) the <span class="math inline">\(x^{(k)}\)</span> is feasible stable (when considering only the species in <span class="math inline">\(k\)</span>) and b) no other species can invade when rare is called the <strong>feasible, stable, non-invasible solution</strong> or the <strong>saturated equilibrium</strong>.</p>
+<p>an equilibrium <span class="math inline">\(\bar{x}\)</span> for which a) the <span class="math inline">\(x^{(k)}\)</span> is feasible and stable (when considering only the species in <span class="math inline">\(k\)</span>) and b) no other species can invade when rare is called the <strong>feasible, stable, non-invasible solution</strong> or the <strong>saturated equilibrium</strong>.</p>
 </div>
-<div id="assembly-and-d-stability" class="section level2">
-<h2><span class="header-section-number">3.3</span> Assembly and D-stability</h2>
-<p>We have seen in the previous lecture that whenever there exists a matrix <span class="math inline">\(C\)</span> such that <span class="math inline">\(CA + A^t C\)</span> is negative definite XXX</p>
+<div id="lyapunov-stability-and-saturated-equilibria" class="section level2">
+<h2><span class="header-section-number">3.3</span> Lyapunov stability and saturated equilibria</h2>
+<p>We have seen in the previous lecture that whenever there exists a matrix <span class="math inline">\(C\)</span> such that <span class="math inline">\(CA + A^t C\)</span> is negative definite and we have a feasible equilibrium <span class="math inline">\(x^\star\)</span> then the equilibrium is globally stable. Now we consider the case in which a feasible equilibrium does not exist. However, we can prove that a <strong>saturated equilibrium</strong> exists and is unique: we have an equilibrium <span class="math inline">\(\bar{x}\)</span> in which some components are positive and some are zero such that <span class="math inline">\(k\)</span> species coexist at a globally stable equilibrium, and the remaining <span class="math inline">\((n-k)\)</span> species cannot invade it.</p>
+<p>Following <span class="citation">Hofbauer and Sigmund (<a href="#ref-hofbauer1998evolutionary" role="doc-biblioref">1998</a>)</span> (section 15.3), we write:</p>
+<p><span class="math display">\[
+V(x) = -\sum_i c_i (\bar{x}_i \log x_i - x_i)
+\]</span>
+yielding:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\dfrac{V(x)}{dt} &amp;= -\sum_i c_i \left(\bar{x}_i \frac{d \log x_i}{dt} - \frac{d x_i}{dt} \right) \\
+&amp;= -\sum_i c_i \left( \bar{x}_i - x_i \right)  \left( r_i + \sum_j A_{ij} x_j \right) \\
+&amp;= -\sum_i c_i \left( \bar{x}_i - x_i \right)  \left( r_i + \sum_j A_{ij} (x_j - \bar{x}_j) +  \sum_j A_{ij} \bar{x}_j \right) \\
+&amp;= \sum_{i,j} \left( \bar{x}_i - x_i \right) c_i A_{ij} \left( \bar{x}_j - x_j \right) - \sum_i c_i \left( \bar{x}_i - x_i \right) \left(r_i + \sum_j A_{ij} \bar{x}_j \right)
+\end{aligned}
+\]</span></p>
+<p>The first term is negative for all <span class="math inline">\(x \neq \bar{x}\)</span>, and is zero at the saturated equilibrium point. The second term is zero for all <span class="math inline">\(\bar{x}_i &gt; 0\)</span>: <span class="math inline">\(r_i + \sum_j A_{ij} \bar{x}_j = 0\)</span>, given that <span class="math inline">\(\bar{x}\)</span> is an equilibrium for the species at positive density; for the remaining species (for which <span class="math inline">\(\bar{x}_i = 0\)</span>), this amounts to the invasion criterion above, and must therefore be negative. As such <span class="math inline">\(V(x)\)</span> is a Lyapunov function for the system, assuming negative values everywhere but at <span class="math inline">\(\bar{x}\)</span>.</p>
 </div>
 <div id="how-many-species-will-coexist" class="section level2">
 <h2><span class="header-section-number">3.4</span> How many species will coexist?</h2>
-<p>Here we investigate the simplest case in which <span class="math inline">\(A\)</span> is symmetric and stable (and therefore <span class="math inline">\(D-\)</span>stable) matrix with random coefficients, and <span class="math inline">\(r\)</span> is a vector of growth rates with random coefficients. For simplicity, we take the off-diagonal elements of <span class="math inline">\(A\)</span> and the growth rates from a normal distribution centered at zero (the same would be found for any distribution symmetric about zero). This case was studied by <span class="citation">Serván et al. (<a href="#ref-servan2018coexistence" role="doc-biblioref">2018</a>)</span>.</p>
+<p>Here we investigate the simplest case in which <span class="math inline">\(A\)</span> is symmetric and stable (and therefore Lyapunov Diagonally stable) matrix with random coefficients, and <span class="math inline">\(r\)</span> is a vector of growth rates with random coefficients. For simplicity, we take the off-diagonal elements of <span class="math inline">\(A\)</span> and the growth rates from a normal distribution centered at zero (the same would be found for any distribution symmetric about zero). This case was studied by <span class="citation">Serván et al. (<a href="#ref-servan2018coexistence" role="doc-biblioref">2018</a>)</span>.</p>
 <p>First, we are going to consider a trivial case, then simulate a more complex one, and finally outline the proof in <span class="citation">Serván et al. (<a href="#ref-servan2018coexistence" role="doc-biblioref">2018</a>)</span>.</p>
 <div id="a-trivial-case" class="section level3">
 <h3><span class="header-section-number">3.4.1</span> A trivial case</h3>
@@ -316,8 +330,8 @@ r^{(n-k)} + A^{(n-k,k)}x^{(k)} &lt; 0
 <span id="cb25-32"><a href="multi.html#cb25-32"></a>  <span class="kw">return</span>(out)</span>
 <span id="cb25-33"><a href="multi.html#cb25-33"></a>}</span></code></pre></div>
 <p>And then write functions to give us a (barely) stable, symmetric matrix <span class="math inline">\(A\)</span>, and random growth rates:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="multi.html#cb26-1"></a><span class="co"># function to build symmetric, D-stable matrix</span></span>
-<span id="cb26-2"><a href="multi.html#cb26-2"></a>build_Dstable &lt;-<span class="st"> </span><span class="cf">function</span>(n){</span>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="multi.html#cb26-1"></a><span class="co"># function to build symmetric, Lyapunov Diagonally-stable matrix</span></span>
+<span id="cb26-2"><a href="multi.html#cb26-2"></a>build_LDstable &lt;-<span class="st"> </span><span class="cf">function</span>(n){</span>
 <span id="cb26-3"><a href="multi.html#cb26-3"></a>  A &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, n, n)</span>
 <span id="cb26-4"><a href="multi.html#cb26-4"></a>  A[<span class="kw">upper.tri</span>(A)] &lt;-<span class="st"> </span><span class="kw">rnorm</span>(n <span class="op">*</span><span class="st"> </span>(n <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">/</span><span class="st"> </span><span class="dv">2</span>)</span>
 <span id="cb26-5"><a href="multi.html#cb26-5"></a>  <span class="co"># make symmetric</span></span>
@@ -338,7 +352,7 @@ r^{(n-k)} + A^{(n-k,k)}x^{(k)} &lt; 0
 <p>Now, we build a random system with seven species, and integrate the dynamics:</p>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="multi.html#cb27-1"></a><span class="kw">set.seed</span>(<span class="dv">5</span>) <span class="co"># for reproducibility</span></span>
 <span id="cb27-2"><a href="multi.html#cb27-2"></a>n &lt;-<span class="st"> </span><span class="dv">7</span></span>
-<span id="cb27-3"><a href="multi.html#cb27-3"></a>A &lt;-<span class="st"> </span><span class="kw">build_Dstable</span>(n)</span>
+<span id="cb27-3"><a href="multi.html#cb27-3"></a>A &lt;-<span class="st"> </span><span class="kw">build_LDstable</span>(n)</span>
 <span id="cb27-4"><a href="multi.html#cb27-4"></a>r &lt;-<span class="st"> </span><span class="kw">build_randomr</span>(n)</span>
 <span id="cb27-5"><a href="multi.html#cb27-5"></a>x0 &lt;-<span class="st"> </span><span class="kw">runif</span>(n)</span>
 <span id="cb27-6"><a href="multi.html#cb27-6"></a>out &lt;-<span class="st"> </span><span class="kw">integrate_GLV</span>(r, A, x0)</span></code></pre></div>
@@ -374,7 +388,7 @@ r^{(n-k)} + A^{(n-k,k)}x^{(k)} &lt; 0
 # 5   100 sp_5      0    
 # 6   100 sp_6      0.645
 # 7   100 sp_7      0.578</code></pre>
-<p>As you can see, the system still goes to the same equilibrium, with 3 and 5 extinct. Turns out, for this type of system, one does not even need to integrate dynamics: the Lemke–Howson algorithm can be adapted to solve the problem efficiently. I have coded up the algorithm already, and you can load the function <code>get_final_composition(A, r)</code> by typing:</p>
+<p>As you can see, the system still goes to the same equilibrium, with 3 and 5 extinct. Turns out, for this type of system, one does not even need to integrate dynamics: the Lemke–Howson algorithm can be adapted to solve the problem efficiently <span class="citation">(Serván et al. <a href="#ref-servan2018coexistence" role="doc-biblioref">2018</a>)</span>. I have coded up the algorithm already, and you can load the function <code>get_final_composition(A, r)</code> by typing:</p>
 <div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="multi.html#cb33-1"></a><span class="kw">source</span>(<span class="st">&quot;https://raw.githubusercontent.com/StefanoAllesina/Sao_Paulo_School/master/code/L-H.R&quot;</span>)</span>
 <span id="cb33-2"><a href="multi.html#cb33-2"></a><span class="kw">get_final_composition</span>(A, r) <span class="co"># use LH instead of integrating dynamics</span></span></code></pre></div>
 <pre><code># [1] 0.4290300 0.2761030 0.0000000 0.4021761 0.0000000 0.6453202 0.5776840</code></pre>
@@ -390,7 +404,7 @@ r^{(n-k)} + A^{(n-k,k)}x^{(k)} &lt; 0
 <span id="cb35-4"><a href="multi.html#cb35-4"></a>results &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">simulation =</span> <span class="dv">1</span><span class="op">:</span>nsim, <span class="dt">ncoexisting =</span> <span class="kw">rep</span>(<span class="ot">NA</span>, nsim))</span>
 <span id="cb35-5"><a href="multi.html#cb35-5"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>nsim){</span>
 <span id="cb35-6"><a href="multi.html#cb35-6"></a>  <span class="co"># build the matrix and vector</span></span>
-<span id="cb35-7"><a href="multi.html#cb35-7"></a>  A &lt;-<span class="st"> </span><span class="kw">build_Dstable</span>(n)</span>
+<span id="cb35-7"><a href="multi.html#cb35-7"></a>  A &lt;-<span class="st"> </span><span class="kw">build_LDstable</span>(n)</span>
 <span id="cb35-8"><a href="multi.html#cb35-8"></a>  r &lt;-<span class="st"> </span><span class="kw">build_randomr</span>(n)</span>
 <span id="cb35-9"><a href="multi.html#cb35-9"></a>  xstar &lt;-<span class="st"> </span><span class="kw">get_final_composition</span>(A, r)</span>
 <span id="cb35-10"><a href="multi.html#cb35-10"></a>  results<span class="op">$</span>ncoexisting[i] &lt;-<span class="st"> </span><span class="kw">sum</span>(xstar <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)</span>
@@ -413,7 +427,7 @@ r^{(n-k)} + A^{(n-k,k)}x^{(k)} &lt; 0
 \]</span></p>
 <p>That is, by setting the <span class="math inline">\(k^\text{th}\)</span> element of <span class="math inline">\(D_k\)</span> to -1, we flip the sign of the <span class="math inline">\(k^\text{th}\)</span> component of <span class="math inline">\(x^\star\)</span>. For example:</p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="multi.html#cb37-1"></a><span class="kw">set.seed</span>(<span class="dv">2</span>)</span>
-<span id="cb37-2"><a href="multi.html#cb37-2"></a>A &lt;-<span class="st"> </span><span class="kw">build_Dstable</span>(<span class="dv">3</span>)</span>
+<span id="cb37-2"><a href="multi.html#cb37-2"></a>A &lt;-<span class="st"> </span><span class="kw">build_LDstable</span>(<span class="dv">3</span>)</span>
 <span id="cb37-3"><a href="multi.html#cb37-3"></a>r &lt;-<span class="st"> </span><span class="kw">build_randomr</span>(<span class="dv">3</span>)</span>
 <span id="cb37-4"><a href="multi.html#cb37-4"></a><span class="co"># the equilibrium is not feasible</span></span>
 <span id="cb37-5"><a href="multi.html#cb37-5"></a><span class="kw">solve</span>(A, <span class="op">-</span>r)</span>
@@ -445,11 +459,11 @@ r^{(n-k)} + A^{(n-k,k)}x^{(k)} &lt; 0
 <p>Now we can take a species pool along with their parameters, and try to assemble the system until we can no longer add any more species (i.e., until we reach a saturated equilibrium):</p>
 <div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="multi.html#cb40-1"></a><span class="kw">set.seed</span>(<span class="dv">7</span>)</span>
 <span id="cb40-2"><a href="multi.html#cb40-2"></a>n &lt;-<span class="st"> </span><span class="dv">10</span></span>
-<span id="cb40-3"><a href="multi.html#cb40-3"></a>A &lt;-<span class="st"> </span><span class="kw">build_Dstable</span>(n)</span>
+<span id="cb40-3"><a href="multi.html#cb40-3"></a>A &lt;-<span class="st"> </span><span class="kw">build_LDstable</span>(n)</span>
 <span id="cb40-4"><a href="multi.html#cb40-4"></a>r &lt;-<span class="st"> </span><span class="kw">build_randomr</span>(n)</span>
 <span id="cb40-5"><a href="multi.html#cb40-5"></a><span class="co"># start with no species</span></span>
 <span id="cb40-6"><a href="multi.html#cb40-6"></a>x &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, n)</span>
-<span id="cb40-7"><a href="multi.html#cb40-7"></a><span class="co"># assemble for 50 steps and keep track of richness</span></span>
+<span id="cb40-7"><a href="multi.html#cb40-7"></a><span class="co"># assemble for 40 steps and keep track of richness and composition</span></span>
 <span id="cb40-8"><a href="multi.html#cb40-8"></a>ninvasions &lt;-<span class="st"> </span><span class="dv">40</span></span>
 <span id="cb40-9"><a href="multi.html#cb40-9"></a>results &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">invasion =</span> <span class="dv">1</span><span class="op">:</span>ninvasions, </span>
 <span id="cb40-10"><a href="multi.html#cb40-10"></a>                  <span class="dt">richness =</span> <span class="kw">rep</span>(<span class="ot">NA</span>, ninvasions),</span>
@@ -477,7 +491,7 @@ r^{(n-k)} + A^{(n-k,k)}x^{(k)} &lt; 0
 <p>Now let’s roll back history and assemble again:</p>
 <div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="multi.html#cb42-1"></a><span class="co"># start with no species</span></span>
 <span id="cb42-2"><a href="multi.html#cb42-2"></a>x &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, n)</span>
-<span id="cb42-3"><a href="multi.html#cb42-3"></a><span class="co"># assemble for 50 steps and keep track of richness</span></span>
+<span id="cb42-3"><a href="multi.html#cb42-3"></a><span class="co"># assemble for 40 steps and keep track of richness</span></span>
 <span id="cb42-4"><a href="multi.html#cb42-4"></a>ninvasions &lt;-<span class="st"> </span><span class="dv">40</span></span>
 <span id="cb42-5"><a href="multi.html#cb42-5"></a>results &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">invasion =</span> <span class="dv">1</span><span class="op">:</span>ninvasions, </span>
 <span id="cb42-6"><a href="multi.html#cb42-6"></a>                  <span class="dt">richness =</span> <span class="kw">rep</span>(<span class="ot">NA</span>, ninvasions),</span>
@@ -509,15 +523,15 @@ r^{(n-k)} + A^{(n-k,k)}x^{(k)} &lt; 0
 #  [8] 1.6956878 0.0000000 0.0000000
 #  [1] 1.7588344 2.5440743 0.0000000 0.7860178 1.8730535 2.5502055 0.6961259
 #  [8] 1.6956878 0.0000000 0.0000000</code></pre>
-<p>As such, given enough time, any assembly history for a symmetric, <span class="math inline">\(D-\)</span>stable matrix <span class="math inline">\(A\)</span> will eventually reach the final composition represented by the saturated equilibrium (Serván, unpublished).</p>
-<p>Interestingly, this is not the case when the matrix is not symmetric. <span class="citation">Serván et al. (<a href="#ref-servan2018coexistence" role="doc-biblioref">2018</a>)</span> conjectured however that the probability of finding a system whose final composition cannot be assembled one species at a time decreases rapidly with the size of the pool.</p>
+<p>As such, given enough time, any assembly history for a symmetric, stable matrix <span class="math inline">\(A\)</span> will eventually reach the final composition represented by the saturated equilibrium (Serván, unpublished).</p>
+<p>Interestingly, this is not the case when the matrix is not symmetric. <span class="citation">Serván et al. (<a href="#ref-servan2018coexistence" role="doc-biblioref">2018</a>)</span> conjectured however that the probability of finding a system whose final composition cannot be assembled one species at a time decreases rapidly with the size of the pool, as long as <span class="math inline">\(A\)</span> is Lyapunov Diagonally stable.</p>
 </div>
 <div id="network-spandrels" class="section level2">
 <h2><span class="header-section-number">3.7</span> Network spandrels</h2>
 <p>What is the network structure of the assembled community vs. that of the initial pool? Can we detect a signature of the forces acting on the community such that some species can persist, while other go extinct? To answer these questions, we start by considering a larger pool of species:</p>
 <div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="multi.html#cb46-1"></a><span class="kw">set.seed</span>(<span class="dv">1</span>)</span>
 <span id="cb46-2"><a href="multi.html#cb46-2"></a><span class="co"># initial pool</span></span>
-<span id="cb46-3"><a href="multi.html#cb46-3"></a>A &lt;-<span class="st"> </span><span class="kw">build_Dstable</span>(<span class="dv">200</span>)</span>
+<span id="cb46-3"><a href="multi.html#cb46-3"></a>A &lt;-<span class="st"> </span><span class="kw">build_LDstable</span>(<span class="dv">200</span>)</span>
 <span id="cb46-4"><a href="multi.html#cb46-4"></a>r &lt;-<span class="st"> </span><span class="kw">build_randomr</span>(<span class="dv">200</span>)</span>
 <span id="cb46-5"><a href="multi.html#cb46-5"></a><span class="co"># final composition</span></span>
 <span id="cb46-6"><a href="multi.html#cb46-6"></a>xstar &lt;-<span class="st"> </span><span class="kw">get_final_composition</span>(A, r)</span>
@@ -566,7 +580,7 @@ r^{(n-k)} + A^{(n-k,k)}x^{(k)} &lt; 0
 <span id="cb52-10"><a href="multi.html#cb52-10"></a>  A[, i] &lt;-<span class="st"> </span>A[, i] <span class="op">+</span><span class="st"> </span>ai</span>
 <span id="cb52-11"><a href="multi.html#cb52-11"></a>  A[i, i] &lt;-<span class="st"> </span><span class="dv">-1</span></span>
 <span id="cb52-12"><a href="multi.html#cb52-12"></a>}</span>
-<span id="cb52-13"><a href="multi.html#cb52-13"></a><span class="co"># make D-stable</span></span>
+<span id="cb52-13"><a href="multi.html#cb52-13"></a><span class="co"># make LD-stable</span></span>
 <span id="cb52-14"><a href="multi.html#cb52-14"></a>l1 &lt;-<span class="st"> </span><span class="kw">max</span>(<span class="kw">eigen</span>(A, <span class="dt">only.values =</span> <span class="ot">TRUE</span>, <span class="dt">symmetric =</span> <span class="ot">TRUE</span>)<span class="op">$</span>values)</span>
 <span id="cb52-15"><a href="multi.html#cb52-15"></a><span class="cf">if</span> (l1 <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="kw">diag</span>(A) &lt;-<span class="st"> </span><span class="kw">diag</span>(A) <span class="op">-</span><span class="st"> </span>l1 <span class="op">*</span><span class="st"> </span><span class="fl">1.01</span></span></code></pre></div>
 <p>Now each species is similar to the previous one:</p>
@@ -593,6 +607,9 @@ r^{(n-k)} + A^{(n-k,k)}x^{(k)} &lt; 0
 <div id="refs" class="references">
 <div id="ref-gould1979spandrels">
 <p>Gould, Stephen Jay, and Richard C Lewontin. 1979. “The Spandrels of San Marco and the Panglossian Paradigm: A Critique of the Adaptationist Programme.” <em>Proceedings of the Royal Society of London. Series B. Biological Sciences</em> 205 (1161): 581–98.</p>
+</div>
+<div id="ref-hofbauer1998evolutionary">
+<p>Hofbauer, Josef, and Karl Sigmund. 1998. <em>Evolutionary Games and Population Dynamics</em>. Cambridge university press.</p>
 </div>
 <div id="ref-maynard2018network">
 <p>Maynard, Daniel S, Carlos A Serván, and Stefano Allesina. 2018. “Network Spandrels Reflect Ecological Assembly.” <em>Ecology Letters</em> 21 (3): 324–34.</p>

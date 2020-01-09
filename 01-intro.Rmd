@@ -373,9 +373,11 @@ res_4 %>% filter(time > 50) %>%
 solve(A_4, -r_4)
 ```
 
-### D-stability and Lyapunov function
+### Lyapunov diagonal stability and global stability
 
-Suppose that there is a positive diagonal matrix $C$ such that $CA + A^t C$ is negative definite (i.e., has only negative eigenvalues; the eigenvalues are real because the matrix is symmetric). Further, suppose that the GLV system with parameters $A$ and $r$ has a feasible equilibrium point $x^\star$. Then the function:
+Suppose that there is a positive diagonal matrix $C$ such that $C A + A^t C$ is negative definite (i.e., has only negative eigenvalues; the eigenvalues are real because the matrix is symmetric).  Then $A$ is **Lyapunov-diagonally stable**. If this is the case, then $A$ is stable, and any $D A$ with $D$ positive is also stable (called $D-$stability).
+
+Further, suppose that the GLV system with parameters $A$ and $r$ has a feasible equilibrium point $x^\star$. Then the function:
 
 $$
 V(x(t)) = 1^t D(y) \left( x(t) -D(x^\star) \log x(t)\right)
@@ -397,14 +399,14 @@ $$
 
 A matrix $B$ is negative definite if $y^t B y < 0$ for all $y \neq 0$. As such $\frac{d V(x(t))}{dt} \leq 0$, i.e., will decrease in time (starting from any $x(0)$) until the equilibrium $x^\star$ is reached. 
 
-Take a matrix $A$ such that for a positive diagonal matrix $C$, $CA + A^tC$ is negative definite. Then $A$ is said to be **D-stable**. The results above show that **if $A$ is D-stable and a feasible equilibrium $x^\star$ exists, than all trajectories starting at a positive density will converge to the equilibrium**. This property is often used to assess **global stability**.
+The results above show that **if $A$ is Lyapunov diagonally-stable and a feasible equilibrium $x^\star$ exists, than all trajectories starting at a positive density will converge to the equilibrium**. This property is often used to prove **global stability**.
 
 A simple numerical example with two species:
 
 ```{r, globalst2}
 r <- c(1, 1)
 A <- matrix(c(-1, 3/2, -1/2, -1), 2, 2)
-# the eigenvalues of A + A^t are -1 and -3, hence A is D-stable
+# the eigenvalues of A + A^t are -1 and -3, hence A is Lyapunov Diagonally-stable
 eigen(A + t(A))$values
 # now integrate from random initial condition---this should always 
 # converge to the equilibrium
