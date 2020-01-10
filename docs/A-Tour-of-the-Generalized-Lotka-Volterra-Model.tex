@@ -124,7 +124,7 @@
   \postauthor{\par}
       \predate{\centering\large\emph}
   \postdate{\par}
-    \date{2020-01-09}
+    \date{2020-01-10}
 
 \usepackage{booktabs}
 \usepackage{graphicx}
@@ -298,6 +298,8 @@ which is again the equation for the logistic growth with \(r = \beta - \gamma\) 
 Returning to the multi-species system, and in analogy with the single species, we can look for stationary points (equilibria). If the matrix \(A\) is not singular, then we can look for a solution of \(r + Ax\) that has positive components (called a \textbf{feasible equilibrium}). \textbf{If such point exists, it is unique} and is the solution of \(Ax^\star = -r\), \(x^\star = -A^{-1}r\).
 
 Suppose that the GLV has no feasible equilibrium. Then all trajectories (if bounded; some could grow to infinity) reach the boundary of \(\mathbb R^n_{0+}\). Practically, this means that \textbf{to ensure coexistence of all species, it is necessary to have an equilibrium in the interior \(\mathbb R^n_{+}\)}.
+
+For a proof, see Theorem 5.2.1 in \citet{hofbauer1998evolutionary}.
 
 \hypertarget{stability-of-an-equilibrium}{%
 \subsection{Stability of an equilibrium}\label{stability-of-an-equilibrium}}
@@ -540,7 +542,7 @@ multiplying by the matrix inverse and rearranging:
 -A^{-1} r = x^\star =  \frac{1}{T} \int_0^T x(t) dt 
 \]
 
-showing that \textbf{the average density is} in fact \textbf{the equilibrium}. With a similar argument, one can prove that the trajectory stays in a compact space (i.e., in case of chaotic attractors), then long-time average is still \(x^\star\).
+showing that \textbf{the average density is} in fact \textbf{the equilibrium}. With a similar argument, one can prove that if the trajectory stays in a compact space (i.e., in case of chaotic attractors), then long-time average is still \(x^\star\).
 
 For example, let's compute the average for the system with the limit cycle above (discarding the transients in the first part of the time series):
 
@@ -1200,7 +1202,21 @@ That is, by setting the \(k^\text{th}\) element of \(D_k\) to -1, we flip the si
 # [3,] 22.73981
 \end{verbatim}
 
-Because of the symmetry assumption (i.e., we sampled all growth rates and off-diagonal elements from a distribution centered at zero), \((D_k A D_k)\) has the same distribution as \(A\), and \(D_k r\) the same distribution as \(r\). We can repeat the operation several times, connecting each possible starting point to the feasible solution. Therefore, the probability of all species coexisting amounts to the probability of having chosen the ``right'' sequence of \(D_k\), which happens with probability \(1 / 2^n\). Notice that the same proof holds when the coefficients of \(A\) are sampled in pairs from a bivariate distribution (rather than having symmetric matrices), as long as the distribution is centered at zero, and the matrix is \(D-\)stable (\citet{servan2018coexistence}). Using the same argument, one can prove that, under this parametrization, the probability of observing \(k\) species coexisting and \(n -k\) not being able to invade is exactly \(\binom{n}{k} \frac{1}{2^n}\) (\citet{servan2018coexistence}).
+Because of the symmetry assumption (i.e., we sampled all growth rates and off-diagonal elements from a distribution centered at zero), \((D_k A D_k)\) has the same distribution as \(A\), and \(D_k r\) the same distribution as \(r\). In fact, one can see that \((D_k A D_k)\) is also a similarity transformation, implying that the eigenvalues of \(A\) and \((D_k A D_k)\) are the same (i.e., the operation preserves stability):
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{eigen}\NormalTok{(A)}\OperatorTok{$}\NormalTok{values}
+\KeywordTok{eigen}\NormalTok{(D_}\DecValTok{1} \OperatorTok{%*%}\StringTok{ }\NormalTok{A }\OperatorTok{%*%}\StringTok{ }\NormalTok{D_}\DecValTok{1}\NormalTok{)}\OperatorTok{$}\NormalTok{values}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+# [1] -0.010000 -1.601076 -3.665781
+# [1] -0.010000 -1.601076 -3.665781
+\end{verbatim}
+
+We can repeat the operation several times, connecting each possible starting point to the feasible solution. Therefore, the probability of all species coexisting amounts to the probability of having chosen the ``right'' sequence of \(D_k\), which happens with probability \(1 / 2^n\). Notice that the same proof holds when the coefficients of \(A\) are sampled in pairs from a bivariate distribution (rather than having symmetric matrices), as long as the distribution is centered at zero, and the matrix is Lyapunov-Diagonally stable (\citet{servan2018coexistence}). Using the same argument, one can prove that, under this parametrization, the probability of observing \(k\) species coexisting and \(n -k\) not being able to invade is exactly \(\binom{n}{k} \frac{1}{2^n}\) (\citet{servan2018coexistence}).
 
 \hypertarget{assembly-and-saturated-equilibrium}{%
 \section{Assembly and saturated equilibrium}\label{assembly-and-saturated-equilibrium}}

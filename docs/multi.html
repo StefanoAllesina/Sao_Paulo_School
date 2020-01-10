@@ -24,7 +24,7 @@
 <meta name="author" content="Stefano Allesina" />
 
 
-<meta name="date" content="2020-01-09" />
+<meta name="date" content="2020-01-10" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -441,43 +441,48 @@ yielding:</p>
 # [1,] 11.75292
 # [2,] 26.47508
 # [3,] 22.73981</code></pre>
-<p>Because of the symmetry assumption (i.e., we sampled all growth rates and off-diagonal elements from a distribution centered at zero), <span class="math inline">\((D_k A D_k)\)</span> has the same distribution as <span class="math inline">\(A\)</span>, and <span class="math inline">\(D_k r\)</span> the same distribution as <span class="math inline">\(r\)</span>. We can repeat the operation several times, connecting each possible starting point to the feasible solution. Therefore, the probability of all species coexisting amounts to the probability of having chosen the “right” sequence of <span class="math inline">\(D_k\)</span>, which happens with probability <span class="math inline">\(1 / 2^n\)</span>. Notice that the same proof holds when the coefficients of <span class="math inline">\(A\)</span> are sampled in pairs from a bivariate distribution (rather than having symmetric matrices), as long as the distribution is centered at zero, and the matrix is <span class="math inline">\(D-\)</span>stable (<span class="citation">Serván et al. (<a href="#ref-servan2018coexistence" role="doc-biblioref">2018</a>)</span>). Using the same argument, one can prove that, under this parametrization, the probability of observing <span class="math inline">\(k\)</span> species coexisting and <span class="math inline">\(n -k\)</span> not being able to invade is exactly <span class="math inline">\(\binom{n}{k} \frac{1}{2^n}\)</span> (<span class="citation">Serván et al. (<a href="#ref-servan2018coexistence" role="doc-biblioref">2018</a>)</span>).</p>
+<p>Because of the symmetry assumption (i.e., we sampled all growth rates and off-diagonal elements from a distribution centered at zero), <span class="math inline">\((D_k A D_k)\)</span> has the same distribution as <span class="math inline">\(A\)</span>, and <span class="math inline">\(D_k r\)</span> the same distribution as <span class="math inline">\(r\)</span>. In fact, one can see that <span class="math inline">\((D_k A D_k)\)</span> is also a similarity transformation, implying that the eigenvalues of <span class="math inline">\(A\)</span> and <span class="math inline">\((D_k A D_k)\)</span> are the same (i.e., the operation preserves stability):</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="multi.html#cb39-1"></a><span class="kw">eigen</span>(A)<span class="op">$</span>values</span>
+<span id="cb39-2"><a href="multi.html#cb39-2"></a><span class="kw">eigen</span>(D_<span class="dv">1</span> <span class="op">%*%</span><span class="st"> </span>A <span class="op">%*%</span><span class="st"> </span>D_<span class="dv">1</span>)<span class="op">$</span>values</span></code></pre></div>
+<pre><code># [1] -0.010000 -1.601076 -3.665781
+# [1] -0.010000 -1.601076 -3.665781</code></pre>
+<p>We can repeat the operation several times, connecting each possible starting point to the feasible solution. Therefore, the probability of all species coexisting amounts to the probability of having chosen the “right” sequence of <span class="math inline">\(D_k\)</span>, which happens with probability <span class="math inline">\(1 / 2^n\)</span>. Notice that the same proof holds when the coefficients of <span class="math inline">\(A\)</span> are sampled in pairs from a bivariate distribution (rather than having symmetric matrices), as long as the distribution is centered at zero, and the matrix is Lyapunov-Diagonally stable (<span class="citation">Serván et al. (<a href="#ref-servan2018coexistence" role="doc-biblioref">2018</a>)</span>). Using the same argument, one can prove that, under this parametrization, the probability of observing <span class="math inline">\(k\)</span> species coexisting and <span class="math inline">\(n -k\)</span> not being able to invade is exactly <span class="math inline">\(\binom{n}{k} \frac{1}{2^n}\)</span> (<span class="citation">Serván et al. (<a href="#ref-servan2018coexistence" role="doc-biblioref">2018</a>)</span>).</p>
 </div>
 <div id="assembly-and-saturated-equilibrium" class="section level2">
 <h2><span class="header-section-number">3.6</span> Assembly and saturated equilibrium</h2>
 <p>Now let’s make it more complicated: we assemble an ecological community from the ground up. At each step, we introduce a species at low abundance, starting from an empty community. We then compute the new equilibrium, completing a step of the assembly:</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="multi.html#cb39-1"></a>assembly_one_step &lt;-<span class="st"> </span><span class="cf">function</span>(x, r, A){</span>
-<span id="cb39-2"><a href="multi.html#cb39-2"></a>  n &lt;-<span class="st"> </span><span class="kw">nrow</span>(A)</span>
-<span id="cb39-3"><a href="multi.html#cb39-3"></a>  invader &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span>n, <span class="dv">1</span>)</span>
-<span id="cb39-4"><a href="multi.html#cb39-4"></a>  x[invader] &lt;-<span class="st"> </span><span class="fl">0.001</span> <span class="co"># introduce the invader at low abundance</span></span>
-<span id="cb39-5"><a href="multi.html#cb39-5"></a>  present &lt;-<span class="st"> </span>x <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span> <span class="co"># these are the species present now</span></span>
-<span id="cb39-6"><a href="multi.html#cb39-6"></a>  <span class="co"># compute new equilibrium</span></span>
-<span id="cb39-7"><a href="multi.html#cb39-7"></a>  y &lt;-<span class="st"> </span><span class="kw">get_final_composition</span>(A[present, present, <span class="dt">drop =</span> <span class="ot">FALSE</span>], r[present])</span>
-<span id="cb39-8"><a href="multi.html#cb39-8"></a>  x[present] &lt;-<span class="st"> </span>y</span>
-<span id="cb39-9"><a href="multi.html#cb39-9"></a>  <span class="kw">return</span>(x)</span>
-<span id="cb39-10"><a href="multi.html#cb39-10"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="multi.html#cb41-1"></a>assembly_one_step &lt;-<span class="st"> </span><span class="cf">function</span>(x, r, A){</span>
+<span id="cb41-2"><a href="multi.html#cb41-2"></a>  n &lt;-<span class="st"> </span><span class="kw">nrow</span>(A)</span>
+<span id="cb41-3"><a href="multi.html#cb41-3"></a>  invader &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span>n, <span class="dv">1</span>)</span>
+<span id="cb41-4"><a href="multi.html#cb41-4"></a>  x[invader] &lt;-<span class="st"> </span><span class="fl">0.001</span> <span class="co"># introduce the invader at low abundance</span></span>
+<span id="cb41-5"><a href="multi.html#cb41-5"></a>  present &lt;-<span class="st"> </span>x <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span> <span class="co"># these are the species present now</span></span>
+<span id="cb41-6"><a href="multi.html#cb41-6"></a>  <span class="co"># compute new equilibrium</span></span>
+<span id="cb41-7"><a href="multi.html#cb41-7"></a>  y &lt;-<span class="st"> </span><span class="kw">get_final_composition</span>(A[present, present, <span class="dt">drop =</span> <span class="ot">FALSE</span>], r[present])</span>
+<span id="cb41-8"><a href="multi.html#cb41-8"></a>  x[present] &lt;-<span class="st"> </span>y</span>
+<span id="cb41-9"><a href="multi.html#cb41-9"></a>  <span class="kw">return</span>(x)</span>
+<span id="cb41-10"><a href="multi.html#cb41-10"></a>}</span></code></pre></div>
 <p>Now we can take a species pool along with their parameters, and try to assemble the system until we can no longer add any more species (i.e., until we reach a saturated equilibrium):</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="multi.html#cb40-1"></a><span class="kw">set.seed</span>(<span class="dv">7</span>)</span>
-<span id="cb40-2"><a href="multi.html#cb40-2"></a>n &lt;-<span class="st"> </span><span class="dv">10</span></span>
-<span id="cb40-3"><a href="multi.html#cb40-3"></a>A &lt;-<span class="st"> </span><span class="kw">build_LDstable</span>(n)</span>
-<span id="cb40-4"><a href="multi.html#cb40-4"></a>r &lt;-<span class="st"> </span><span class="kw">build_randomr</span>(n)</span>
-<span id="cb40-5"><a href="multi.html#cb40-5"></a><span class="co"># start with no species</span></span>
-<span id="cb40-6"><a href="multi.html#cb40-6"></a>x &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, n)</span>
-<span id="cb40-7"><a href="multi.html#cb40-7"></a><span class="co"># assemble for 40 steps and keep track of richness and composition</span></span>
-<span id="cb40-8"><a href="multi.html#cb40-8"></a>ninvasions &lt;-<span class="st"> </span><span class="dv">40</span></span>
-<span id="cb40-9"><a href="multi.html#cb40-9"></a>results &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">invasion =</span> <span class="dv">1</span><span class="op">:</span>ninvasions, </span>
-<span id="cb40-10"><a href="multi.html#cb40-10"></a>                  <span class="dt">richness =</span> <span class="kw">rep</span>(<span class="ot">NA</span>, ninvasions),</span>
-<span id="cb40-11"><a href="multi.html#cb40-11"></a>                  <span class="dt">composition =</span> <span class="kw">rep</span>(<span class="ot">NA</span>, ninvasions))</span>
-<span id="cb40-12"><a href="multi.html#cb40-12"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>ninvasions){</span>
-<span id="cb40-13"><a href="multi.html#cb40-13"></a>  x &lt;-<span class="st"> </span><span class="kw">assembly_one_step</span>(x, r, A) </span>
-<span id="cb40-14"><a href="multi.html#cb40-14"></a>  results<span class="op">$</span>richness[i] &lt;-<span class="st"> </span><span class="kw">sum</span>(x <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)</span>
-<span id="cb40-15"><a href="multi.html#cb40-15"></a>  results<span class="op">$</span>composition[i] &lt;-<span class="st"> </span><span class="kw">paste</span>((<span class="dv">1</span><span class="op">:</span>n)[x<span class="op">&gt;</span><span class="dv">0</span>], <span class="dt">collapse =</span> <span class="st">&quot;-&quot;</span>)</span>
-<span id="cb40-16"><a href="multi.html#cb40-16"></a>}</span>
-<span id="cb40-17"><a href="multi.html#cb40-17"></a><span class="kw">print</span>(<span class="kw">head</span>(results))</span>
-<span id="cb40-18"><a href="multi.html#cb40-18"></a>pl &lt;-<span class="st"> </span><span class="kw">ggplot</span>(results) <span class="op">+</span><span class="st"> </span><span class="kw">aes</span>(<span class="dt">x =</span> invasion, <span class="dt">y =</span> richness, <span class="dt">label =</span> composition) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb40-19"><a href="multi.html#cb40-19"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_text</span>(<span class="dt">hjust =</span> <span class="dv">0</span>, <span class="dt">nudge_y =</span> <span class="fl">0.25</span>, <span class="dt">angle =</span> <span class="dv">90</span>)<span class="op">+</span><span class="st"> </span></span>
-<span id="cb40-20"><a href="multi.html#cb40-20"></a><span class="st">  </span><span class="kw">ylim</span>(<span class="kw">c</span>(<span class="dv">0</span>, n <span class="op">*</span><span class="st"> </span><span class="fl">1.25</span>))</span>
-<span id="cb40-21"><a href="multi.html#cb40-21"></a><span class="kw">show</span>(pl)</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="multi.html#cb42-1"></a><span class="kw">set.seed</span>(<span class="dv">7</span>)</span>
+<span id="cb42-2"><a href="multi.html#cb42-2"></a>n &lt;-<span class="st"> </span><span class="dv">10</span></span>
+<span id="cb42-3"><a href="multi.html#cb42-3"></a>A &lt;-<span class="st"> </span><span class="kw">build_LDstable</span>(n)</span>
+<span id="cb42-4"><a href="multi.html#cb42-4"></a>r &lt;-<span class="st"> </span><span class="kw">build_randomr</span>(n)</span>
+<span id="cb42-5"><a href="multi.html#cb42-5"></a><span class="co"># start with no species</span></span>
+<span id="cb42-6"><a href="multi.html#cb42-6"></a>x &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, n)</span>
+<span id="cb42-7"><a href="multi.html#cb42-7"></a><span class="co"># assemble for 40 steps and keep track of richness and composition</span></span>
+<span id="cb42-8"><a href="multi.html#cb42-8"></a>ninvasions &lt;-<span class="st"> </span><span class="dv">40</span></span>
+<span id="cb42-9"><a href="multi.html#cb42-9"></a>results &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">invasion =</span> <span class="dv">1</span><span class="op">:</span>ninvasions, </span>
+<span id="cb42-10"><a href="multi.html#cb42-10"></a>                  <span class="dt">richness =</span> <span class="kw">rep</span>(<span class="ot">NA</span>, ninvasions),</span>
+<span id="cb42-11"><a href="multi.html#cb42-11"></a>                  <span class="dt">composition =</span> <span class="kw">rep</span>(<span class="ot">NA</span>, ninvasions))</span>
+<span id="cb42-12"><a href="multi.html#cb42-12"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>ninvasions){</span>
+<span id="cb42-13"><a href="multi.html#cb42-13"></a>  x &lt;-<span class="st"> </span><span class="kw">assembly_one_step</span>(x, r, A) </span>
+<span id="cb42-14"><a href="multi.html#cb42-14"></a>  results<span class="op">$</span>richness[i] &lt;-<span class="st"> </span><span class="kw">sum</span>(x <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)</span>
+<span id="cb42-15"><a href="multi.html#cb42-15"></a>  results<span class="op">$</span>composition[i] &lt;-<span class="st"> </span><span class="kw">paste</span>((<span class="dv">1</span><span class="op">:</span>n)[x<span class="op">&gt;</span><span class="dv">0</span>], <span class="dt">collapse =</span> <span class="st">&quot;-&quot;</span>)</span>
+<span id="cb42-16"><a href="multi.html#cb42-16"></a>}</span>
+<span id="cb42-17"><a href="multi.html#cb42-17"></a><span class="kw">print</span>(<span class="kw">head</span>(results))</span>
+<span id="cb42-18"><a href="multi.html#cb42-18"></a>pl &lt;-<span class="st"> </span><span class="kw">ggplot</span>(results) <span class="op">+</span><span class="st"> </span><span class="kw">aes</span>(<span class="dt">x =</span> invasion, <span class="dt">y =</span> richness, <span class="dt">label =</span> composition) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb42-19"><a href="multi.html#cb42-19"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_text</span>(<span class="dt">hjust =</span> <span class="dv">0</span>, <span class="dt">nudge_y =</span> <span class="fl">0.25</span>, <span class="dt">angle =</span> <span class="dv">90</span>)<span class="op">+</span><span class="st"> </span></span>
+<span id="cb42-20"><a href="multi.html#cb42-20"></a><span class="st">  </span><span class="kw">ylim</span>(<span class="kw">c</span>(<span class="dv">0</span>, n <span class="op">*</span><span class="st"> </span><span class="fl">1.25</span>))</span>
+<span id="cb42-21"><a href="multi.html#cb42-21"></a><span class="kw">show</span>(pl)</span></code></pre></div>
 <p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/rndzooassembly-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre><code># # A tibble: 6 x 3
 #   invasion richness composition
@@ -489,23 +494,23 @@ yielding:</p>
 # 5        5        2 1-2        
 # 6        6        2 1-2</code></pre>
 <p>Now let’s roll back history and assemble again:</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="multi.html#cb42-1"></a><span class="co"># start with no species</span></span>
-<span id="cb42-2"><a href="multi.html#cb42-2"></a>x &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, n)</span>
-<span id="cb42-3"><a href="multi.html#cb42-3"></a><span class="co"># assemble for 40 steps and keep track of richness</span></span>
-<span id="cb42-4"><a href="multi.html#cb42-4"></a>ninvasions &lt;-<span class="st"> </span><span class="dv">40</span></span>
-<span id="cb42-5"><a href="multi.html#cb42-5"></a>results &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">invasion =</span> <span class="dv">1</span><span class="op">:</span>ninvasions, </span>
-<span id="cb42-6"><a href="multi.html#cb42-6"></a>                  <span class="dt">richness =</span> <span class="kw">rep</span>(<span class="ot">NA</span>, ninvasions),</span>
-<span id="cb42-7"><a href="multi.html#cb42-7"></a>                  <span class="dt">composition =</span> <span class="kw">rep</span>(<span class="ot">NA</span>, ninvasions))</span>
-<span id="cb42-8"><a href="multi.html#cb42-8"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>ninvasions){</span>
-<span id="cb42-9"><a href="multi.html#cb42-9"></a>  x &lt;-<span class="st"> </span><span class="kw">assembly_one_step</span>(x, r, A) </span>
-<span id="cb42-10"><a href="multi.html#cb42-10"></a>  results<span class="op">$</span>richness[i] &lt;-<span class="st"> </span><span class="kw">sum</span>(x <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)</span>
-<span id="cb42-11"><a href="multi.html#cb42-11"></a>  results<span class="op">$</span>composition[i] &lt;-<span class="st"> </span><span class="kw">paste</span>((<span class="dv">1</span><span class="op">:</span>n)[x<span class="op">&gt;</span><span class="dv">0</span>], <span class="dt">collapse =</span> <span class="st">&quot;-&quot;</span>)</span>
-<span id="cb42-12"><a href="multi.html#cb42-12"></a>}</span>
-<span id="cb42-13"><a href="multi.html#cb42-13"></a><span class="kw">print</span>(<span class="kw">head</span>(results))</span>
-<span id="cb42-14"><a href="multi.html#cb42-14"></a>pl &lt;-<span class="st"> </span><span class="kw">ggplot</span>(results) <span class="op">+</span><span class="st"> </span><span class="kw">aes</span>(<span class="dt">x =</span> invasion, <span class="dt">y =</span> richness, <span class="dt">label =</span> composition) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb42-15"><a href="multi.html#cb42-15"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_text</span>(<span class="dt">hjust =</span> <span class="dv">0</span>, <span class="dt">nudge_y =</span> <span class="fl">0.25</span>, <span class="dt">angle =</span> <span class="dv">90</span>)<span class="op">+</span><span class="st"> </span></span>
-<span id="cb42-16"><a href="multi.html#cb42-16"></a><span class="st">  </span><span class="kw">ylim</span>(<span class="kw">c</span>(<span class="dv">0</span>, n <span class="op">*</span><span class="st"> </span><span class="fl">1.25</span>))</span>
-<span id="cb42-17"><a href="multi.html#cb42-17"></a><span class="kw">show</span>(pl)</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="multi.html#cb44-1"></a><span class="co"># start with no species</span></span>
+<span id="cb44-2"><a href="multi.html#cb44-2"></a>x &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, n)</span>
+<span id="cb44-3"><a href="multi.html#cb44-3"></a><span class="co"># assemble for 40 steps and keep track of richness</span></span>
+<span id="cb44-4"><a href="multi.html#cb44-4"></a>ninvasions &lt;-<span class="st"> </span><span class="dv">40</span></span>
+<span id="cb44-5"><a href="multi.html#cb44-5"></a>results &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">invasion =</span> <span class="dv">1</span><span class="op">:</span>ninvasions, </span>
+<span id="cb44-6"><a href="multi.html#cb44-6"></a>                  <span class="dt">richness =</span> <span class="kw">rep</span>(<span class="ot">NA</span>, ninvasions),</span>
+<span id="cb44-7"><a href="multi.html#cb44-7"></a>                  <span class="dt">composition =</span> <span class="kw">rep</span>(<span class="ot">NA</span>, ninvasions))</span>
+<span id="cb44-8"><a href="multi.html#cb44-8"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>ninvasions){</span>
+<span id="cb44-9"><a href="multi.html#cb44-9"></a>  x &lt;-<span class="st"> </span><span class="kw">assembly_one_step</span>(x, r, A) </span>
+<span id="cb44-10"><a href="multi.html#cb44-10"></a>  results<span class="op">$</span>richness[i] &lt;-<span class="st"> </span><span class="kw">sum</span>(x <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)</span>
+<span id="cb44-11"><a href="multi.html#cb44-11"></a>  results<span class="op">$</span>composition[i] &lt;-<span class="st"> </span><span class="kw">paste</span>((<span class="dv">1</span><span class="op">:</span>n)[x<span class="op">&gt;</span><span class="dv">0</span>], <span class="dt">collapse =</span> <span class="st">&quot;-&quot;</span>)</span>
+<span id="cb44-12"><a href="multi.html#cb44-12"></a>}</span>
+<span id="cb44-13"><a href="multi.html#cb44-13"></a><span class="kw">print</span>(<span class="kw">head</span>(results))</span>
+<span id="cb44-14"><a href="multi.html#cb44-14"></a>pl &lt;-<span class="st"> </span><span class="kw">ggplot</span>(results) <span class="op">+</span><span class="st"> </span><span class="kw">aes</span>(<span class="dt">x =</span> invasion, <span class="dt">y =</span> richness, <span class="dt">label =</span> composition) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb44-15"><a href="multi.html#cb44-15"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_text</span>(<span class="dt">hjust =</span> <span class="dv">0</span>, <span class="dt">nudge_y =</span> <span class="fl">0.25</span>, <span class="dt">angle =</span> <span class="dv">90</span>)<span class="op">+</span><span class="st"> </span></span>
+<span id="cb44-16"><a href="multi.html#cb44-16"></a><span class="st">  </span><span class="kw">ylim</span>(<span class="kw">c</span>(<span class="dv">0</span>, n <span class="op">*</span><span class="st"> </span><span class="fl">1.25</span>))</span>
+<span id="cb44-17"><a href="multi.html#cb44-17"></a><span class="kw">show</span>(pl)</span></code></pre></div>
 <p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/alternativehistory-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre><code># # A tibble: 6 x 3
 #   invasion richness composition
@@ -517,8 +522,8 @@ yielding:</p>
 # 5        5        2 4-10       
 # 6        6        2 4-10</code></pre>
 <p>As you can see, despite taking a different assembly history, we reach the same final composition. In fact, this is exactly what we would expect if we were to throw all species in the environment at the same time:</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="multi.html#cb44-1"></a><span class="kw">get_final_composition</span>(A, r)</span>
-<span id="cb44-2"><a href="multi.html#cb44-2"></a>x</span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="multi.html#cb46-1"></a><span class="kw">get_final_composition</span>(A, r)</span>
+<span id="cb46-2"><a href="multi.html#cb46-2"></a>x</span></code></pre></div>
 <pre><code>#  [1] 1.7588344 2.5440743 0.0000000 0.7860178 1.8730535 2.5502055 0.6961259
 #  [8] 1.6956878 0.0000000 0.0000000
 #  [1] 1.7588344 2.5440743 0.0000000 0.7860178 1.8730535 2.5502055 0.6961259
@@ -529,75 +534,75 @@ yielding:</p>
 <div id="network-spandrels" class="section level2">
 <h2><span class="header-section-number">3.7</span> Network spandrels</h2>
 <p>What is the network structure of the assembled community vs. that of the initial pool? Can we detect a signature of the forces acting on the community such that some species can persist, while other go extinct? To answer these questions, we start by considering a larger pool of species:</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="multi.html#cb46-1"></a><span class="kw">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb46-2"><a href="multi.html#cb46-2"></a><span class="co"># initial pool</span></span>
-<span id="cb46-3"><a href="multi.html#cb46-3"></a>A &lt;-<span class="st"> </span><span class="kw">build_LDstable</span>(<span class="dv">200</span>)</span>
-<span id="cb46-4"><a href="multi.html#cb46-4"></a>r &lt;-<span class="st"> </span><span class="kw">build_randomr</span>(<span class="dv">200</span>)</span>
-<span id="cb46-5"><a href="multi.html#cb46-5"></a><span class="co"># final composition</span></span>
-<span id="cb46-6"><a href="multi.html#cb46-6"></a>xstar &lt;-<span class="st"> </span><span class="kw">get_final_composition</span>(A, r)</span>
-<span id="cb46-7"><a href="multi.html#cb46-7"></a>A_pruned &lt;-<span class="st"> </span>A[xstar <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>, xstar <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>]</span>
-<span id="cb46-8"><a href="multi.html#cb46-8"></a>r_pruned &lt;-<span class="st"> </span>r[xstar <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="multi.html#cb48-1"></a><span class="kw">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb48-2"><a href="multi.html#cb48-2"></a><span class="co"># initial pool</span></span>
+<span id="cb48-3"><a href="multi.html#cb48-3"></a>A &lt;-<span class="st"> </span><span class="kw">build_LDstable</span>(<span class="dv">200</span>)</span>
+<span id="cb48-4"><a href="multi.html#cb48-4"></a>r &lt;-<span class="st"> </span><span class="kw">build_randomr</span>(<span class="dv">200</span>)</span>
+<span id="cb48-5"><a href="multi.html#cb48-5"></a><span class="co"># final composition</span></span>
+<span id="cb48-6"><a href="multi.html#cb48-6"></a>xstar &lt;-<span class="st"> </span><span class="kw">get_final_composition</span>(A, r)</span>
+<span id="cb48-7"><a href="multi.html#cb48-7"></a>A_pruned &lt;-<span class="st"> </span>A[xstar <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>, xstar <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>]</span>
+<span id="cb48-8"><a href="multi.html#cb48-8"></a>r_pruned &lt;-<span class="st"> </span>r[xstar <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>]</span></code></pre></div>
 <p>Are the properties of matrix <span class="math inline">\(A\)</span> different from those of the pruned version <span class="math inline">\(\tilde{A}\)</span>? We probe this in two ways: first, we build a graph with the strongest interactions, and plot it.</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="multi.html#cb47-1"></a><span class="kw">library</span>(igraph)</span>
-<span id="cb47-2"><a href="multi.html#cb47-2"></a>plot_graph_strong &lt;-<span class="st"> </span><span class="cf">function</span>(B, <span class="dt">quantile =</span> <span class="fl">0.75</span>){</span>
-<span id="cb47-3"><a href="multi.html#cb47-3"></a>  Bstrong &lt;-<span class="st"> </span><span class="kw">abs</span>(B)</span>
-<span id="cb47-4"><a href="multi.html#cb47-4"></a>  <span class="kw">diag</span>(Bstrong) &lt;-<span class="st"> </span><span class="dv">0</span></span>
-<span id="cb47-5"><a href="multi.html#cb47-5"></a>  Bstrong[Bstrong <span class="op">&lt;</span><span class="st"> </span><span class="kw">quantile</span>(Bstrong, quantile)] &lt;-<span class="st"> </span><span class="dv">0</span></span>
-<span id="cb47-6"><a href="multi.html#cb47-6"></a>  gr &lt;-<span class="st"> </span><span class="kw">graph_from_adjacency_matrix</span>((Bstrong <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">*</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">mode =</span> <span class="st">&quot;undirected&quot;</span>)</span>
-<span id="cb47-7"><a href="multi.html#cb47-7"></a>  <span class="kw">plot</span>(gr, <span class="dt">vertex.size=</span><span class="dv">10</span>, <span class="dt">vertex.label=</span><span class="ot">NA</span>, <span class="dt">layout=</span>layout_with_fr)</span>
-<span id="cb47-8"><a href="multi.html#cb47-8"></a>}</span>
-<span id="cb47-9"><a href="multi.html#cb47-9"></a></span>
-<span id="cb47-10"><a href="multi.html#cb47-10"></a><span class="kw">plot_graph_strong</span>(A)</span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="multi.html#cb49-1"></a><span class="kw">library</span>(igraph)</span>
+<span id="cb49-2"><a href="multi.html#cb49-2"></a>plot_graph_strong &lt;-<span class="st"> </span><span class="cf">function</span>(B, <span class="dt">quantile =</span> <span class="fl">0.75</span>){</span>
+<span id="cb49-3"><a href="multi.html#cb49-3"></a>  Bstrong &lt;-<span class="st"> </span><span class="kw">abs</span>(B)</span>
+<span id="cb49-4"><a href="multi.html#cb49-4"></a>  <span class="kw">diag</span>(Bstrong) &lt;-<span class="st"> </span><span class="dv">0</span></span>
+<span id="cb49-5"><a href="multi.html#cb49-5"></a>  Bstrong[Bstrong <span class="op">&lt;</span><span class="st"> </span><span class="kw">quantile</span>(Bstrong, quantile)] &lt;-<span class="st"> </span><span class="dv">0</span></span>
+<span id="cb49-6"><a href="multi.html#cb49-6"></a>  gr &lt;-<span class="st"> </span><span class="kw">graph_from_adjacency_matrix</span>((Bstrong <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">*</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">mode =</span> <span class="st">&quot;undirected&quot;</span>)</span>
+<span id="cb49-7"><a href="multi.html#cb49-7"></a>  <span class="kw">plot</span>(gr, <span class="dt">vertex.size=</span><span class="dv">10</span>, <span class="dt">vertex.label=</span><span class="ot">NA</span>, <span class="dt">layout=</span>layout_with_fr)</span>
+<span id="cb49-8"><a href="multi.html#cb49-8"></a>}</span>
+<span id="cb49-9"><a href="multi.html#cb49-9"></a></span>
+<span id="cb49-10"><a href="multi.html#cb49-10"></a><span class="kw">plot_graph_strong</span>(A)</span></code></pre></div>
 <p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/plotnetworksrz-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="multi.html#cb48-1"></a><span class="kw">plot_graph_strong</span>(A_pruned)</span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="multi.html#cb50-1"></a><span class="kw">plot_graph_strong</span>(A_pruned)</span></code></pre></div>
 <p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/plotnetworksrz-2.png" width="672" style="display: block; margin: auto;" /></p>
 <p>There seems to be no special structure. A more powerful way to show the same is to plot the eigenvalues of <span class="math inline">\(A\)</span> and <span class="math inline">\(\tilde{A}\)</span>. For a symmetric matrix with off-diagonal elements centered at zero, the eigenvalues should follow Wigner’s semicircle law:</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="multi.html#cb49-1"></a>plot_eigen &lt;-<span class="st"> </span><span class="cf">function</span>(B){</span>
-<span id="cb49-2"><a href="multi.html#cb49-2"></a>  evals &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">lambda =</span> <span class="kw">eigen</span>(B, <span class="dt">only.values =</span> <span class="ot">TRUE</span>, <span class="dt">symmetric =</span> <span class="ot">TRUE</span>)<span class="op">$</span>values)</span>
-<span id="cb49-3"><a href="multi.html#cb49-3"></a>  <span class="kw">ggplot</span>(<span class="dt">data =</span> evals) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb49-4"><a href="multi.html#cb49-4"></a><span class="st">    </span><span class="kw">aes</span>(<span class="dt">x =</span> lambda) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb49-5"><a href="multi.html#cb49-5"></a><span class="st">    </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="kw">as.integer</span>(<span class="kw">nrow</span>(evals) <span class="op">/</span><span class="st"> </span><span class="dv">10</span>), <span class="dt">colour =</span> <span class="st">&quot;black&quot;</span>)</span>
-<span id="cb49-6"><a href="multi.html#cb49-6"></a>}</span>
-<span id="cb49-7"><a href="multi.html#cb49-7"></a><span class="kw">plot_eigen</span>(A)</span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="multi.html#cb51-1"></a>plot_eigen &lt;-<span class="st"> </span><span class="cf">function</span>(B){</span>
+<span id="cb51-2"><a href="multi.html#cb51-2"></a>  evals &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">lambda =</span> <span class="kw">eigen</span>(B, <span class="dt">only.values =</span> <span class="ot">TRUE</span>, <span class="dt">symmetric =</span> <span class="ot">TRUE</span>)<span class="op">$</span>values)</span>
+<span id="cb51-3"><a href="multi.html#cb51-3"></a>  <span class="kw">ggplot</span>(<span class="dt">data =</span> evals) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb51-4"><a href="multi.html#cb51-4"></a><span class="st">    </span><span class="kw">aes</span>(<span class="dt">x =</span> lambda) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb51-5"><a href="multi.html#cb51-5"></a><span class="st">    </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="kw">as.integer</span>(<span class="kw">nrow</span>(evals) <span class="op">/</span><span class="st"> </span><span class="dv">10</span>), <span class="dt">colour =</span> <span class="st">&quot;black&quot;</span>)</span>
+<span id="cb51-6"><a href="multi.html#cb51-6"></a>}</span>
+<span id="cb51-7"><a href="multi.html#cb51-7"></a><span class="kw">plot_eigen</span>(A)</span></code></pre></div>
 <p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/ploteigenrz-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="multi.html#cb50-1"></a><span class="kw">plot_eigen</span>(A_pruned)</span></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="multi.html#cb52-1"></a><span class="kw">plot_eigen</span>(A_pruned)</span></code></pre></div>
 <p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/ploteigenrz-2.png" width="672" style="display: block; margin: auto;" /></p>
 <p>As such, the matrix of interactions before/after dynamics seem to have the same properties. However, as shown in <span class="citation">Serván et al. (<a href="#ref-servan2018coexistence" role="doc-biblioref">2018</a>)</span>, the distribution of the growth rates changes in a non-trivial way:</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="multi.html#cb51-1"></a>toplot &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">r =</span> r, <span class="dt">type =</span> <span class="st">&quot;before&quot;</span>)</span>
-<span id="cb51-2"><a href="multi.html#cb51-2"></a>toplot &lt;-<span class="st"> </span><span class="kw">rbind</span>(toplot, <span class="kw">data.frame</span>(<span class="dt">r =</span> r_pruned, <span class="dt">type =</span> <span class="st">&quot;after&quot;</span>))</span>
-<span id="cb51-3"><a href="multi.html#cb51-3"></a><span class="kw">ggplot</span>(toplot) <span class="op">+</span><span class="st"> </span><span class="kw">aes</span>(<span class="dt">x =</span> r, <span class="dt">fill =</span> type) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="multi.html#cb53-1"></a>toplot &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">r =</span> r, <span class="dt">type =</span> <span class="st">&quot;before&quot;</span>)</span>
+<span id="cb53-2"><a href="multi.html#cb53-2"></a>toplot &lt;-<span class="st"> </span><span class="kw">rbind</span>(toplot, <span class="kw">data.frame</span>(<span class="dt">r =</span> r_pruned, <span class="dt">type =</span> <span class="st">&quot;after&quot;</span>))</span>
+<span id="cb53-3"><a href="multi.html#cb53-3"></a><span class="kw">ggplot</span>(toplot) <span class="op">+</span><span class="st"> </span><span class="kw">aes</span>(<span class="dt">x =</span> r, <span class="dt">fill =</span> type) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>)</span></code></pre></div>
 <p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/plotrbeforeafter-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>But what if species were to be related to each other? For example, suppose <span class="math inline">\(r_i = 1\)</span> for all species, and build a matrix in which the interactions of species <span class="math inline">\(i + 1\)</span> are obtained by mutating slightly those of species <span class="math inline">\(i\)</span>:</p>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="multi.html#cb52-1"></a>n &lt;-<span class="st"> </span><span class="dv">200</span></span>
-<span id="cb52-2"><a href="multi.html#cb52-2"></a>r &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">200</span>)</span>
-<span id="cb52-3"><a href="multi.html#cb52-3"></a>A &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, n, n)</span>
-<span id="cb52-4"><a href="multi.html#cb52-4"></a><span class="co"># set first species</span></span>
-<span id="cb52-5"><a href="multi.html#cb52-5"></a>A[<span class="dv">1</span>, <span class="dv">1</span>] &lt;-<span class="st"> </span><span class="dv">-1</span></span>
-<span id="cb52-6"><a href="multi.html#cb52-6"></a><span class="co"># now each species is obtained by mutating the previous one</span></span>
-<span id="cb52-7"><a href="multi.html#cb52-7"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>n){</span>
-<span id="cb52-8"><a href="multi.html#cb52-8"></a>  ai &lt;-<span class="st"> </span>A[i <span class="dv">-1</span>,] <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.05</span> <span class="op">*</span><span class="st"> </span><span class="kw">runif</span>(n))</span>
-<span id="cb52-9"><a href="multi.html#cb52-9"></a>  A[i, ] &lt;-<span class="st"> </span>A[i, ] <span class="op">+</span><span class="st"> </span>ai</span>
-<span id="cb52-10"><a href="multi.html#cb52-10"></a>  A[, i] &lt;-<span class="st"> </span>A[, i] <span class="op">+</span><span class="st"> </span>ai</span>
-<span id="cb52-11"><a href="multi.html#cb52-11"></a>  A[i, i] &lt;-<span class="st"> </span><span class="dv">-1</span></span>
-<span id="cb52-12"><a href="multi.html#cb52-12"></a>}</span>
-<span id="cb52-13"><a href="multi.html#cb52-13"></a><span class="co"># make LD-stable</span></span>
-<span id="cb52-14"><a href="multi.html#cb52-14"></a>l1 &lt;-<span class="st"> </span><span class="kw">max</span>(<span class="kw">eigen</span>(A, <span class="dt">only.values =</span> <span class="ot">TRUE</span>, <span class="dt">symmetric =</span> <span class="ot">TRUE</span>)<span class="op">$</span>values)</span>
-<span id="cb52-15"><a href="multi.html#cb52-15"></a><span class="cf">if</span> (l1 <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="kw">diag</span>(A) &lt;-<span class="st"> </span><span class="kw">diag</span>(A) <span class="op">-</span><span class="st"> </span>l1 <span class="op">*</span><span class="st"> </span><span class="fl">1.01</span></span></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="multi.html#cb54-1"></a>n &lt;-<span class="st"> </span><span class="dv">200</span></span>
+<span id="cb54-2"><a href="multi.html#cb54-2"></a>r &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">200</span>)</span>
+<span id="cb54-3"><a href="multi.html#cb54-3"></a>A &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, n, n)</span>
+<span id="cb54-4"><a href="multi.html#cb54-4"></a><span class="co"># set first species</span></span>
+<span id="cb54-5"><a href="multi.html#cb54-5"></a>A[<span class="dv">1</span>, <span class="dv">1</span>] &lt;-<span class="st"> </span><span class="dv">-1</span></span>
+<span id="cb54-6"><a href="multi.html#cb54-6"></a><span class="co"># now each species is obtained by mutating the previous one</span></span>
+<span id="cb54-7"><a href="multi.html#cb54-7"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>n){</span>
+<span id="cb54-8"><a href="multi.html#cb54-8"></a>  ai &lt;-<span class="st"> </span>A[i <span class="dv">-1</span>,] <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.05</span> <span class="op">*</span><span class="st"> </span><span class="kw">runif</span>(n))</span>
+<span id="cb54-9"><a href="multi.html#cb54-9"></a>  A[i, ] &lt;-<span class="st"> </span>A[i, ] <span class="op">+</span><span class="st"> </span>ai</span>
+<span id="cb54-10"><a href="multi.html#cb54-10"></a>  A[, i] &lt;-<span class="st"> </span>A[, i] <span class="op">+</span><span class="st"> </span>ai</span>
+<span id="cb54-11"><a href="multi.html#cb54-11"></a>  A[i, i] &lt;-<span class="st"> </span><span class="dv">-1</span></span>
+<span id="cb54-12"><a href="multi.html#cb54-12"></a>}</span>
+<span id="cb54-13"><a href="multi.html#cb54-13"></a><span class="co"># make LD-stable</span></span>
+<span id="cb54-14"><a href="multi.html#cb54-14"></a>l1 &lt;-<span class="st"> </span><span class="kw">max</span>(<span class="kw">eigen</span>(A, <span class="dt">only.values =</span> <span class="ot">TRUE</span>, <span class="dt">symmetric =</span> <span class="ot">TRUE</span>)<span class="op">$</span>values)</span>
+<span id="cb54-15"><a href="multi.html#cb54-15"></a><span class="cf">if</span> (l1 <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="kw">diag</span>(A) &lt;-<span class="st"> </span><span class="kw">diag</span>(A) <span class="op">-</span><span class="st"> </span>l1 <span class="op">*</span><span class="st"> </span><span class="fl">1.01</span></span></code></pre></div>
 <p>Now each species is similar to the previous one:</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="multi.html#cb53-1"></a><span class="kw">image</span>(A[<span class="dv">1</span><span class="op">:</span>n, n<span class="op">:</span><span class="dv">1</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="multi.html#cb55-1"></a><span class="kw">image</span>(A[<span class="dv">1</span><span class="op">:</span>n, n<span class="op">:</span><span class="dv">1</span>])</span></code></pre></div>
 <p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/similarimage-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Perform the pruning, and plot networks and eigenvalues:</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="multi.html#cb54-1"></a>xstar &lt;-<span class="st"> </span><span class="kw">get_final_composition</span>(A, r)</span>
-<span id="cb54-2"><a href="multi.html#cb54-2"></a>A_pruned &lt;-<span class="st"> </span>A[xstar <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>, xstar <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>]</span>
-<span id="cb54-3"><a href="multi.html#cb54-3"></a>r_pruned &lt;-<span class="st"> </span>r[xstar <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>]</span>
-<span id="cb54-4"><a href="multi.html#cb54-4"></a></span>
-<span id="cb54-5"><a href="multi.html#cb54-5"></a><span class="kw">plot_graph_strong</span>(A)</span></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="multi.html#cb56-1"></a>xstar &lt;-<span class="st"> </span><span class="kw">get_final_composition</span>(A, r)</span>
+<span id="cb56-2"><a href="multi.html#cb56-2"></a>A_pruned &lt;-<span class="st"> </span>A[xstar <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>, xstar <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>]</span>
+<span id="cb56-3"><a href="multi.html#cb56-3"></a>r_pruned &lt;-<span class="st"> </span>r[xstar <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>]</span>
+<span id="cb56-4"><a href="multi.html#cb56-4"></a></span>
+<span id="cb56-5"><a href="multi.html#cb56-5"></a><span class="kw">plot_graph_strong</span>(A)</span></code></pre></div>
 <p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/structruredspandrels-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="multi.html#cb55-1"></a><span class="kw">plot_graph_strong</span>(A_pruned)</span></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="multi.html#cb57-1"></a><span class="kw">plot_graph_strong</span>(A_pruned)</span></code></pre></div>
 <p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/structruredspandrels-2.png" width="672" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="multi.html#cb56-1"></a><span class="kw">plot_eigen</span>(A)</span></code></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="multi.html#cb58-1"></a><span class="kw">plot_eigen</span>(A)</span></code></pre></div>
 <p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/structruredspandrels-3.png" width="672" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="multi.html#cb57-1"></a><span class="kw">plot_eigen</span>(A_pruned)</span></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="multi.html#cb59-1"></a><span class="kw">plot_eigen</span>(A_pruned)</span></code></pre></div>
 <p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/structruredspandrels-4.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Meaning that if our matrix <span class="math inline">\(A\)</span> is structured, we will recover a structured matrix after pruning, while if <span class="math inline">\(A\)</span> is unstructured, we will recover an unstructured matrix. <span class="citation">Maynard, Serván, and Allesina (<a href="#ref-maynard2018network" role="doc-biblioref">2018</a>)</span> showed that a well-defined network structure could be a “network spandrel” (cfr. <span class="citation">Gould and Lewontin (<a href="#ref-gould1979spandrels" role="doc-biblioref">1979</a>)</span> and <span class="citation">Solé and Valverde (<a href="#ref-sole2006network" role="doc-biblioref">2006</a>)</span>) arising from the way new species are introduced, rather than a “signature of stability”.</p>
 

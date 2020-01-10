@@ -24,7 +24,7 @@
 <meta name="author" content="Stefano Allesina" />
 
 
-<meta name="date" content="2020-01-09" />
+<meta name="date" content="2020-01-10" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -315,6 +315,7 @@ As such, provided with the parameters <span class="math inline">\(r\)</span> and
 <h3><span class="header-section-number">2.4.1</span> Existence of an equilibrium</h3>
 <p>Returning to the multi-species system, and in analogy with the single species, we can look for stationary points (equilibria). If the matrix <span class="math inline">\(A\)</span> is not singular, then we can look for a solution of <span class="math inline">\(r + Ax\)</span> that has positive components (called a <strong>feasible equilibrium</strong>). <strong>If such point exists, it is unique</strong> and is the solution of <span class="math inline">\(Ax^\star = -r\)</span>, <span class="math inline">\(x^\star = -A^{-1}r\)</span>.</p>
 <p>Suppose that the GLV has no feasible equilibrium. Then all trajectories (if bounded; some could grow to infinity) reach the boundary of <span class="math inline">\(\mathbb R^n_{0+}\)</span>. Practically, this means that <strong>to ensure coexistence of all species, it is necessary to have an equilibrium in the interior <span class="math inline">\(\mathbb R^n_{+}\)</span></strong>.</p>
+<p>For a proof, see Theorem 5.2.1 in <span class="citation">Hofbauer and Sigmund (<a href="#ref-hofbauer1998evolutionary" role="doc-biblioref">1998</a>)</span>.</p>
 </div>
 <div id="stability-of-an-equilibrium" class="section level3">
 <h3><span class="header-section-number">2.4.2</span> Stability of an equilibrium</h3>
@@ -478,7 +479,7 @@ multiplying by the matrix inverse and rearranging:</p>
 <p><span class="math display">\[
 -A^{-1} r = x^\star =  \frac{1}{T} \int_0^T x(t) dt 
 \]</span></p>
-<p>showing that <strong>the average density is</strong> in fact <strong>the equilibrium</strong>. With a similar argument, one can prove that the trajectory stays in a compact space (i.e., in case of chaotic attractors), then long-time average is still <span class="math inline">\(x^\star\)</span>.</p>
+<p>showing that <strong>the average density is</strong> in fact <strong>the equilibrium</strong>. With a similar argument, one can prove that if the trajectory stays in a compact space (i.e., in case of chaotic attractors), then long-time average is still <span class="math inline">\(x^\star\)</span>.</p>
 <p>For example, let’s compute the average for the system with the limit cycle above (discarding the transients in the first part of the time series):</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="intro.html#cb11-1"></a>res_<span class="dv">3</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(time <span class="op">&gt;</span><span class="st"> </span><span class="dv">50</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb11-2"><a href="intro.html#cb11-2"></a><span class="st">  </span><span class="kw">group_by</span>(species) <span class="op">%&gt;%</span><span class="st"> </span></span>

@@ -151,6 +151,8 @@ Returning to the multi-species system, and in analogy with the single species, w
 
 Suppose that the GLV has no feasible equilibrium. Then all trajectories (if bounded; some could grow to infinity) reach the boundary of $\mathbb R^n_{0+}$. Practically, this means that **to ensure coexistence of all species, it is necessary to have an equilibrium in the interior $\mathbb R^n_{+}$**. 
 
+For a proof, see Theorem 5.2.1 in @hofbauer1998evolutionary.
+
 ### Stability of an equilibrium
 
 Suppose that a feasible equilibrium $x^\star$ exists. Then we can ask whether it is **attractive**, i.e. if trajectories started at initial condition $x(0)$ will eventually reach $x^\star$. This problem is in general difficult to solve (but see below); as an alternative, we can test for **local asymptotic stability**, i.e., ask whether **the system will return to the equilibrium if perturbed infinitesimally away from it**. In general, whenever we describe an ecological community as a system of nonlinear, autonomous ODEs:
@@ -353,7 +355,7 @@ $$
 -A^{-1} r = x^\star =  \frac{1}{T} \int_0^T x(t) dt 
 $$
 
-showing that **the average density is** in fact **the equilibrium**. With a similar argument, one can prove that the trajectory stays in a compact space (i.e., in case of chaotic attractors), then long-time average is still $x^\star$.
+showing that **the average density is** in fact **the equilibrium**. With a similar argument, one can prove that if the trajectory stays in a compact space (i.e., in case of chaotic attractors), then long-time average is still $x^\star$.
 
 For example, let's compute the average for the system with the limit cycle above (discarding the transients in the first part of the time series):
 ```{r, timeavg1}

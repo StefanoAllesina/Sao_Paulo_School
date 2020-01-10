@@ -258,7 +258,14 @@ D_1 <- diag(c(-1, 1, 1))
 solve(D_1 %*% A %*% D_1, -D_1 %*% r)
 ```
 
-Because of the symmetry assumption (i.e., we sampled all growth rates and off-diagonal elements from a distribution centered at zero), $(D_k A D_k)$ has the same distribution as $A$, and $D_k r$ the same distribution as $r$. We can repeat the operation several times, connecting each possible starting point to the feasible solution. Therefore, the probability of all species coexisting amounts to the probability of having chosen the "right" sequence of $D_k$, which happens with probability $1 / 2^n$. Notice that the same proof holds when the coefficients of $A$ are sampled in pairs from a bivariate distribution (rather than having symmetric matrices), as long as the distribution is centered at zero, and the matrix is $D-$stable (@servan2018coexistence). Using the same argument, one can prove that, under this parametrization, the probability of observing $k$ species coexisting and $n -k$ not being able to invade is exactly $\binom{n}{k} \frac{1}{2^n}$ (@servan2018coexistence).
+Because of the symmetry assumption (i.e., we sampled all growth rates and off-diagonal elements from a distribution centered at zero), $(D_k A D_k)$ has the same distribution as $A$, and $D_k r$ the same distribution as $r$. In fact, one can see that $(D_k A D_k)$ is also a similarity transformation, implying that the eigenvalues of $A$ and $(D_k A D_k)$ are the same (i.e., the operation preserves stability):
+
+```{r proofrzsimilarity}
+eigen(A)$values
+eigen(D_1 %*% A %*% D_1)$values
+```
+
+We can repeat the operation several times, connecting each possible starting point to the feasible solution. Therefore, the probability of all species coexisting amounts to the probability of having chosen the "right" sequence of $D_k$, which happens with probability $1 / 2^n$. Notice that the same proof holds when the coefficients of $A$ are sampled in pairs from a bivariate distribution (rather than having symmetric matrices), as long as the distribution is centered at zero, and the matrix is Lyapunov-Diagonally stable (@servan2018coexistence). Using the same argument, one can prove that, under this parametrization, the probability of observing $k$ species coexisting and $n -k$ not being able to invade is exactly $\binom{n}{k} \frac{1}{2^n}$ (@servan2018coexistence).
 
 ## Assembly and saturated equilibrium
 
