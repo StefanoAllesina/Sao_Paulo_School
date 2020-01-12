@@ -24,7 +24,7 @@
 <meta name="author" content="Stefano Allesina" />
 
 
-<meta name="date" content="2020-01-10" />
+<meta name="date" content="2020-01-12" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -225,7 +225,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>To solve these two issues, we would need to find a good way to navigate the enormous space of possibilities, thereby suggesting “good” experiments that yield a large probability of coexistence.</p>
 <div id="synthetic-communities-using-the-glv-model" class="section level2">
 <h2><span class="header-section-number">5.1</span> Synthetic communities using the GLV model</h2>
-<p>To set the stage for deriving a statistical model that can deal with the problems above, we start by simulating the communities that can be formed from a pool of <span class="math inline">\(n\)</span> species using the GLV model. First, we need a way to index our communities. We take a vector <span class="math inline">\(p\)</span> reporting the presence/absence of a given species at the beginning of the experiment. We then associate a label <span class="math inline">\(k \in \{1, \ldots, 2^n -1\}\)</span> with the experiment. This label uniquely defines the composition of a community. If only taxon 1 is present (<span class="math inline">\(p = [1,0,0,\ldots,0]\)</span>), then <span class="math inline">\(k = 1\)</span>, if only taxon 2 is present (<span class="math inline">\(p =[0,1,0,\ldots,0]\)</span>) then <span class="math inline">\(k = 2\)</span>, if both taxa 1 and 2 are part of the experiment, <span class="math inline">\(k = 3\)</span> (<span class="math inline">\(p = [1,1,0,\ldots,0]\)</span>); in general, <span class="math inline">\(k = \sum_{i = 1}^n p_i 2^{(i-1)}\)</span> where <span class="math inline">\(p_i = 1\)</span> if taxon <span class="math inline">\(i\)</span> is part of the experiment, and <span class="math inline">\(p_i = 0\)</span> otherwise.</p>
+<p>To set the stage for deriving a statistical model that can deal with the problems above, we start by simulating the communities that can be formed from a pool of <span class="math inline">\(n\)</span> species using the GLV model. First, we need a way to index our communities. We take a vector <span class="math inline">\(p\)</span> reporting the presence/absence of a given species in a community. To this end, we associate a label <span class="math inline">\(k \in \{1, \ldots, 2^n -1\}\)</span> with each possible community. If only taxon 1 is present (<span class="math inline">\(p = [1,0,0,\ldots,0]\)</span>), then <span class="math inline">\(k = 1\)</span>, if only taxon 2 is present (<span class="math inline">\(p =[0,1,0,\ldots,0]\)</span>) then <span class="math inline">\(k = 2\)</span>, if both taxa 1 and 2 are part of the community, <span class="math inline">\(k = 3\)</span> (<span class="math inline">\(p = [1,1,0,\ldots,0]\)</span>); in general, <span class="math inline">\(k = \sum_{i = 1}^n p_i 2^{(i-1)}\)</span> where <span class="math inline">\(p_i = 1\)</span> if taxon <span class="math inline">\(i\)</span> is in the community, and <span class="math inline">\(p_i = 0\)</span> otherwise.</p>
 <p>We can then cycle through each of the <span class="math inline">\(2^n - 1\)</span> assemblages that can be formed, and determine whether the species will coexist or not in our experiment. For simplicity, we report as coexisting any set of species for which a) the GLV equilibrium is feasible, and b) it is locally stable. We collect all the communities that are coexisting along with the abundance of all species in the matrix <span class="math inline">\(E\)</span>.</p>
 <p>In <code>R</code>:</p>
 <div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="data.html#cb77-1"></a><span class="kw">set.seed</span>(<span class="dv">3</span>)</span>
@@ -309,11 +309,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><span class="math display">\[
 \begin{aligned}
 \dfrac{dx(t)}{dt} &amp;= D(x(t))(r + A x(t))\\
-&amp;= D(r x(t))(1 + B x(t))
+&amp;= D(r \circ x(t))(1 + B x(t))
 \end{aligned}
 \]</span>
 where we have <span class="math inline">\(b_{ij} = a_{ij} / r_i\)</span>. The equilibrium for each subset of species <span class="math inline">\(k\)</span> (if it exists) can be found as <span class="math inline">\((B^{(k)})^{-1} 1^{(k)}\)</span>, where <span class="math inline">\((B^{(k)})^{-1}\)</span> is the inverse of the <span class="math inline">\(B^{(k)}\)</span> sub-matrix of <span class="math inline">\(B\)</span> in which only the rows/columns belonging to <span class="math inline">\(k\)</span> are retained, and <span class="math inline">\(1^{(k)}\)</span> is a vector of ones with length equal to the number of species in <span class="math inline">\(k\)</span>.</p>
-<p>We now want to link the matrix <span class="math inline">\(B\)</span> with the results of the experiments, stored in matrix <span class="math inline">\(E\)</span>. Call <span class="math inline">\(x^{(k)}_i\)</span> the recorded density of taxon <span class="math inline">\(i\)</span> in community <span class="math inline">\(k\)</span> (i.e., stored in one of the rows of <span class="math inline">\(E\)</span>). Then, we can build a matrix <span class="math inline">\(P\)</span> where each row represents an equation <span class="math inline">\(\sum_j b_{ij} x_j^{(k)} = 1\)</span> and we have a column for each coefficient in <span class="math inline">\(B\)</span>. For example, take three taxa, and suppose that we can culture each in isolation, and that the all assemblages coexist when co-cultured. We can write 12 equations: monocultures (<span class="math inline">\(k \in \{1, 2, 4\}\)</span>) give rise to a single equation; co-cultures of two taxa to two equations each (<span class="math inline">\(k \in \{3, 5, 6 \}\)</span>); and communities with three taxa to three independent equations (<span class="math inline">\(k = 7\)</span>). Here are the 12 equations we can write:</p>
+<p>We now want to link the matrix <span class="math inline">\(B\)</span> with the results of the experiments, stored in matrix <span class="math inline">\(E\)</span>. Call <span class="math inline">\(x^{(k)}_i\)</span> the recorded density of taxon <span class="math inline">\(i\)</span> in community <span class="math inline">\(k\)</span> (i.e., stored in one of the rows of <span class="math inline">\(E\)</span>). Then, we can build a matrix <span class="math inline">\(P\)</span> where each row represents an equation <span class="math inline">\(\sum_{j \in k} b_{ij} x_j^{(k)} = 1\)</span> and we have a column for each coefficient in <span class="math inline">\(B\)</span>. For example, take three taxa, and suppose that we can culture each in isolation, and that the all assemblages coexist when co-cultured. We can write 12 equations: monocultures (<span class="math inline">\(k \in \{1, 2, 4\}\)</span>) give rise to a single equation; co-cultures of two taxa to two equations each (<span class="math inline">\(k \in \{3, 5, 6 \}\)</span>); and communities with three taxa to three independent equations (<span class="math inline">\(k = 7\)</span>). Here are the 12 equations we can write:</p>
 <p><span class="math display">\[
 \begin{aligned}
 b_{11} x_1^{(1)} &amp;= 1\\
@@ -481,11 +481,11 @@ b_{13}
 <h2><span class="header-section-number">5.4</span> Fitting real data</h2>
 <p>Having played with synthetic data, we can start thinking about data stemming from real experiments. In particular, consider the linear, additive model:</p>
 <p><span class="math display">\[
-x_i^{(k)} = \gamma_i - \sum_{j\neq i} \theta_{ij} x_i^{(k)}
+x_i^{(k)} = \gamma_i - \sum_{j\neq i} \theta_{ij} x_j^{(k)}
 \]</span>
-where <span class="math inline">\(x_i^{(k)}\)</span> is the density of species <span class="math inline">\(i\)</span> in community <span class="math inline">\(k\)</span>, <span class="math inline">\(\gamma_i\)</span> models the density of <span class="math inline">\(i\)</span> when grown in isolation, and the parameters <span class="math inline">\(\theta_{ij}\)</span> how the density of <span class="math inline">\(i\)</span> is influenced by the other species in community <span class="math inline">\(k\)</span>. Dividing both sides by <span class="math inline">\(\gamma_i\)</span> and rearranging:</p>
+where <span class="math inline">\(x_i^{(k)}\)</span> is the density of species <span class="math inline">\(i\)</span> in community <span class="math inline">\(k\)</span>, <span class="math inline">\(\gamma_i\)</span> models the density of <span class="math inline">\(i\)</span> when grown in isolation, and the parameters <span class="math inline">\(\theta_{ij}\)</span> model how the density of <span class="math inline">\(i\)</span> is influenced by the other species in community <span class="math inline">\(k\)</span>. Dividing both sides by <span class="math inline">\(\gamma_i\)</span> and rearranging:</p>
 <p><span class="math display">\[
-\sum_{j\neq i} (\theta_{ij} /\gamma_i) x_i^{(k)} + (1/{\gamma_i}) x_i^{(k)}= \sum_j b_{ij} x_j^{(k)} = 1
+\sum_{j\neq i} (\theta_{ij} /\gamma_i) x_j^{(k)} + (1/{\gamma_i}) x_i^{(k)}= \sum_j b_{ij} x_j^{(k)} = 1
 \]</span>
 which is exactly the same system of equations found above. As such, fitting a linear, addittive model for the biomass of each species in each plot is equivalent to finding the equilibrium strcuture of a GLV model that approximates the data.</p>
 <p>One thing to consider when modeling real data, contrary to simulated data, is the structure of the errors. For example, empirical data often contain replicates that reach slightly different densities. Moreover, what is typically done in these types of experiments is to sort and measure biomass for a section of each plot, and then to multiply to extrapolate the biomass for the whole plot. As such, if the error is normally distributed for the sub-plot, then it’s going to be lognormally distributed for the whole plot. Furthermore, we need to link the rows of matrix <span class="math inline">\(P\)</span> above, because when we make an error in measuring <span class="math inline">\(x_j^{(k)}\)</span>, the value is reported over several values. Following <span class="citation">Maynard, Miller, and Allesina (<a href="#ref-maynard2019predicting" role="doc-biblioref">2020</a>)</span>, we do the following:</p>
@@ -565,7 +565,7 @@ which is exactly the same system of equations found above. As such, fitting a li
 <span id="cb89-8"><a href="data.html#cb89-8"></a>best_B &lt;-<span class="st"> </span><span class="kw">matrix</span>(tmp<span class="op">$</span>par, <span class="dv">4</span>, <span class="dv">4</span>)</span>
 <span id="cb89-9"><a href="data.html#cb89-9"></a>solution &lt;-<span class="st"> </span><span class="kw">compute_SSQ</span>(best_B, E)</span></code></pre></div>
 <p>Now let’s write code to show a nice plot of the predicted vs. observed values for all communities:</p>
-<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="data.html#cb90-1"></a>plot_solution &lt;-<span class="st"> </span><span class="cf">function</span>(solution){</span>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="data.html#cb90-1"></a>plot_solution &lt;-<span class="st"> </span><span class="cf">function</span>(solution, <span class="dt">oof =</span> <span class="ot">NULL</span>){</span>
 <span id="cb90-2"><a href="data.html#cb90-2"></a>  <span class="co"># add a column with community composition</span></span>
 <span id="cb90-3"><a href="data.html#cb90-3"></a>  spnames &lt;-<span class="st"> </span><span class="kw">colnames</span>(solution<span class="op">$</span>E)</span>
 <span id="cb90-4"><a href="data.html#cb90-4"></a>  community &lt;-<span class="st"> </span><span class="kw">apply</span>(solution<span class="op">$</span>E, <span class="dv">1</span>, <span class="cf">function</span>(x) <span class="kw">paste</span>(spnames[x <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>], <span class="dt">collapse =</span> <span class="st">&quot;_&quot;</span>))</span>
@@ -576,23 +576,40 @@ which is exactly the same system of equations found above. As such, fitting a li
 <span id="cb90-9"><a href="data.html#cb90-9"></a>  toplot &lt;-<span class="st"> </span>E <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(species, observed_biomass, <span class="op">-</span>experiment, <span class="op">-</span>community) <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb90-10"><a href="data.html#cb90-10"></a><span class="st">    </span><span class="kw">filter</span>(observed_biomass <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)</span>
 <span id="cb90-11"><a href="data.html#cb90-11"></a>  <span class="co"># now the predicted data</span></span>
-<span id="cb90-12"><a href="data.html#cb90-12"></a>  tildeE &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(solution<span class="op">$</span>tildeE) <span class="op">%&gt;%</span></span>
-<span id="cb90-13"><a href="data.html#cb90-13"></a><span class="st">    </span><span class="kw">add_column</span>(<span class="dt">community =</span> community) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb90-14"><a href="data.html#cb90-14"></a><span class="st">    </span><span class="kw">gather</span>(species, predicted_biomass, <span class="op">-</span>community) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb90-15"><a href="data.html#cb90-15"></a><span class="st">    </span><span class="kw">distinct</span>()</span>
-<span id="cb90-16"><a href="data.html#cb90-16"></a>  <span class="co"># join the two data sets</span></span>
-<span id="cb90-17"><a href="data.html#cb90-17"></a>  toplot &lt;-<span class="st"> </span>toplot <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb90-18"><a href="data.html#cb90-18"></a><span class="st">    </span><span class="kw">inner_join</span>(tildeE, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;community&quot;</span>, <span class="st">&quot;species&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb90-19"><a href="data.html#cb90-19"></a><span class="st">    </span><span class="kw">filter</span>(observed_biomass <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)</span>
-<span id="cb90-20"><a href="data.html#cb90-20"></a>  pl &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> toplot) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb90-21"><a href="data.html#cb90-21"></a><span class="st">    </span><span class="kw">aes</span>(<span class="dt">x =</span> species, <span class="dt">fill =</span> species) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb90-22"><a href="data.html#cb90-22"></a><span class="st">    </span><span class="kw">geom_violin</span>(<span class="kw">aes</span>(<span class="dt">y =</span> observed_biomass), <span class="dt">draw_quantiles =</span> <span class="fl">0.5</span>, <span class="dt">scale =</span> <span class="st">&quot;width&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb90-23"><a href="data.html#cb90-23"></a><span class="st">    </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y =</span> predicted_biomass)) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb90-24"><a href="data.html#cb90-24"></a><span class="st">    </span><span class="kw">facet_wrap</span>(<span class="op">~</span>community, <span class="dt">scales =</span> <span class="st">&quot;free_y&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb90-25"><a href="data.html#cb90-25"></a><span class="st">    </span><span class="kw">scale_y_log10</span>(<span class="st">&quot;biomass&quot;</span>)</span>
-<span id="cb90-26"><a href="data.html#cb90-26"></a>  <span class="kw">return</span>(pl)</span>
-<span id="cb90-27"><a href="data.html#cb90-27"></a>}</span>
-<span id="cb90-28"><a href="data.html#cb90-28"></a><span class="kw">plot_solution</span>(solution)</span></code></pre></div>
+<span id="cb90-12"><a href="data.html#cb90-12"></a>  <span class="cf">if</span> (<span class="kw">is.null</span>(oof)){</span>
+<span id="cb90-13"><a href="data.html#cb90-13"></a>    tildeE &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(solution<span class="op">$</span>tildeE) <span class="op">%&gt;%</span></span>
+<span id="cb90-14"><a href="data.html#cb90-14"></a><span class="st">      </span><span class="kw">add_column</span>(<span class="dt">community =</span> community) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb90-15"><a href="data.html#cb90-15"></a><span class="st">      </span><span class="kw">gather</span>(species, predicted_biomass, <span class="op">-</span>community) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb90-16"><a href="data.html#cb90-16"></a><span class="st">      </span><span class="kw">distinct</span>()</span>
+<span id="cb90-17"><a href="data.html#cb90-17"></a>  } <span class="cf">else</span> {</span>
+<span id="cb90-18"><a href="data.html#cb90-18"></a>    tildeE &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(solution<span class="op">$</span>tildeE) <span class="op">%&gt;%</span></span>
+<span id="cb90-19"><a href="data.html#cb90-19"></a><span class="st">      </span><span class="kw">add_column</span>(<span class="dt">community =</span> community, <span class="dt">oof =</span> oof) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb90-20"><a href="data.html#cb90-20"></a><span class="st">      </span><span class="kw">gather</span>(species, predicted_biomass, <span class="op">-</span>community, <span class="op">-</span>oof) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb90-21"><a href="data.html#cb90-21"></a><span class="st">      </span><span class="kw">distinct</span>()</span>
+<span id="cb90-22"><a href="data.html#cb90-22"></a>  }</span>
+<span id="cb90-23"><a href="data.html#cb90-23"></a>  <span class="co"># join the two data sets</span></span>
+<span id="cb90-24"><a href="data.html#cb90-24"></a>  toplot &lt;-<span class="st"> </span>toplot <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb90-25"><a href="data.html#cb90-25"></a><span class="st">    </span><span class="kw">inner_join</span>(tildeE, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;community&quot;</span>, <span class="st">&quot;species&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb90-26"><a href="data.html#cb90-26"></a><span class="st">    </span><span class="kw">filter</span>(observed_biomass <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)</span>
+<span id="cb90-27"><a href="data.html#cb90-27"></a>  <span class="cf">if</span> (<span class="kw">is.null</span>(oof)){</span>
+<span id="cb90-28"><a href="data.html#cb90-28"></a>    pl &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> toplot) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb90-29"><a href="data.html#cb90-29"></a><span class="st">    </span><span class="kw">aes</span>(<span class="dt">x =</span> species, <span class="dt">fill =</span> species) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb90-30"><a href="data.html#cb90-30"></a><span class="st">    </span><span class="kw">geom_violin</span>(<span class="kw">aes</span>(<span class="dt">y =</span> observed_biomass), <span class="dt">draw_quantiles =</span> <span class="fl">0.5</span>, <span class="dt">scale =</span> <span class="st">&quot;width&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb90-31"><a href="data.html#cb90-31"></a><span class="st">    </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y =</span> predicted_biomass)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb90-32"><a href="data.html#cb90-32"></a><span class="st">    </span><span class="kw">facet_wrap</span>(<span class="op">~</span>community, <span class="dt">scales =</span> <span class="st">&quot;free_y&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb90-33"><a href="data.html#cb90-33"></a><span class="st">    </span><span class="kw">scale_y_log10</span>(<span class="st">&quot;biomass&quot;</span>)</span>
+<span id="cb90-34"><a href="data.html#cb90-34"></a>  } <span class="cf">else</span> {</span>
+<span id="cb90-35"><a href="data.html#cb90-35"></a>    pl &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> toplot) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb90-36"><a href="data.html#cb90-36"></a><span class="st">    </span><span class="kw">aes</span>(<span class="dt">x =</span> species, <span class="dt">fill =</span> species) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb90-37"><a href="data.html#cb90-37"></a><span class="st">    </span><span class="kw">geom_violin</span>(<span class="kw">aes</span>(<span class="dt">y =</span> observed_biomass, <span class="dt">alpha =</span> <span class="kw">I</span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.9</span> <span class="op">*</span><span class="st"> </span>oof)), </span>
+<span id="cb90-38"><a href="data.html#cb90-38"></a>                <span class="dt">draw_quantiles =</span> <span class="fl">0.5</span>, <span class="dt">scale =</span> <span class="st">&quot;width&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb90-39"><a href="data.html#cb90-39"></a><span class="st">    </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y =</span> predicted_biomass)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb90-40"><a href="data.html#cb90-40"></a><span class="st">    </span><span class="kw">facet_wrap</span>(<span class="op">~</span>community, <span class="dt">scales =</span> <span class="st">&quot;free_y&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb90-41"><a href="data.html#cb90-41"></a><span class="st">    </span><span class="kw">scale_y_log10</span>(<span class="st">&quot;biomass&quot;</span>)</span>
+<span id="cb90-42"><a href="data.html#cb90-42"></a>  }</span>
+<span id="cb90-43"><a href="data.html#cb90-43"></a>  <span class="kw">return</span>(pl)</span>
+<span id="cb90-44"><a href="data.html#cb90-44"></a>}</span>
+<span id="cb90-45"><a href="data.html#cb90-45"></a><span class="kw">plot_solution</span>(solution)</span></code></pre></div>
 <p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/plotendpoints-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="predicting-real-data-out-of-fit" class="section level2">
@@ -602,39 +619,42 @@ which is exactly the same system of equations found above. As such, fitting a li
 <span id="cb91-2"><a href="data.html#cb91-2"></a>B &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, <span class="dv">4</span>, <span class="dv">4</span>)</span>
 <span id="cb91-3"><a href="data.html#cb91-3"></a><span class="kw">diag</span>(B) &lt;-<span class="st"> </span><span class="dv">1</span></span>
 <span id="cb91-4"><a href="data.html#cb91-4"></a>Enotriplets &lt;-<span class="st"> </span>E[<span class="kw">rowSums</span>(E <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">!=</span><span class="st"> </span><span class="dv">3</span>, ]</span>
-<span id="cb91-5"><a href="data.html#cb91-5"></a>tmp &lt;-<span class="st"> </span><span class="kw">optim</span>(<span class="dt">par =</span> <span class="kw">as.vector</span>(B), </span>
-<span id="cb91-6"><a href="data.html#cb91-6"></a>             <span class="dt">fn =</span> to_minimize, </span>
-<span id="cb91-7"><a href="data.html#cb91-7"></a>             <span class="dt">E =</span> Enotriplets,</span>
-<span id="cb91-8"><a href="data.html#cb91-8"></a>             <span class="dt">method =</span> <span class="st">&quot;BFGS&quot;</span>)</span>
-<span id="cb91-9"><a href="data.html#cb91-9"></a>best_B_oof &lt;-<span class="st"> </span><span class="kw">matrix</span>(tmp<span class="op">$</span>par, <span class="dv">4</span>, <span class="dv">4</span>)</span>
-<span id="cb91-10"><a href="data.html#cb91-10"></a>solution_oof &lt;-<span class="st"> </span><span class="kw">compute_SSQ</span>(best_B_oof, E)</span>
-<span id="cb91-11"><a href="data.html#cb91-11"></a><span class="kw">plot_solution</span>(solution_oof)</span></code></pre></div>
+<span id="cb91-5"><a href="data.html#cb91-5"></a>oof &lt;-<span class="st"> </span><span class="kw">rowSums</span>(E <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">==</span><span class="st"> </span><span class="dv">3</span></span>
+<span id="cb91-6"><a href="data.html#cb91-6"></a>tmp &lt;-<span class="st"> </span><span class="kw">optim</span>(<span class="dt">par =</span> <span class="kw">as.vector</span>(B), </span>
+<span id="cb91-7"><a href="data.html#cb91-7"></a>             <span class="dt">fn =</span> to_minimize, </span>
+<span id="cb91-8"><a href="data.html#cb91-8"></a>             <span class="dt">E =</span> Enotriplets,</span>
+<span id="cb91-9"><a href="data.html#cb91-9"></a>             <span class="dt">method =</span> <span class="st">&quot;BFGS&quot;</span>)</span>
+<span id="cb91-10"><a href="data.html#cb91-10"></a>best_B_oof &lt;-<span class="st"> </span><span class="kw">matrix</span>(tmp<span class="op">$</span>par, <span class="dv">4</span>, <span class="dv">4</span>)</span>
+<span id="cb91-11"><a href="data.html#cb91-11"></a>solution_oof &lt;-<span class="st"> </span><span class="kw">compute_SSQ</span>(best_B_oof, E)</span>
+<span id="cb91-12"><a href="data.html#cb91-12"></a><span class="kw">plot_solution</span>(solution_oof, oof)</span></code></pre></div>
 <p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/kuebnumerics2-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Repeat excluding all the pairs:</p>
 <div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="data.html#cb92-1"></a><span class="kw">set.seed</span>(<span class="dv">1</span>)</span>
 <span id="cb92-2"><a href="data.html#cb92-2"></a>B &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, <span class="dv">4</span>, <span class="dv">4</span>)</span>
 <span id="cb92-3"><a href="data.html#cb92-3"></a><span class="kw">diag</span>(B) &lt;-<span class="st"> </span><span class="dv">1</span></span>
 <span id="cb92-4"><a href="data.html#cb92-4"></a>Enopairs &lt;-<span class="st"> </span>E[<span class="kw">rowSums</span>(E <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">!=</span><span class="st"> </span><span class="dv">2</span>, ]</span>
-<span id="cb92-5"><a href="data.html#cb92-5"></a>tmp &lt;-<span class="st"> </span><span class="kw">optim</span>(<span class="dt">par =</span> <span class="kw">as.vector</span>(B), </span>
-<span id="cb92-6"><a href="data.html#cb92-6"></a>             <span class="dt">fn =</span> to_minimize, </span>
-<span id="cb92-7"><a href="data.html#cb92-7"></a>             <span class="dt">E =</span> Enopairs,</span>
-<span id="cb92-8"><a href="data.html#cb92-8"></a>             <span class="dt">method =</span> <span class="st">&quot;BFGS&quot;</span>)</span>
-<span id="cb92-9"><a href="data.html#cb92-9"></a>best_B_oof2 &lt;-<span class="st"> </span><span class="kw">matrix</span>(tmp<span class="op">$</span>par, <span class="dv">4</span>, <span class="dv">4</span>)</span>
-<span id="cb92-10"><a href="data.html#cb92-10"></a>solution_oof2 &lt;-<span class="st"> </span><span class="kw">compute_SSQ</span>(best_B_oof2, E)</span>
-<span id="cb92-11"><a href="data.html#cb92-11"></a><span class="kw">plot_solution</span>(solution_oof2)</span></code></pre></div>
+<span id="cb92-5"><a href="data.html#cb92-5"></a>oof &lt;-<span class="st"> </span><span class="kw">rowSums</span>(E <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">==</span><span class="st"> </span><span class="dv">2</span></span>
+<span id="cb92-6"><a href="data.html#cb92-6"></a>tmp &lt;-<span class="st"> </span><span class="kw">optim</span>(<span class="dt">par =</span> <span class="kw">as.vector</span>(B), </span>
+<span id="cb92-7"><a href="data.html#cb92-7"></a>             <span class="dt">fn =</span> to_minimize, </span>
+<span id="cb92-8"><a href="data.html#cb92-8"></a>             <span class="dt">E =</span> Enopairs,</span>
+<span id="cb92-9"><a href="data.html#cb92-9"></a>             <span class="dt">method =</span> <span class="st">&quot;BFGS&quot;</span>)</span>
+<span id="cb92-10"><a href="data.html#cb92-10"></a>best_B_oof2 &lt;-<span class="st"> </span><span class="kw">matrix</span>(tmp<span class="op">$</span>par, <span class="dv">4</span>, <span class="dv">4</span>)</span>
+<span id="cb92-11"><a href="data.html#cb92-11"></a>solution_oof2 &lt;-<span class="st"> </span><span class="kw">compute_SSQ</span>(best_B_oof2, E)</span>
+<span id="cb92-12"><a href="data.html#cb92-12"></a><span class="kw">plot_solution</span>(solution_oof2, oof)</span></code></pre></div>
 <p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/kuebnumerics3-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Of course, we might push this too far. For example, a popular way to attempt parameterizing models is to consider only monocultures and pairs:</p>
 <div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="data.html#cb93-1"></a><span class="kw">set.seed</span>(<span class="dv">1</span>)</span>
 <span id="cb93-2"><a href="data.html#cb93-2"></a>B &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, <span class="dv">4</span>, <span class="dv">4</span>)</span>
 <span id="cb93-3"><a href="data.html#cb93-3"></a><span class="kw">diag</span>(B) &lt;-<span class="st"> </span><span class="dv">1</span></span>
 <span id="cb93-4"><a href="data.html#cb93-4"></a>Eonlymonopairs &lt;-<span class="st"> </span>E[<span class="kw">rowSums</span>(E <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">&lt;</span><span class="st"> </span><span class="dv">3</span>, ]</span>
-<span id="cb93-5"><a href="data.html#cb93-5"></a>tmp &lt;-<span class="st"> </span><span class="kw">optim</span>(<span class="dt">par =</span> <span class="kw">as.vector</span>(B), </span>
-<span id="cb93-6"><a href="data.html#cb93-6"></a>             <span class="dt">fn =</span> to_minimize, </span>
-<span id="cb93-7"><a href="data.html#cb93-7"></a>             <span class="dt">E =</span> Eonlymonopairs,</span>
-<span id="cb93-8"><a href="data.html#cb93-8"></a>             <span class="dt">method =</span> <span class="st">&quot;BFGS&quot;</span>)</span>
-<span id="cb93-9"><a href="data.html#cb93-9"></a>best_B_oof3 &lt;-<span class="st"> </span><span class="kw">matrix</span>(tmp<span class="op">$</span>par, <span class="dv">4</span>, <span class="dv">4</span>)</span>
-<span id="cb93-10"><a href="data.html#cb93-10"></a>solution_oof3 &lt;-<span class="st"> </span><span class="kw">compute_SSQ</span>(best_B_oof3, E)</span>
-<span id="cb93-11"><a href="data.html#cb93-11"></a><span class="kw">plot_solution</span>(solution_oof3)</span></code></pre></div>
+<span id="cb93-5"><a href="data.html#cb93-5"></a>oof &lt;-<span class="st"> </span><span class="kw">rowSums</span>(E <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">&gt;=</span><span class="st"> </span><span class="dv">3</span></span>
+<span id="cb93-6"><a href="data.html#cb93-6"></a>tmp &lt;-<span class="st"> </span><span class="kw">optim</span>(<span class="dt">par =</span> <span class="kw">as.vector</span>(B), </span>
+<span id="cb93-7"><a href="data.html#cb93-7"></a>             <span class="dt">fn =</span> to_minimize, </span>
+<span id="cb93-8"><a href="data.html#cb93-8"></a>             <span class="dt">E =</span> Eonlymonopairs,</span>
+<span id="cb93-9"><a href="data.html#cb93-9"></a>             <span class="dt">method =</span> <span class="st">&quot;BFGS&quot;</span>)</span>
+<span id="cb93-10"><a href="data.html#cb93-10"></a>best_B_oof3 &lt;-<span class="st"> </span><span class="kw">matrix</span>(tmp<span class="op">$</span>par, <span class="dv">4</span>, <span class="dv">4</span>)</span>
+<span id="cb93-11"><a href="data.html#cb93-11"></a>solution_oof3 &lt;-<span class="st"> </span><span class="kw">compute_SSQ</span>(best_B_oof3, E)</span>
+<span id="cb93-12"><a href="data.html#cb93-12"></a><span class="kw">plot_solution</span>(solution_oof3, oof)</span></code></pre></div>
 <p><img src="A-Tour-of-the-Generalized-Lotka-Volterra-Model_files/figure-html/kuebnumerics4-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>You can see that we predict a lack of coexistence for the system with all four species, while experimentally we have observed coexistence in all ten replicates. <span class="citation">Maynard, Miller, and Allesina (<a href="#ref-maynard2019predicting" role="doc-biblioref">2020</a>)</span> have demonstrated that experimental designs mixing high- and low-abundance experiments provide the best fit while minimizing the number of experiments.</p>
 

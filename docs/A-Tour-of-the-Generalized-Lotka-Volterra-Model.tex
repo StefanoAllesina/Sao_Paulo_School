@@ -124,7 +124,7 @@
   \postauthor{\par}
       \predate{\centering\large\emph}
   \postdate{\par}
-    \date{2020-01-10}
+    \date{2020-01-12}
 
 \usepackage{booktabs}
 \usepackage{graphicx}
@@ -2051,7 +2051,7 @@ To solve these two issues, we would need to find a good way to navigate the enor
 \hypertarget{synthetic-communities-using-the-glv-model}{%
 \section{Synthetic communities using the GLV model}\label{synthetic-communities-using-the-glv-model}}
 
-To set the stage for deriving a statistical model that can deal with the problems above, we start by simulating the communities that can be formed from a pool of \(n\) species using the GLV model. First, we need a way to index our communities. We take a vector \(p\) reporting the presence/absence of a given species at the beginning of the experiment. We then associate a label \(k \in \{1, \ldots, 2^n -1\}\) with the experiment. This label uniquely defines the composition of a community. If only taxon 1 is present (\(p = [1,0,0,\ldots,0]\)), then \(k = 1\), if only taxon 2 is present (\(p =[0,1,0,\ldots,0]\)) then \(k = 2\), if both taxa 1 and 2 are part of the experiment, \(k = 3\) (\(p = [1,1,0,\ldots,0]\)); in general, \(k = \sum_{i = 1}^n p_i 2^{(i-1)}\) where \(p_i = 1\) if taxon \(i\) is part of the experiment, and \(p_i = 0\) otherwise.
+To set the stage for deriving a statistical model that can deal with the problems above, we start by simulating the communities that can be formed from a pool of \(n\) species using the GLV model. First, we need a way to index our communities. We take a vector \(p\) reporting the presence/absence of a given species in a community. To this end, we associate a label \(k \in \{1, \ldots, 2^n -1\}\) with each possible community. If only taxon 1 is present (\(p = [1,0,0,\ldots,0]\)), then \(k = 1\), if only taxon 2 is present (\(p =[0,1,0,\ldots,0]\)) then \(k = 2\), if both taxa 1 and 2 are part of the community, \(k = 3\) (\(p = [1,1,0,\ldots,0]\)); in general, \(k = \sum_{i = 1}^n p_i 2^{(i-1)}\) where \(p_i = 1\) if taxon \(i\) is in the community, and \(p_i = 0\) otherwise.
 
 We can then cycle through each of the \(2^n - 1\) assemblages that can be formed, and determine whether the species will coexist or not in our experiment. For simplicity, we report as coexisting any set of species for which a) the GLV equilibrium is feasible, and b) it is locally stable. We collect all the communities that are coexisting along with the abundance of all species in the matrix \(E\).
 
@@ -2164,12 +2164,12 @@ We can rewrite the GLV model as:
 \[
 \begin{aligned}
 \dfrac{dx(t)}{dt} &= D(x(t))(r + A x(t))\\
-&= D(r x(t))(1 + B x(t))
+&= D(r \circ x(t))(1 + B x(t))
 \end{aligned}
 \]
 where we have \(b_{ij} = a_{ij} / r_i\). The equilibrium for each subset of species \(k\) (if it exists) can be found as \((B^{(k)})^{-1} 1^{(k)}\), where \((B^{(k)})^{-1}\) is the inverse of the \(B^{(k)}\) sub-matrix of \(B\) in which only the rows/columns belonging to \(k\) are retained, and \(1^{(k)}\) is a vector of ones with length equal to the number of species in \(k\).
 
-We now want to link the matrix \(B\) with the results of the experiments, stored in matrix \(E\). Call \(x^{(k)}_i\) the recorded density of taxon \(i\) in community \(k\) (i.e., stored in one of the rows of \(E\)). Then, we can build a matrix \(P\) where each row represents an equation \(\sum_j b_{ij} x_j^{(k)} = 1\) and we have a column for each coefficient in \(B\). For example, take three taxa, and suppose that we can culture each in isolation, and that the all assemblages coexist when co-cultured. We can write 12 equations: monocultures (\(k \in \{1, 2, 4\}\)) give rise to a single equation; co-cultures of two taxa to two equations each (\(k \in \{3, 5, 6 \}\)); and communities with three taxa to three independent equations (\(k = 7\)). Here are the 12 equations we can write:
+We now want to link the matrix \(B\) with the results of the experiments, stored in matrix \(E\). Call \(x^{(k)}_i\) the recorded density of taxon \(i\) in community \(k\) (i.e., stored in one of the rows of \(E\)). Then, we can build a matrix \(P\) where each row represents an equation \(\sum_{j \in k} b_{ij} x_j^{(k)} = 1\) and we have a column for each coefficient in \(B\). For example, take three taxa, and suppose that we can culture each in isolation, and that the all assemblages coexist when co-cultured. We can write 12 equations: monocultures (\(k \in \{1, 2, 4\}\)) give rise to a single equation; co-cultures of two taxa to two equations each (\(k \in \{3, 5, 6 \}\)); and communities with three taxa to three independent equations (\(k = 7\)). Here are the 12 equations we can write:
 
 \[
 \begin{aligned}
@@ -2368,12 +2368,12 @@ The equation \(E_i B_i = -1\) shows that all the equilibria of species \(i\) in 
 Having played with synthetic data, we can start thinking about data stemming from real experiments. In particular, consider the linear, additive model:
 
 \[
-x_i^{(k)} = \gamma_i - \sum_{j\neq i} \theta_{ij} x_i^{(k)}
+x_i^{(k)} = \gamma_i - \sum_{j\neq i} \theta_{ij} x_j^{(k)}
 \]
-where \(x_i^{(k)}\) is the density of species \(i\) in community \(k\), \(\gamma_i\) models the density of \(i\) when grown in isolation, and the parameters \(\theta_{ij}\) how the density of \(i\) is influenced by the other species in community \(k\). Dividing both sides by \(\gamma_i\) and rearranging:
+where \(x_i^{(k)}\) is the density of species \(i\) in community \(k\), \(\gamma_i\) models the density of \(i\) when grown in isolation, and the parameters \(\theta_{ij}\) model how the density of \(i\) is influenced by the other species in community \(k\). Dividing both sides by \(\gamma_i\) and rearranging:
 
 \[
-\sum_{j\neq i} (\theta_{ij} /\gamma_i) x_i^{(k)} + (1/{\gamma_i}) x_i^{(k)}= \sum_j b_{ij} x_j^{(k)} = 1
+\sum_{j\neq i} (\theta_{ij} /\gamma_i) x_j^{(k)} + (1/{\gamma_i}) x_i^{(k)}= \sum_j b_{ij} x_j^{(k)} = 1
 \]
 which is exactly the same system of equations found above. As such, fitting a linear, addittive model for the biomass of each species in each plot is equivalent to finding the equilibrium strcuture of a GLV model that approximates the data.
 
@@ -2484,7 +2484,7 @@ Now let's write code to show a nice plot of the predicted vs.~observed values fo
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{plot_solution <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(solution)\{}
+\NormalTok{plot_solution <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(solution, }\DataTypeTok{oof =} \OtherTok{NULL}\NormalTok{)\{}
   \CommentTok{# add a column with community composition}
 \NormalTok{  spnames <-}\StringTok{ }\KeywordTok{colnames}\NormalTok{(solution}\OperatorTok{$}\NormalTok{E)}
 \NormalTok{  community <-}\StringTok{ }\KeywordTok{apply}\NormalTok{(solution}\OperatorTok{$}\NormalTok{E, }\DecValTok{1}\NormalTok{, }\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{paste}\NormalTok{(spnames[x }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{], }\DataTypeTok{collapse =} \StringTok{"_"}\NormalTok{))}
@@ -2495,20 +2495,37 @@ Now let's write code to show a nice plot of the predicted vs.~observed values fo
 \NormalTok{  toplot <-}\StringTok{ }\NormalTok{E }\OperatorTok{%>%}\StringTok{ }\KeywordTok{gather}\NormalTok{(species, observed_biomass, }\OperatorTok{-}\NormalTok{experiment, }\OperatorTok{-}\NormalTok{community) }\OperatorTok{%>%}\StringTok{ }
 \StringTok{    }\KeywordTok{filter}\NormalTok{(observed_biomass }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{)}
   \CommentTok{# now the predicted data}
-\NormalTok{  tildeE <-}\StringTok{ }\KeywordTok{as_tibble}\NormalTok{(solution}\OperatorTok{$}\NormalTok{tildeE) }\OperatorTok{%>%}
-\StringTok{    }\KeywordTok{add_column}\NormalTok{(}\DataTypeTok{community =}\NormalTok{ community) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{    }\KeywordTok{gather}\NormalTok{(species, predicted_biomass, }\OperatorTok{-}\NormalTok{community) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{    }\KeywordTok{distinct}\NormalTok{()}
+  \ControlFlowTok{if}\NormalTok{ (}\KeywordTok{is.null}\NormalTok{(oof))\{}
+\NormalTok{    tildeE <-}\StringTok{ }\KeywordTok{as_tibble}\NormalTok{(solution}\OperatorTok{$}\NormalTok{tildeE) }\OperatorTok{%>%}
+\StringTok{      }\KeywordTok{add_column}\NormalTok{(}\DataTypeTok{community =}\NormalTok{ community) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{      }\KeywordTok{gather}\NormalTok{(species, predicted_biomass, }\OperatorTok{-}\NormalTok{community) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{      }\KeywordTok{distinct}\NormalTok{()}
+\NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{}
+\NormalTok{    tildeE <-}\StringTok{ }\KeywordTok{as_tibble}\NormalTok{(solution}\OperatorTok{$}\NormalTok{tildeE) }\OperatorTok{%>%}
+\StringTok{      }\KeywordTok{add_column}\NormalTok{(}\DataTypeTok{community =}\NormalTok{ community, }\DataTypeTok{oof =}\NormalTok{ oof) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{      }\KeywordTok{gather}\NormalTok{(species, predicted_biomass, }\OperatorTok{-}\NormalTok{community, }\OperatorTok{-}\NormalTok{oof) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{      }\KeywordTok{distinct}\NormalTok{()}
+\NormalTok{  \}}
   \CommentTok{# join the two data sets}
 \NormalTok{  toplot <-}\StringTok{ }\NormalTok{toplot }\OperatorTok{%>%}\StringTok{ }
 \StringTok{    }\KeywordTok{inner_join}\NormalTok{(tildeE, }\DataTypeTok{by =} \KeywordTok{c}\NormalTok{(}\StringTok{"community"}\NormalTok{, }\StringTok{"species"}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }
 \StringTok{    }\KeywordTok{filter}\NormalTok{(observed_biomass }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{)}
-\NormalTok{  pl <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ toplot) }\OperatorTok{+}\StringTok{ }
+  \ControlFlowTok{if}\NormalTok{ (}\KeywordTok{is.null}\NormalTok{(oof))\{}
+\NormalTok{    pl <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ toplot) }\OperatorTok{+}\StringTok{ }
 \StringTok{    }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ species, }\DataTypeTok{fill =}\NormalTok{ species) }\OperatorTok{+}\StringTok{ }
 \StringTok{    }\KeywordTok{geom_violin}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{y =}\NormalTok{ observed_biomass), }\DataTypeTok{draw_quantiles =} \FloatTok{0.5}\NormalTok{, }\DataTypeTok{scale =} \StringTok{"width"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
 \StringTok{    }\KeywordTok{geom_point}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{y =}\NormalTok{ predicted_biomass)) }\OperatorTok{+}\StringTok{ }
 \StringTok{    }\KeywordTok{facet_wrap}\NormalTok{(}\OperatorTok{~}\NormalTok{community, }\DataTypeTok{scales =} \StringTok{"free_y"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
 \StringTok{    }\KeywordTok{scale_y_log10}\NormalTok{(}\StringTok{"biomass"}\NormalTok{)}
+\NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{}
+\NormalTok{    pl <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ toplot) }\OperatorTok{+}\StringTok{ }
+\StringTok{    }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ species, }\DataTypeTok{fill =}\NormalTok{ species) }\OperatorTok{+}\StringTok{ }
+\StringTok{    }\KeywordTok{geom_violin}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{y =}\NormalTok{ observed_biomass, }\DataTypeTok{alpha =} \KeywordTok{I}\NormalTok{(}\DecValTok{1} \OperatorTok{-}\StringTok{ }\FloatTok{0.9} \OperatorTok{*}\StringTok{ }\NormalTok{oof)), }
+                \DataTypeTok{draw_quantiles =} \FloatTok{0.5}\NormalTok{, }\DataTypeTok{scale =} \StringTok{"width"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{    }\KeywordTok{geom_point}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{y =}\NormalTok{ predicted_biomass)) }\OperatorTok{+}\StringTok{ }
+\StringTok{    }\KeywordTok{facet_wrap}\NormalTok{(}\OperatorTok{~}\NormalTok{community, }\DataTypeTok{scales =} \StringTok{"free_y"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{    }\KeywordTok{scale_y_log10}\NormalTok{(}\StringTok{"biomass"}\NormalTok{)}
+\NormalTok{  \}}
   \KeywordTok{return}\NormalTok{(pl)}
 \NormalTok{\}}
 \KeywordTok{plot_solution}\NormalTok{(solution)}
@@ -2528,13 +2545,14 @@ Exactly as done for the GLV simulated data, we can attempt fitting the matrix \(
 \NormalTok{B <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{)}
 \KeywordTok{diag}\NormalTok{(B) <-}\StringTok{ }\DecValTok{1}
 \NormalTok{Enotriplets <-}\StringTok{ }\NormalTok{E[}\KeywordTok{rowSums}\NormalTok{(E }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) }\OperatorTok{!=}\StringTok{ }\DecValTok{3}\NormalTok{, ]}
+\NormalTok{oof <-}\StringTok{ }\KeywordTok{rowSums}\NormalTok{(E }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) }\OperatorTok{==}\StringTok{ }\DecValTok{3}
 \NormalTok{tmp <-}\StringTok{ }\KeywordTok{optim}\NormalTok{(}\DataTypeTok{par =} \KeywordTok{as.vector}\NormalTok{(B), }
              \DataTypeTok{fn =}\NormalTok{ to_minimize, }
              \DataTypeTok{E =}\NormalTok{ Enotriplets,}
              \DataTypeTok{method =} \StringTok{"BFGS"}\NormalTok{)}
 \NormalTok{best_B_oof <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(tmp}\OperatorTok{$}\NormalTok{par, }\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{)}
 \NormalTok{solution_oof <-}\StringTok{ }\KeywordTok{compute_SSQ}\NormalTok{(best_B_oof, E)}
-\KeywordTok{plot_solution}\NormalTok{(solution_oof)}
+\KeywordTok{plot_solution}\NormalTok{(solution_oof, oof)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -2548,13 +2566,14 @@ Repeat excluding all the pairs:
 \NormalTok{B <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{)}
 \KeywordTok{diag}\NormalTok{(B) <-}\StringTok{ }\DecValTok{1}
 \NormalTok{Enopairs <-}\StringTok{ }\NormalTok{E[}\KeywordTok{rowSums}\NormalTok{(E }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) }\OperatorTok{!=}\StringTok{ }\DecValTok{2}\NormalTok{, ]}
+\NormalTok{oof <-}\StringTok{ }\KeywordTok{rowSums}\NormalTok{(E }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) }\OperatorTok{==}\StringTok{ }\DecValTok{2}
 \NormalTok{tmp <-}\StringTok{ }\KeywordTok{optim}\NormalTok{(}\DataTypeTok{par =} \KeywordTok{as.vector}\NormalTok{(B), }
              \DataTypeTok{fn =}\NormalTok{ to_minimize, }
              \DataTypeTok{E =}\NormalTok{ Enopairs,}
              \DataTypeTok{method =} \StringTok{"BFGS"}\NormalTok{)}
 \NormalTok{best_B_oof2 <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(tmp}\OperatorTok{$}\NormalTok{par, }\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{)}
 \NormalTok{solution_oof2 <-}\StringTok{ }\KeywordTok{compute_SSQ}\NormalTok{(best_B_oof2, E)}
-\KeywordTok{plot_solution}\NormalTok{(solution_oof2)}
+\KeywordTok{plot_solution}\NormalTok{(solution_oof2, oof)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -2568,13 +2587,14 @@ Of course, we might push this too far. For example, a popular way to attempt par
 \NormalTok{B <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{)}
 \KeywordTok{diag}\NormalTok{(B) <-}\StringTok{ }\DecValTok{1}
 \NormalTok{Eonlymonopairs <-}\StringTok{ }\NormalTok{E[}\KeywordTok{rowSums}\NormalTok{(E }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) }\OperatorTok{<}\StringTok{ }\DecValTok{3}\NormalTok{, ]}
+\NormalTok{oof <-}\StringTok{ }\KeywordTok{rowSums}\NormalTok{(E }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) }\OperatorTok{>=}\StringTok{ }\DecValTok{3}
 \NormalTok{tmp <-}\StringTok{ }\KeywordTok{optim}\NormalTok{(}\DataTypeTok{par =} \KeywordTok{as.vector}\NormalTok{(B), }
              \DataTypeTok{fn =}\NormalTok{ to_minimize, }
              \DataTypeTok{E =}\NormalTok{ Eonlymonopairs,}
              \DataTypeTok{method =} \StringTok{"BFGS"}\NormalTok{)}
 \NormalTok{best_B_oof3 <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(tmp}\OperatorTok{$}\NormalTok{par, }\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{)}
 \NormalTok{solution_oof3 <-}\StringTok{ }\KeywordTok{compute_SSQ}\NormalTok{(best_B_oof3, E)}
-\KeywordTok{plot_solution}\NormalTok{(solution_oof3)}
+\KeywordTok{plot_solution}\NormalTok{(solution_oof3, oof)}
 \end{Highlighting}
 \end{Shaded}
 
