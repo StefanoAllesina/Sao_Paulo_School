@@ -119,10 +119,10 @@ $$
 Consider a fragmented landscape in which habitable patches are connected by dispersal (for simplicity, suppose that all patches are reachable from any other). Call $p(t)$ the proportion of patches occupied by the species of interest at time $t$, and assume that a) an empty patch (the proportion of empty patches is $1 - p(t)$) is colonized by the species with rate $c p(t)$, where $c$ is the "colonization rate", and b) that occupied patches become empty at rate $e p(t)$ ("extinction rate"). We want to model the proportion of patches occupied by the population at time $t$ [@levins1969some]:
 
 $$
-\dfrac{d p(t)}{dt} = c p(t)(1 - p(t)) - e p(t) = p(t) (c - (c + e) p(t))
+\dfrac{d p(t)}{dt} = c p(t)(1 - p(t)) - e p(t) = p(t) ((c - e) - c  p(t))
 $$
 
-which is equivalent to the logistic equation above with $r = c$ and $a = -(c+e)$. As such, asymptotically the proportion of patches occupied by the population will be $-r/a = c / (c + e)$.
+which is equivalent to the logistic equation above with $r = c-e$ and $a = -c$. As such, asymptotically the proportion of patches occupied by the population will be $-r/a = (c -e) / c$.
 
 ### S-I-S model
 
