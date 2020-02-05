@@ -124,7 +124,7 @@
   \postauthor{\par}
       \predate{\centering\large\emph}
   \postdate{\par}
-    \date{2020-01-19}
+    \date{2020-02-05}
 
 \usepackage{booktabs}
 \usepackage{graphicx}
@@ -597,7 +597,7 @@ Suppose that there is a positive diagonal matrix \(C\) such that \(C A + A^t C\)
 Further, suppose that the GLV system with parameters \(A\) and \(r\) has a feasible equilibrium point \(x^\star\). Then the function:
 
 \[
-V(x(t)) = 1^t D(y) \left( x(t) -D(x^\star) \log x(t)\right)
+V(x(t)) = 1^t C \left( x(t) -D(x^\star) \log x(t)\right)
 \]
 is a Lyapunov function for the GLV system.
 
@@ -1577,10 +1577,10 @@ We next connect NE and ESS with dynamical systems.
 The replicator equation for this type of games can be written as:
 
 \[
-\dfrac{d x}{dt} = D(x)(A x - x^t A x)
+\dfrac{d x_i}{dt} = x_i \left( \sum_j A_{ij} x_j - \sum_{jk} x_j A_{jk} x_k \right)
 \]
 
-If we define \(f = A x\) as a vector reporting the ``fitness''" of each population at time \(t\), and \(\bar{f} = x^t A t\) as the average fitness at time \(t\) we can write the replicator equation more compactly as:
+If we define \(f = A x\) as a vector reporting the ``fitness''" of each population at time \(t\), and \(\bar{f} = \sum_{jk} x_j A_{jk} x_k = x^t A t\) as the average fitness at time \(t\) we can write the replicator equation more compactly as:
 
 \[
 \dfrac{d x_i}{dt} = x_i (f_i - \bar{f})
@@ -1597,11 +1597,10 @@ Adding a constant to each column of \(A\) does not alter the dynamics. We have \
 
 \[
 \begin{aligned}
-D(x)(B x - x^t B x) &= D(x)(A + eb^t) x - x^t (A + eb^t) x\\
-&= D(x)A x + D(x) eb^t x - x^t A x - x^t e b^t x\\
-&= D(x)A x + x^t e b^t x - x^t A x - x^t e b^t  x\\
-&= D(x)A - x^t A x\\
-&= D(x)(A x - x^t A x)
+x_i \left( \sum_j B_{ij} x_j - \sum_{kj} x_k B_{kj} x_j \right) & = x_i \left( \sum_j (A_{ij} + b_j) x_j - \sum_{kj} x_k (A_{kj} + b_j) x_j \right)\\
+&= x_i \left(\sum_j A_{ij} x_j + \sum_j b_j x_j  - \sum_{kj} x_k A_{kj} x_j - \sum_{kj} x_k b_{j} x_j \right)\\
+&= x_i \left(\sum_j A_{ij} x_j + \sum_j b_j x_j  - \sum_{kj} x_k A_{kj} x_j - \sum_{j} b_{j} x_j \right)\\
+&= x_i \left(\sum_j A_{ij} x_j - \sum_{kj} x_k A_{kj} x_j \right)\\
 \end{aligned}
 \]
 

@@ -382,7 +382,7 @@ Suppose that there is a positive diagonal matrix $C$ such that $C A + A^t C$ is 
 Further, suppose that the GLV system with parameters $A$ and $r$ has a feasible equilibrium point $x^\star$. Then the function:
 
 $$
-V(x(t)) = 1^t D(y) \left( x(t) -D(x^\star) \log x(t)\right)
+V(x(t)) = 1^t C \left( x(t) -D(x^\star) \log x(t)\right)
 $$
 is a Lyapunov function for the GLV system. 
 
