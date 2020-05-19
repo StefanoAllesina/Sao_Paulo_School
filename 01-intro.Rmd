@@ -391,7 +391,7 @@ To prove this point, we start from $r = -Ax^\star$. Substituting, we can write t
 $$
 \begin{aligned}
  \frac{d V(x(t))}{dt} &= 1^t C \left(\frac{d x(t)}{dt}  + D(x^*) \frac{d \log x(t)}{dt} \right)\\
- &= 1^t C \left(A (x - x^\star)  + D(x^*) A (x - x^\star) \right)\\
+ &= 1^t C \left(D(x) A (x - x^\star)  + D(x^*) A (x - x^\star) \right)\\
  &= 1^t C \left(D(x - x^\star)  A (x - x^\star) \right)\\
  &= 1^t \left(D(x - x^\star)  C A (x - x^\star) \right)\\
  &= (x - x^\star)^t  CA (x - x^\star)\\

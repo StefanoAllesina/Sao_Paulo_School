@@ -329,11 +329,11 @@ Now let's try to count how many species suvive when starting with 10:
 ```{r, coexistlphist}
 n <- 10
 num_simulations <- 5000
-results <- tibble(simulation = 1:num_simulations, coexisting = NA)
+results <- tibble(simulation = 1:num_simulations, coexisting = 0)
 for (i in 1:num_simulations){
   H <- random_H(n)
   coexisting <- find_optimal_strategy(H)
-  results[i,"coexisting"] <- sum(coexisting > 0)
+  results[i,"coexisting"] <- sum((coexisting > 0)*1)
 }
 # and plot
 ggplot(data = results) + 
